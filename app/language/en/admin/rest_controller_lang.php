@@ -1,0 +1,6 @@
+<?php
+
+/*
+ * English language
+ */
+
