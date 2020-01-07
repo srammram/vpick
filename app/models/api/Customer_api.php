@@ -2052,11 +2052,12 @@ ORDER BY distance ASC LIMIT 1";
 	}
 	
 	
-	function updatepassword($data, $countryCode){
+	function updatepassword($data, $countryCode = NULL){
 		
 		$this->db->where('id', $data['customer_id']);
-		$this->db->where('is_country', $countryCode);
+		//$this->db->where('is_country', $countryCode);
 		$q = $this->db->update('users', array('password' => $data['password'], 'text_password' => $data['text_password'], 'forgot_otp_verify' => 1));
+		//print_r($this->db->last_query());die;
 		if($q){
 			return true;	
 		}

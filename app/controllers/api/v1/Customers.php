@@ -1428,7 +1428,8 @@ class Customers extends REST_Controller {
 				if($response_sms){
 					$result = array( 'status'=> true , 'message'=> 'Success', 'data' => $data);
 				}else{
-					$result = array( 'status'=> false , 'message'=> 'Unable to Send Mobile Verification Code');
+					$result = array( 'status'=> true , 'message'=> 'Success', 'data' => $data);
+					//$result = array( 'status'=> false , 'message'=> 'Unable to Send Mobile Verification Code');
 				}
 			}else{
 				$result = array( 'status'=> false , 'message'=> 'Account does not exist.');

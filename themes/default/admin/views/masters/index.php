@@ -565,6 +565,54 @@
                 </fieldset>
                 
                 <fieldset class="scheduler-border">
+                    <legend class="scheduler-border"><?= lang('truck_shift') ?></legend>
+                    
+                    
+                    
+                    
+                    
+                    <div class="col-md-6">
+                        <div class="form-group">
+                        	<div class="col-md-12">
+                            <label class="control-label" for="support_mobile"><?= lang("day_shift"); ?></label>
+                			</div>
+                             <div class="col-md-6">
+                            <div class="controls">
+                                <?= form_input('day_shift_from_time', $dataSettings->day_shift_from_time, 'class="form-control tip" id="day_shift_from_time"'); ?>
+                            </div>
+                            </div>
+                             <div class="col-md-6">
+                            <div class="controls">
+                                <?= form_input('day_shift_to_time', $dataSettings->day_shift_to_time, 'class="form-control tip" id="day_shift_to_time" readonly'); ?>
+                            </div>
+                            </div>
+                            
+                        </div>
+                    </div>
+                    
+                     <div class="col-md-6">
+                        <div class="form-group">
+                        	<div class="col-md-12">
+                            <label class="control-label" for="support_mobile"><?= lang("night_shift"); ?></label>
+                			</div>
+                             <div class="col-md-6">
+                            <div class="controls">
+                                <?= form_input('night_shift_from_time', $dataSettings->night_shift_from_time, 'class="form-control tip" id="night_shift_from_time" readonly'); ?>
+                            </div>
+                            </div>
+                             <div class="col-md-6">
+                            <div class="controls">
+                                <?= form_input('night_shift_from_time', $dataSettings->night_shift_to_time, 'class="form-control tip" id="night_shift_to_time" readonly'); ?>
+                            </div>
+                            </div>
+                            
+                        </div>
+                    </div>
+                    
+                   
+                </fieldset>
+                
+                <fieldset class="scheduler-border">
                     <legend class="scheduler-border"><?= lang('user') ?></legend>
                    
                     
@@ -887,4 +935,45 @@ $(document).on('change', '#is_country', function(){
 		
     
 })
+
+/*$('#day_shift_from_time').change(function() {
+  var date2 = $('#day_shift_from_time').datepicker('getDate'); 
+  date2.setHours(date2.getHours()+10); 
+    //alert(date2);
+  $('#day_shift_to_time').val(date2);
+  ('#night_shift_from_time').val(date2);
+});*/
+//day_shift_from_time
+/*$(function () {
+	$('#day_shift_from_time').datetimepicker({
+		 format: 'hh:ii',
+		 showMeridian: true,
+         autoclose: true,
+         todayBtn: true,
+		
+	}).on("change", function() {
+		var oldDate = $(this).val();
+		alert(oldDate);
+		 oldDate.setHours(oldDate+10); 
+		//var hour = oldDate;
+		//var newDate = oldDate.setHours(hour + 12);
+		$('#day_shift_to_time').val(oldDate);
+		$('#night_shift_from_time').val(oldDate);
+		//var tonewDate = newDate.setHours(hour + 12);
+		$('#night_shift_to_time').val(oldDate);
+	});
+	
+	//var hour = oldDate.getHours();
+//var newDate = oldDate.setHours(hour + 1);
+
+});*/
+$(function () {
+	$('#day_shift_from_time').datetimepicker({
+		 format: 'hh:ii',
+		 showMeridian: true,
+         autoclose: true,
+         todayBtn: true,
+	});
+	
+});
 </script>
