@@ -1,3 +1,25 @@
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-validator/0.5.3/js/bootstrapValidator.js
+"></script>
+
+
+<script>
+
+   $('form[class="add_from"]').bootstrapValidator({
+        fields: {
+            package_name: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please Enter the  package_name'
+                    },                  
+                }
+            },
+        },
+        add_rental: 'input[type="submit"]'
+    });
+
+    </script>
+
 <?php defined('BASEPATH') OR exit('No direct script access allowed'); ?>
 <div class="box">
     
@@ -5,7 +27,7 @@
         <div class="row">
         
             <div class="col-lg-12">
-            	<?php $attrib = array('class' => 'form-horizontal', 'class' => 'edit_from', 'data-toggle' => 'validator', 'role' => 'form', 'autocomplete' => "off");
+            	<?php $attrib = array('class' => 'form-horizontal', 'class' => 'add_from', 'data-toggle' => 'validator', 'role' => 'form', 'autocomplete' => "off");
                 echo admin_form_open_multipart("locations/edit_rental/".$id, $attrib);
                 ?>
                 
@@ -37,6 +59,43 @@
                                         }
                                         echo form_dropdown('taxi_type', $t,  $result->taxi_type, 'class="form-control select"  id="taxi_type" required="required"'); ?>
                                     </div>
+                                    <div class="form-group col-sm-3 col-xs-12">
+										<?= lang('tons', 'tons'); ?>
+                                        <?php
+                                        $ton[''] = 'Select Tons';
+                                        foreach ($tons['type'] as $trow) {
+                                            $ton[$trow->tons] = $trow->tons;
+                                        }
+                                        
+                                        echo form_dropdown('tons', $ton, $result->tons, 'class="form-control select"  id="tons" required="required"'); ?>
+                                    </div>
+                                    <div class="form-group col-md-3 col-xs-12">
+										<?= lang('accessing', 'accessing'); ?>
+                                        <?php echo form_input('shift_name', $result->shift_name, 'class="form-control " id="shift_name" readonly required="required"'); ?>
+                                    </div>
+                                    
+                                    <div class="form-group col-md-3 col-xs-12">
+										<?= lang('load_status', 'load_status'); ?>
+                                        <?php
+										 	
+                                        $f['0'] = 'Full Load';
+                                        $f['1'] = 'Single Load';
+                                        $f['2'] = 'Single Time';
+                                        
+                                        echo form_dropdown('load_status', $f, $result->load_status, 'class="form-control select"  id="load_status" required="required"'); ?>
+                                    </div>
+                                    
+                                    <div class="form-group col-md-3 col-xs-12">
+										<?= lang('work_per_load', 'work_per_load'); ?>
+                                        <?php echo form_input('work_per_load', $result->work_per_load, 'class="form-control" id="work_per_load" onkeyup="checkNum(this)" required="required"'); ?>
+                                    </div>
+                                    
+                                    <div class="form-group col-md-3 col-xs-12">
+										<?= lang('commision_percentage', 'commision_percentage'); ?>
+                                        <?php echo form_input('commision_percentage', $result->commision_percentage, 'class="form-control " id="commision_percentage" onkeyup="checkNum(this)" required="required"'); ?>
+                                    </div>
+                                    
+                                    <div class="clearfix"></div>
                                 	<div class="form-group col-sm-3 col-xs-12">
 										<?= lang('continent', 'continent'); ?>
                                         <?php
@@ -44,7 +103,7 @@
                                         foreach ($continents as $continents) {
                                             $c[$continents->id] = $continents->name;
                                         }
-                                        echo form_dropdown('continent_id', $c, $result->continent_id, 'class="form-control select-local-continent select"  id="continent_id" required="required"'); ?>
+                                        echo form_dropdown('continent_id', $c, $result->continent_id, 'class="form-control select-local-continent select"  id="continent_id" '); ?>
                                     </div>
                                    
                                     <div class="form-group col-sm-3 col-xs-12">
@@ -54,7 +113,7 @@
 										foreach ($countrys as $country) {
 											$lcou[$country->id] = $country->name;
 										}
-                                        echo form_dropdown('country_id', $lcou, $result->country_id, 'class="form-control select-local-country select" id="country_id" required="required"'); ?>
+                                        echo form_dropdown('country_id', $lcou, $result->country_id, 'class="form-control select-local-country select" id="country_id" '); ?>
                                     </div>
                                     
                                     <div class="form-group col-sm-3 col-xs-12">
@@ -64,7 +123,7 @@
 										foreach ($zones as $zone) {
 											$lz[$zone->id] = $zone->name;
 										}
-                                        echo form_dropdown('zone_id', $lz, $result->zone_id, 'class="form-control select-local-zone select" id="zone_id" required="required"'); ?>
+                                        echo form_dropdown('zone_id', $lz, $result->zone_id, 'class="form-control select-local-zone select" id="zone_id" '); ?>
                                     </div>
                                     
                                     <div class="form-group col-sm-3 col-xs-12">
@@ -74,7 +133,7 @@
 										foreach ($states as $state) {
 											$ls[$state->id] = $state->name;
 										}
-                                        echo form_dropdown('state_id', $ls, $result->state_id, 'class="form-control select-local-state select" id="state_id" required="required"'); ?>
+                                        echo form_dropdown('state_id', $ls, $result->state_id, 'class="form-control select-local-state select" id="state_id" '); ?>
                                     </div>
                                     
                                     <div class="form-group col-sm-3 col-xs-12">
@@ -84,7 +143,7 @@
 										foreach ($citys as $city) {
 											$lci[$city->id] = $city->name;
 										}
-                                        echo form_dropdown('city_id', $lci, $result->city_id, 'class="form-control select-local-city select" id="city_id" required="required"'); ?>
+                                        echo form_dropdown('city_id', $lci, $result->city_id, 'class="form-control select-local-city select" id="city_id" '); ?>
                                     </div>
                                     
                                     
@@ -103,7 +162,7 @@
                             </div>
                     
                         <div class="col-md-12">  
-                        <h2 class="box_he_de">Rental Time</h2>  	
+                        <h2 class="box_he_de">Rental Fare</h2>  	
                 
                             <div class="col-md-12">
                                 <div class="form-group col-sm-3 col-xs-12">
@@ -118,7 +177,10 @@
                                         <input type="text" id="package_price" name="package_price" value="<?= $result->package_price ?>" class="form-control"/>
                                     </div>
                                 </div>
-                                <div class="form-group col-sm-3 col-xs-12">
+                                
+                                 <input type="hidden" id="option_type" name="option_type" value="<?= $result->option_type ?>" class="form-control"/>
+                                  <input type="hidden" id="option_price" name="option_price" value="<?= $result->option_price ?>" class="form-control"/>
+                                <!--<div class="form-group col-sm-3 col-xs-12">
 									<?php echo lang('option_type', 'option_type'); ?>
                                     <div class="controls">
                                         <?php
@@ -135,9 +197,7 @@
 										echo form_dropdown('option_price', $opp, $result->option_price, 'id="option_price"  class="form-control select" style="width:100%;"');
 										?>
                                     </div>
-                                </div>
-                                
-                                
+                                </div>-->
                                 <div class="form-group col-sm-3 col-xs-12">
 									<?php echo lang('included_distance', 'Included Distance'); ?>
                                     <div class="controls">
@@ -151,19 +211,22 @@
                                     </div>
                                 </div>
                                 
-                                <div class="form-group col-sm-3 col-xs-12">
+                                  <input type="hidden" id="per_distance" name="per_distance" value="<?= $result->per_distance ?>" class="form-control"/>
+                                    <input type="hidden" id="option_price" name="option_price" value="<?= $result->option_price ?>" class="form-control"/>
+                                    
+                               <!-- <div class="form-group col-sm-3 col-xs-12">
 									<?php echo lang('extra_distance', 'Extra Distance'); ?>
                                     <div class="controls">
                                         <input type="text" id="per_distance" name="per_distance" value="<?= $result->per_distance ?>" class="form-control"/>
                                     </div>
-                                </div>
+                                </div>-->
                                 <div class="form-group col-sm-3 col-xs-12">
-									<?php echo lang('extra_distance_fare', 'Extra Distance_fare'); ?>
+									<?php echo lang('rate_per_km', 'rate_per_km'); ?>
                                     <div class="controls">
                                         <input type="text" id="per_distance_price" name="per_distance_price" value="<?= $result->per_distance_price ?>" class="form-control"/>
                                     </div>
                                 </div>
-                                <div class="form-group col-sm-3 col-xs-12">
+                                <!--<div class="form-group col-sm-3 col-xs-12">
 									<?php echo lang('time_type', 'time_type'); ?>
                                     <div class="controls">
                                         <?php
@@ -172,31 +235,22 @@
 										?>
                                     </div>
                                 </div>
+                                
                                 <div class="form-group col-sm-3 col-xs-12">
 									<?php echo lang('extra_duration', 'Extra Duration'); ?>
                                     <div class="controls">
                                         <input type="text" id="per_time" name="per_time" value="<?= $result->per_time ?>" class="form-control time"/>
                                     </div>
-                                </div>
+                                </div>-->
+                                 <input type="hidden" id="time_type" name="time_type" value="<?= $result->time_type ?>" class="form-control"/>
+                                  <input type="hidden" id="per_time" name="per_time" value="<?= $result->per_time ?>" class="form-control"/>
+                                
                                 <div class="form-group col-sm-3 col-xs-12">
-									<?php echo llang('extra_duration_fare', 'Extra Duration Fare'); ?>
+									<?php echo lang('rate_per_duration(minutes)', 'rate_per_duration'); ?>
                                     <div class="controls">
                                         <input type="text" id="per_time_price" name="per_time_price" value="<?= $result->per_time_price ?>" class="form-control"/>
                                     </div>
                                 </div>
-                                
-                                <!--<div class="form-group col-sm-3 col-xs-12">
-									<?php echo lang('day_allowance', 'day_allowance'); ?>
-                                    <div class="controls">
-                                        <input type="text" id="day_allowance" name="day_allowance" value="<?= $result->day_allowance ?>"  class="form-control"/>
-                                    </div>
-                                </div>
-                                <div class="form-group col-sm-3 col-xs-12">
-									<?php echo lang('overnight_allowance', 'overnight_allowance'); ?>
-                                    <div class="controls">
-                                        <input type="text" id="overnight_allowance" name="overnight_allowance" value="<?= $result->overnight_allowance ?>"  class="form-control"/>
-                                    </div>
-                                </div>-->
                                 
                                 <div class="form-group col-sm-3 col-xs-12"> <?php echo lang('labour_charge', 'labour_charge'); ?>
                                     <div class="controls">
@@ -205,8 +259,7 @@
                                   </div>
                                 
                                 
-                            </div>
-                        
+                              </div>
                         
                  </div>
                <div class="col-sm-12 last_sa_se"> <?php echo form_submit('edit_rental', lang('submit'), 'class="btn btn-primary  change_btn_save center-block"'); ?></div>
@@ -304,6 +357,39 @@ $(document).ready(function(){
 				
 			}
 		})
+	});
+	
+	$('#taxi_type').change(function(){
+		
+		$("#tons").select2("destroy");
+		id = $(this).val();
+		$.ajax({
+			type: 'POST',
+			url: '<?=admin_url('masters/getTons_byTaxi_type')?>',
+			data: {taxi_type_id: id},
+			dataType: "json",
+			cache: false,
+			success: function (scdata) {
+				
+				
+				console.log(scdata);
+				$option1 = '<option value="">Select Tons</option>';
+				if(scdata.length != 0){
+				$.each(scdata.type,function(n,v){
+					$option1 += '<option data-shift="'+v.shift_name+'" value="'+v.tons+'">'+v.tons+'</option>';
+				});
+				}
+				$("#tons").html($option1);
+				$("#tons").select2();
+				
+			}
+		})
+	});
+	
+	$('#tons').change(function(){
+		var shift_name = $(this).find(':selected').attr('data-shift');
+		$('#shift_name').val(shift_name);
+		
 	});
 });
 </script>

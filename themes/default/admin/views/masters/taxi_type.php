@@ -14,7 +14,7 @@
                 $.ajax({'dataType': 'json', 'type': 'POST', 'url': sSource, 'data': aoData, 'success': fnCallback});
             },
             
-            "aoColumns": [ {"mRender": empty_status},   {"bSortable": false,"mRender": common_img}, {"bSortable": false,"mRender": common_img}, {"bSortable": false,"mRender": common_img}, null,  {"mRender": taxi_type_status}, {"mRender": empty_status}, {"bSortable": false}]
+            "aoColumns": [ {"mRender": empty_status},   {"bSortable": false,"mRender": common_img}, {"bSortable": false,"mRender": common_img}, {"bSortable": false,"mRender": common_img}, null,  {"mRender": taxi_type_status}, {"mRender": empty_status}, {"mRender": empty_status}, {"bSortable": false}]
         });
     });
 </script>
@@ -98,6 +98,7 @@
                             <th style="width:100px;"><?php echo lang('map_car'); ?></th>
                             <th style="width:100px;"><?php echo lang('category'); ?></th>
                             <th style="width:100px;"><?php echo lang('status'); ?></th>
+                            <th style="width:100px;"><?php echo lang('not_create_tons'); ?></th>
                             <th style="width: 33.33%!important;"><?php echo lang('instance'); ?></th>
                             <th class="col-xs-2"><?php echo lang('action'); ?></th>
                         </tr>

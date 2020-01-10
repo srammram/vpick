@@ -37,6 +37,44 @@
                                         echo form_dropdown('taxi_type', $t, $result->taxi_type, 'class="form-control select"  id="taxi_type" required="required"'); ?>
               </div>
               <div class="form-group col-sm-3 col-xs-12">
+										<?= lang('tons', 'tons'); ?>
+                                        <?php
+										
+                                        $ton[''] = 'Select Tons';
+                                        foreach ($tons['type'] as $trow) {
+                                            $ton[$trow->tons] = $trow->tons;
+                                        }
+                                        
+                                        echo form_dropdown('tons', $ton, $result->tons, 'class="form-control select"  id="tons" required="required"'); ?>
+                                    </div>
+                                    <div class="form-group col-md-3 col-xs-12">
+										<?= lang('accessing', 'accessing'); ?>
+                                        <?php echo form_input('shift_name', $result->shift_name, 'class="form-control " id="shift_name" readonly required="required"'); ?>
+                                    </div>
+                                    
+                                    <div class="form-group col-md-3 col-xs-12">
+										<?= lang('load_status', 'load_status'); ?>
+                                        <?php
+										 	
+                                        $f['0'] = 'Full Load';
+                                        $f['1'] = 'Single Load';
+                                        $f['2'] = 'Single Time';
+                                        
+                                        echo form_dropdown('load_status', $f, $result->load_status, 'class="form-control select"  id="load_status" required="required"'); ?>
+                                    </div>
+                                    
+                                    <div class="form-group col-md-3 col-xs-12">
+										<?= lang('work_per_load', 'work_per_load'); ?>
+                                        <?php echo form_input('work_per_load', $result->work_per_load, 'class="form-control" id="work_per_load" onkeyup="checkNum(this)" required="required"'); ?>
+                                    </div>
+                                    
+                                    <div class="form-group col-md-3 col-xs-12">
+										<?= lang('commision_percentage', 'commision_percentage'); ?>
+                                        <?php echo form_input('commision_percentage', $result->commision_percentage, 'class="form-control " id="commision_percentage" onkeyup="checkNum(this)" required="required"'); ?>
+                                    </div>
+                                    
+                                    <div class="clearfix"></div>
+              <div class="form-group col-sm-3 col-xs-12">
                 <?= lang('continent', 'continent'); ?>
                 <?php
                                         $c[''] = 'Select Continents';
@@ -92,7 +130,7 @@
               </div>
             </div>
           </div>
-          <div class="col-md-12">
+          <div class="col-md-12 hidden">
             <div class="col-md-12 box_he_de"><b><?= lang('peek_fare') ?></b>
               <div class="switch-field pull-right">
                 <input type="radio" value="0" id="switch_left_is_peak" class="skip" name="is_peak" <?php echo (@$result->is_peak==0) ? "checked" : ''; ?>>
@@ -375,7 +413,7 @@
 			  ?>
             </div>
           </div>
-          <div class="col-md-12">
+          <div class="col-md-12 hidden">
             <div class="col-md-12 box_he_de"><b><?= lang('night_fare') ?></b>
               <div class="switch-field pull-right">
                 <input type="radio" value="0" id="switch_left_is_night" class="skip" name="is_night" <?php echo (@$result->is_night==0) ? "checked" : ''; ?>>
@@ -702,6 +740,39 @@ $(document).ready(function(){
 				
 			}
 		})
+	});
+	
+	$('#taxi_type').change(function(){
+		
+		$("#tons").select2("destroy");
+		id = $(this).val();
+		$.ajax({
+			type: 'POST',
+			url: '<?=admin_url('masters/getTons_byTaxi_type')?>',
+			data: {taxi_type_id: id},
+			dataType: "json",
+			cache: false,
+			success: function (scdata) {
+				
+				
+				console.log(scdata);
+				$option1 = '<option value="">Select Tons</option>';
+				if(scdata.length != 0){
+				$.each(scdata.type,function(n,v){
+					$option1 += '<option data-shift="'+v.shift_name+'" value="'+v.tons+'">'+v.tons+'</option>';
+				});
+				}
+				$("#tons").html($option1);
+				$("#tons").select2();
+				
+			}
+		})
+	});
+	
+	$('#tons').change(function(){
+		var shift_name = $(this).find(':selected').attr('data-shift');
+		$('#shift_name').val(shift_name);
+		
 	});
 });
 </script>

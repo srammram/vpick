@@ -602,7 +602,7 @@
                             </div>
                              <div class="col-md-6">
                             <div class="controls">
-                                <?= form_input('night_shift_from_time', $dataSettings->night_shift_to_time, 'class="form-control tip" id="night_shift_to_time" readonly'); ?>
+                                <?= form_input('night_shift_to_time', $dataSettings->night_shift_to_time, 'class="form-control tip" id="night_shift_to_time" readonly'); ?>
                             </div>
                             </div>
                             

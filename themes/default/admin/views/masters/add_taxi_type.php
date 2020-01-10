@@ -93,31 +93,42 @@ $('form[class="add_from"]').bootstrapValidator({
             </select>
             </div>
             
+            <div class="col-md-12">  
+						<h2 class="box_he_de"><?= lang('tons_details') ?></h2>
+						<div id="field">
+                            <div id="field0">
+                            
+                            
+                                <div class="form-group col-md-4 col-xs-12">
+                                    <?= lang('tons', 'tons'); ?>
+                                    <?php echo form_input('tons[]', '', 'class="form-control num" id="tons" onkeyup="checkNum(this)" required="required"'); ?>
+                                </div>
+                               
+                                
+                                <div class="form-group col-md-4 col-xs-12">
+                                    <?= lang('shift', 'shift'); ?>
+                                    <?php
+                                    $f['Both Shift'] = 'Both Shift';
+                                    $f['Day Shift'] = 'Day Shift';
+									$f['Night Shift'] = 'Night Shift';
+									
+                                    echo form_dropdown('shift[]', $f, '', 'class="form-control select"  id="shift" required="required"'); ?>
+                                </div>
+                                
+                                
+                                <div class="form-group col-md-4 col-xs-12">
+                                    
+                                    <button type="button" style="margin-top:30px;" id="add-more" name="add-more" class="btn btn-primary btn-block">Add More</button>
+                                </div>
+                       			
+                            
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+            			</div>
             
-            <!--<input type="hidden" name="category_id" value="1">-->
             
-            <!--<div class="form-group all col-sm-6 col-xs-12">
-				<?= lang("image", "image") ?>
-                <input id="image" type="file" data-browse-label="<?= lang('browse'); ?>" name="image" data-show-upload="false"
-                       data-show-preview="false" class="form-control file" accept="im/*">
-            </div>
-            
-            <div class="form-group all col-sm-6 col-xs-12">
-				<?= lang("image_hover", "image_hover") ?>
-                <input id="image_hover" type="file" data-browse-label="<?= lang('browse'); ?>" name="image_hover" data-show-upload="false"
-                       data-show-preview="false" class="form-control file" accept="im/*">
-            </div>
-            
-            <div class="form-group all col-sm-6 col-xs-12">
-				<?= lang("mapcar", "mapcar") ?>
-                <input id="mapcar" type="file" data-browse-label="<?= lang('browse'); ?>" name="mapcar" data-show-upload="false"
-                       data-show-preview="false" class="form-control file" accept="im/*">
-            </div>-->
-            <!-- <div class="form-group all col-sm-6 col-xs-12">
-				<?= lang("outstation_image", "outstation_image") ?>
-                <input id="outstation_image" type="file" data-browse-label="<?= lang('browse'); ?>" name="outstation_image" data-show-upload="false"
-                       data-show-preview="false" class="form-control file" accept="im/*">
-            </div>-->
+           
             
             </div>
             
@@ -171,4 +182,44 @@ $(document).ready(function(){
 		})
 	});
 });
+
+$(document).ready(function () {
+    var next = 0;
+	$(document).on('click', "#add-more", function(e){
+ 
+        e.preventDefault();
+        var addto = "#field";
+       // var addRemove = "#field" + (next);
+        next = next + 1;
+        var newIn = ' <div id="field'+ next +'" name="field'+ next +'"><div class="form-group col-md-4 col-xs-12"><label>Tons</label><input type="text" name="tons[]" class="form-control num"  onkeyup="checkNum(this)" id="tons" ></div><div class="form-group col-md-4 col-xs-12"><label>Shift</label><select name="shift[]" class="form-control select"><option value="Both Shift">Both Shift</option><option value="Day Shift">Day Shift</option><option value="Night Shift">Night Shift</option></select></div><div class="form-group col-md-4 col-xs-12"><button type="button" style="margin-top:30px;"  id="remove' + (next - 1) + '" class="btn btn-danger btn-block remove-me" >Remove</button></div></div><div class="clearfix"></div>';
+        var newInput = $(newIn);
+        //var removeBtn = '';
+       // var removeButton = $(removeBtn);
+        $(addto).before(newInput);
+       // $(addRemove).before(removeButton);
+        $("#field" + next).attr('data-source',$(addto).attr('data-source'));
+        $("#count").val(next);  
+        
+            $('.remove-me').click(function(e){
+                e.preventDefault();
+                var fieldNum = parseInt(this.id.charAt(this.id.length-1));
+				fieldNum = parseInt(fieldNum + 1);
+                var fieldID = "#field" + fieldNum;
+                $(this).remove();
+                $(fieldID).remove();
+            });
+    });
+
+
+});
+
+
+
+function checkNum(input) {
+	input.value = input.value.match(/^\d+\.?\d{0,1}/);  
+}
+
+/*$(".num").keyup(function (e){
+	this.value = this.value.match(/^\d+\.?\d{0,1}/);  
+});*/
 </script>

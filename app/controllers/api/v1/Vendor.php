@@ -3263,6 +3263,7 @@ class Vendor extends REST_Controller {
 			   }else{
 				   $is_daily = 0;
 			   }
+			   $this->site->createTonNotification($this->input->post('weight'), $this->input->post('type'), '1', $countryCode);
 			$taxi = array(
 				'name' => $this->input->post('name'),
 				'model' => $this->input->post('model'),

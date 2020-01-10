@@ -2822,5 +2822,76 @@ function GetDrivingDistanceNew1($point1_lat, $point1_long, $point2_lat, $point2_
 		}
 		return false;
 	}
+	
+	function createTonNotification($tons, $type, $user_id, $countryCode){
+		$this->db->where('tons', $tons);
+		$this->db->where('taxi_type_id', $type);
+		$q = $this->db->get('taxi_tons');
+		if($q->num_rows() == 0){
+			$this->db->insert('tons_notification', array('taxi_type_id' => $type, 'tons' => $tons, 'created_by' => $user_id, 'created_on' => date('Y-m-d H:i:s'), 'is_country' => $countryCode));
+			return true;
+		}
+		return false;
+	}
+	
+	function getTons_notification($group_id, $countryCode){
+		$this->db->select('tn.id, tt.name as type_name, tn.tons, tn.is_read');
+		$this->db->from('tons_notification tn');
+		$this->db->join('taxi_type tt', 'tt.id = tn.taxi_type_id');
+		if($group_id != 1){
+		$this->db->where('tn.is_country', $countryCode);
+		}
+		$this->db->where('tn.created_status', 0);
+		$this->db->order_by('tn.is_read', 'ACS');
+		$q = $this->db->get();
+		
+		if($q->num_rows() > 0){
+			
+			return $q->result();
+		}
+		return false;
+	}
+	
+	function checkTons($tons, $type){
+		$this->db->select('tn.id, tn.taxi_type_id, tn.tons');
+		$this->db->from('taxi_tons tn');
+		
+		$this->db->where('tn.tons', $tons);
+		$this->db->where('tn.taxi_type_id', $type);
+		$q = $this->db->get();
+		//print_r($this->db->last_query());die;
+		if($q->num_rows() == 0){
+			
+			return true;
+		}else{
+			
+			$d =  $this->db->select('id')->where('tons', $q->row('tons'))->where('taxi_type', $q->row('taxi_type_id'))->get('daily_fare');
+			if($d->num_rows() > 0){
+				$daily_fare = 1;
+			}else{
+				$daily_fare = 0;
+			}
+			
+			$o = $this->db->select('id')->where('tons', $q->row('tons'))->where('taxi_type', $q->row('taxi_type_id'))->get('outstation_fare');
+			if($o->num_rows() > 0){
+				$outstation_fare = 1;
+			}else{
+				$outstation_fare = 0;
+			}
+			
+			$r = $this->db->select('id')->where('tons', $q->row('tons'))->where('taxi_type', $q->row('taxi_type_id'))->get('rental_fare');
+			if($r->num_rows() > 0){
+				$rental_fare = 1;
+			}else{
+				$rental_fare = 0;
+			}
+			
+			if($daily_fare == 0 && $outstation_fare == 0 && $rental_fare == 0){				
+				return true;
+			}else{
+				return false;	
+			}
+		}
+	}
     
 }

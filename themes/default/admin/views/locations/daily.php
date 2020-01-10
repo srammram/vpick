@@ -13,6 +13,17 @@ function city_fare_status(x) {
         '<a href="javascript:void(0)"><span class="label label-success">Yes</a>' :
         '<a href="javascript:void(0)"><span class="label label-danger">No<a/>';
     }
+	
+	function load_status(n) {
+        var m = n
+		
+        return m == 1 ?
+        '<a href="javascript:void(0)"><span class="text-success">Single Load</a>' :
+		m == 2 ?
+		'<a href="javascript:void(0)"><span class="text-success">Single Time </a>' :
+        '<a href="javascript:void(0)"><span class="text-danger">Full Load<a/>';
+    }
+	
     $(document).ready(function () {
         oTable = $('#UsrTable').dataTable({
             "aaSorting": [[0, "desc"]],
@@ -28,7 +39,7 @@ function city_fare_status(x) {
                 $.ajax({'dataType': 'json', 'type': 'POST', 'url': sSource, 'data': aoData, 'success': fnCallback});
             },
             
-            "aoColumns": [ {"mRender": empty_status},{"mRender": empty_status}, {"mRender": empty_status}, {"mRender": empty_status},{"mRender": empty_status},{"mRender": empty_status},{"mRender": empty_status},{"mRender": city_fare_status}, {"mRender": default_status}, {"mRender": empty_status}, {"mRender": empty_status}]
+            "aoColumns": [ {"mRender": empty_status},{"mRender": empty_status},{"mRender": empty_status},{"mRender": empty_status}, {"mRender": empty_status}, {"mRender": empty_status},{"mRender": empty_status},{"mRender": empty_status},{"mRender": empty_status}, {"mRender": load_status}, {"mRender": empty_status}, {"mRender": empty_status}, {"mRender": city_fare_status},  {"mRender": default_status}, {"mRender": empty_status}, {"mRender": empty_status}]
         });
     });
 </script>
@@ -122,12 +133,17 @@ function city_fare_status(x) {
                         <tr>
                             
                             <th class="col-xs-2"><?php echo lang('cab_type'); ?></th>
+                            <th class="col-xs-2"><?php echo lang('tons'); ?></th>
+                            <th class="col-xs-2"><?php echo lang('access'); ?></th>
                             <th class="col-xs-2"><?php echo lang('area'); ?></th>
                             <th class="col-xs-2"><?php echo lang('city'); ?></th>
                             <th class="col-xs-2"><?php echo lang('state'); ?></th>
                             <th class="col-xs-2"><?php echo lang('country'); ?></th>
                             <th class="col-xs-2"><?php echo lang('min_fare'); ?></th>
-                            <th class="col-xs-2"><?php echo lang('per_fare'); ?></th>
+                            <th class="col-xs-2"><?php echo lang('rate_per_km'); ?></th>
+                            <th style="width:100px;"><?php echo lang('load_status'); ?></th>
+                            <th style="width:100px;"><?php echo lang('work_per_load'); ?></th>
+                            <th style="width:100px;"><?php echo lang('commision%'); ?></th>
                             <th style="width:100px;"><?php echo lang('status'); ?></th>
                             <th style="width:100px;"><?php echo lang('default'); ?></th>
                             <th style="width: 33.33%!important;"><?php echo lang('instance'); ?></th>

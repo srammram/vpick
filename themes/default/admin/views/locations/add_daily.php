@@ -29,12 +29,47 @@
               <div class="form-group col-sm-3 col-xs-12">
                 <?= lang('cab_type', 'taxi_type'); ?>
                 <?php
-                                        $t[''] = 'Select Taxi Type';
-                                        foreach ($taxi_types as $taxi_type) {
-                                            $t[$taxi_type->id] = $taxi_type->name;
-                                        }
-                                        echo form_dropdown('taxi_type', $t, '', 'class="form-control select"  id="taxi_type" required="required"'); ?>
+					$t[''] = 'Select Taxi Type';
+					foreach ($taxi_types as $taxi_type) {
+						$t[$taxi_type->id] = $taxi_type->name;
+					}
+					echo form_dropdown('taxi_type', $t, '', 'class="form-control select"  id="taxi_type" required="required"'); ?>
               </div>
+              <div class="form-group col-sm-3 col-xs-12">
+                <?= lang('tons', 'tons'); ?>
+                <?php
+				
+				
+				echo form_dropdown('tons', '', '', 'class="form-control select"  id="tons" required="required"'); ?>
+			</div>
+            <div class="form-group col-md-3 col-xs-12">
+										<?= lang('accessing', 'accessing'); ?>
+                                        <?php echo form_input('shift_name', '', 'class="form-control " id="shift_name" readonly required="required"'); ?>
+                                    </div>
+                                    
+                                    <div class="form-group col-md-3 col-xs-12">
+										<?= lang('load_status', 'load_status'); ?>
+                                        <?php
+										 	
+                                        $f['0'] = 'Full Load';
+                                        $f['1'] = 'Single Load';
+                                        $f['2'] = 'Single Time';
+                                        
+                                        echo form_dropdown('load_status', $f, '', 'class="form-control select"  id="load_status" required="required"'); ?>
+                                    </div>
+                                    
+                                    <div class="form-group col-md-3 col-xs-12">
+										<?= lang('work_per_load', 'work_per_load'); ?>
+                                        <?php echo form_input('work_per_load', '', 'class="form-control" id="work_per_load" onkeyup="checkNum(this)" required="required"'); ?>
+                                    </div>
+                                    
+                                    <div class="form-group col-md-3 col-xs-12">
+										<?= lang('commision_percentage', 'commision_percentage'); ?>
+                                        <?php echo form_input('commision_percentage', '', 'class="form-control " id="commision_percentage" onkeyup="checkNum(this)" required="required"'); ?>
+                                    </div>
+                                    
+                                    <div class="clearfix"></div>
+                                    
               <div class="form-group col-sm-3 col-xs-12">
                 <?= lang('continent', 'continent'); ?>
                 <?php
@@ -71,7 +106,7 @@
               </div>
             </div>
           </div>
-          <div class="col-md-12">
+          <div class="col-md-12 hidden">
             <div class="col-md-12 box_he_de"><b><?= lang('peek_fare') ?></b>
               <div class="switch-field pull-right">
                 <input type="radio" value="0" id="switch_left_is_peak" class="skip" name="is_peak" <?php echo (@$fare->is_peak==0) ? "checked" : ''; ?>>
@@ -209,12 +244,12 @@
               </div>
             </div>
           </div>
-          <div class="col-md-12">
+          <div class="col-md-12 hidden">
             <div class="col-md-12 box_he_de"><b><?= lang('night_fare') ?></b>
               <div class="switch-field pull-right">
                 <input type="radio" value="0" id="switch_left_is_night" class="skip" name="is_night" <?php echo (@$fare->is_night==0) ? "checked" : ''; ?>>
                 <label for="switch_left_is_night">OFF</label>
-                <input type="radio" value="1" id="switch_right_is_night" class="skip" name="is_night" <?php echo (@$fare->is_night==1) ? "checked" : ''; ?>>
+                <input type="radio" value="1"  id="switch_right_is_night" class="skip" name="is_night" <?php echo (@$fare->is_night==1) ? "checked" : ''; ?>>
                 <label for="switch_right_is_night">ON</label>
               </div>
             </div>
@@ -346,9 +381,9 @@
           <div class="col-md-12">
             <div class="col-md-12 box_he_de"><b><?= lang('base_fare') ?></b>
               <div class="switch-field pull-right">
-                <input type="radio" value="0" id="switch_left_is_base" class="skip" name="is_base" <?php echo (@$fare->is_base==0) ? "checked" : ''; ?>>
+                <input type="radio" value="0" id="switch_left_is_base" class="skip" name="is_base" >
                 <label for="switch_left_is_base">OFF</label>
-                <input type="radio" value="1" id="switch_right_is_base" class="skip" name="is_base" <?php echo (@$fare->is_base==1) ? "checked" : ''; ?>>
+                <input type="radio" value="1" id="switch_right_is_base" class="skip" name="is_base" checked>
                 <label for="switch_right_is_base">ON</label>
               </div>
             </div>
@@ -582,6 +617,38 @@ $(document).ready(function(){
 				
 			}
 		})
+	});
+	$('#taxi_type').change(function(){
+		
+		$("#tons").select2("destroy");
+		id = $(this).val();
+		$.ajax({
+			type: 'POST',
+			url: '<?=admin_url('masters/getTons_byTaxi_type')?>',
+			data: {taxi_type_id: id},
+			dataType: "json",
+			cache: false,
+			success: function (scdata) {
+				
+				
+				console.log(scdata);
+				$option1 = '<option value="">Select Tons</option>';
+				if(scdata.length != 0){
+				$.each(scdata.type,function(n,v){
+					$option1 += '<option data-shift="'+v.shift_name+'" value="'+v.tons+'">'+v.tons+'</option>';
+				});
+				}
+				$("#tons").html($option1);
+				$("#tons").select2();
+				
+			}
+		})
+	});
+	
+	$('#tons').change(function(){
+		var shift_name = $(this).find(':selected').attr('data-shift');
+		$('#shift_name').val(shift_name);
+		
 	});
 });
 </script>

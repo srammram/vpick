@@ -26,7 +26,15 @@
     
     
    
-    <noscript><style type="text/css">#loading { display: none; }</style></noscript>
+    <noscript>
+	<style type="text/css">#loading { display: none; }</style></noscript>
+    <style type="text/css">.sub_li{margin: 0px;
+    line-height: 20px;
+    padding: 0px 15px 0px 30px;
+    font-size: 12px;
+	color:#E0DEDE;
+    position: initial;
+    float: left;}</style>
         <script type="text/javascript">
         $(window).load(function () {
             $("#loading").fadeOut("slow");
@@ -119,37 +127,57 @@
                             
                         </ul>
                     </li>
-<!--                    <li class="dropdown hidden-xs"><a class="btn tip" title=" Dashboard" data-placement="bottom" href="<?=admin_url()?>welcome"><i class="fa fa-dashboard"></i></a></li>-->
-                    	<!--<li class="dropdown hidden-sm">
-                            <a class="btn tip" title="Search" data-placement="bottom" href="#" data-toggle="dropdown" data-original-title=" Notifications">
-                                <i class="fa fa-search" aria-hidden="true"></i>
-                            </a>
-                            <ul class="dropdown-menu pull-right calc">
-                                <li>
-                                    <a href="javascript:void(0)" class=""><input type="text" placeholder="search"></a>
-                                </li>
-                            </ul>
-                        </li>-->
-                    	<!--<li class="dropdown hidden-sm">
+
+				</ul>
+                
+                <ul class="nav navbar-nav pull-right">
+                		<?php
+						$tons_notification = $this->site->getTons_notification($this->session->userdata('group_id'), $this->countryCode);
+						$count_tons_notification = $tons_notification != false ? count($tons_notification) : 0;
+						?>
+<!-- Stars Symbols ⋆ ✢ ✥ ✦ ✧ ❂ ❉ ✯ - i2Symbol-->
+						
+                    	<li class="dropdown hidden-sm">
                             <a class="btn tip" title="" data-placement="bottom" href="#" data-toggle="dropdown" data-original-title=" Notifications">
                                 <i class="fa fa-bell" aria-hidden="true"></i>
-                                <span class="number bred white">4</span>
+                                <span class="number bred white"><?= $count_tons_notification; ?></span>
                             </a>
                             <ul class="dropdown-menu pull-right"  style="display: none;">
                                 <li>
-                                    <a href="#" class="">
+                                    <a href="javascript:void(0)">
+                                        <span class="label label-danger pull-right" style="margin-top:3px;"><?= $count_tons_notification; ?></span>
+                                        <span style="padding-right: 35px;">Tons Notification</span>
+                                    </a>
+                                    <?php
+									
+									if($tons_notification != false){
+									?>
+                                    <ul class="pull-right">
+                                    	<?php
+										foreach($tons_notification as $tons_n){
+											
+										?>
+                                        <li class="sub_li">
+                                            <a href="<?= admin_url('masters/taxi_type?ton_notification='.$tons_n->id); ?>" >
+                                            <span class="<?= $tons_n->is_read == 0 ? 'text-info' : '' ?>"> <?= $tons_n->type_name.'('.$tons_n->tons.' Tons)' ?> </span>
+                                            </a>
+                                        </li>
+                                        <?php
+										}
+										?>
+                                     </ul>
+                                    <?php
+									}
+									?>
+                                </li>
+								<!--<li>
+                                    <a href="#" class="a">
                                         <span class="label label-danger pull-right" style="margin-top:3px;">1</span>
-                                        <span style="padding-right: 35px;">Notification</span>
+                                        <span style="padding-right: 35px;">Tons Notification</span>
                                     </a>
-                                </li>
-								<li>
-                                    <a href="#" class="">
-                                        <span class="label label-danger pull-right" style="margin-top:3px;">2</span>
-                                        <span style="padding-right: 35px;">notification</span>
-                                    </a>
-                                </li>
+                                 </li>-->
                             </ul>
-                        </li>-->
+                        </li>
                     	<!--<li class="dropdown hidden-sm">
                             <a class="btn tip" title="" data-placement="left" data-toggle="dropdown" href="#" data-original-title=" Alerts">
                                 <i class="fa fa-envelope" aria-hidden="true"></i>

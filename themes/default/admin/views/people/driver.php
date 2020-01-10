@@ -45,6 +45,8 @@
 		
         return z[1] == 1 ?
         '<a href="'+site.base_url+'people/driver_edit/'+ z[0] +'/view"><span class="label label-success">  Verified</span></a>' :
+		 z[2] == 0 ?
+		 '<a href="javascript:void(0)"><span class="text-warning"> Admin Status Pending</span></a>' :
         '<a href="'+site.base_url+'people/driver_status/deactive/'+ z[0] +'"><span class="label label-danger">  Not Verified</span><a/>';
     }
 	

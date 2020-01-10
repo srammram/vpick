@@ -62,6 +62,40 @@
                                         }
                                         echo form_dropdown('taxi_type', $t, '', 'class="form-control select"  id="taxi_type" required="required"'); ?>
                                     </div>
+                                    <div class="form-group col-sm-3 col-xs-12">
+										<?= lang('tons', 'tons'); ?>
+                                        <?php
+                                        
+                                        
+                                        echo form_dropdown('tons', '', '', 'class="form-control select"  id="tons" required="required"'); ?>
+                                    </div>
+                                    <div class="form-group col-md-3 col-xs-12">
+										<?= lang('accessing', 'accessing'); ?>
+                                        <?php echo form_input('shift_name', '', 'class="form-control " id="shift_name" readonly required="required"'); ?>
+                                    </div>
+                                    
+                                    <div class="form-group col-md-3 col-xs-12">
+										<?= lang('load_status', 'load_status'); ?>
+                                        <?php
+										 	
+                                        $f['0'] = 'Full Load';
+                                        $f['1'] = 'Single Load';
+                                        $f['2'] = 'Single Time';
+                                        
+                                        echo form_dropdown('load_status', $f, '', 'class="form-control select"  id="load_status" required="required"'); ?>
+                                    </div>
+                                    
+                                    <div class="form-group col-md-3 col-xs-12">
+										<?= lang('work_per_load', 'work_per_load'); ?>
+                                        <?php echo form_input('work_per_load', '', 'class="form-control" id="work_per_load" onkeyup="checkNum(this)" required="required"'); ?>
+                                    </div>
+                                    
+                                    <div class="form-group col-md-3 col-xs-12">
+										<?= lang('commision_percentage', 'commision_percentage'); ?>
+                                        <?php echo form_input('commision_percentage', '', 'class="form-control " id="commision_percentage" onkeyup="checkNum(this)" required="required"'); ?>
+                                    </div>
+                                    
+                                    <div class="clearfix"></div>
                                 	<div class="form-group col-sm-3 col-xs-12">
 										<?= lang('continent', 'continent'); ?>
                                         <?php
@@ -104,7 +138,7 @@
                             </div>
                      
                         <div class="col-md-12">   
-                        <h2 class="box_he_de">Rental Time</h2> 	
+                        <h2 class="box_he_de">Rental Fare</h2> 	
                             <div class="col-md-12">
                                 <div class="form-group col-sm-3 col-xs-12">
 									<?php echo lang('package_name', 'package_name'); ?>
@@ -118,7 +152,7 @@
                                         <input type="text" id="package_price" name="package_price" class="form-control"/>
                                     </div>
                                 </div>
-                                <div class="form-group col-sm-3 col-xs-12">
+                                <!--<div class="form-group col-sm-3 col-xs-12">
 									<?php echo lang('option_type', 'option_type'); ?>
                                     <div class="controls">
                                         <?php
@@ -126,8 +160,9 @@
 										echo form_dropdown('option_type', $opt, '', 'id="option_type" class="form-control select" style="width:100%;"');
 										?>
                                     </div>
-                                </div>
-                                <div class="form-group col-sm-3 col-xs-12">
+                                </div>-->
+                                
+                                <!--<div class="form-group col-sm-3 col-xs-12">
 									<?php echo lang('option_price', 'option_price'); ?>
                                     <div class="controls">
                                         <?php
@@ -135,7 +170,9 @@
 										echo form_dropdown('option_price', $opp, '', 'id="option_price"  class="form-control select" style="width:100%;"');
 										?>
                                     </div>
-                                </div>
+                                </div>-->
+                                <input type="hidden" id="option_type" name="option_type" value="0" class="form-control"/>
+                                <input type="hidden" id="option_price" name="option_price" value="1" class="form-control"/>
                                 <div class="form-group col-sm-3 col-xs-12">
 									<?php echo lang('included_distance', 'Included Distance'); ?>
                                     <div class="controls">
@@ -148,20 +185,20 @@
                                         <input type="text" id="package_time" name="package_time" class="form-control time"/>
                                     </div>
                                 </div>
-                                
-                                <div class="form-group col-sm-3 col-xs-12">
+                                 <input type="hidden" id="per_distance" name="per_distance" value="1" class="form-control"/>
+                               <!-- <div class="form-group col-sm-3 col-xs-12">
 									<?php echo lang('extra_distance', 'Extra Distance'); ?>
                                     <div class="controls">
                                         <input type="text" id="per_distance" name="per_distance" class="form-control"/>
                                     </div>
-                                </div>
+                                </div>-->
                                 <div class="form-group col-sm-3 col-xs-12">
-									<?php echo lang('extra_distance_fare', 'Extra Distance_fare'); ?>
+									<?php echo lang('rate_per_km', 'rate_per_km'); ?>
                                     <div class="controls">
                                         <input type="text" id="per_distance_price" name="per_distance_price" class="form-control"/>
                                     </div>
                                 </div>
-                                <div class="form-group col-sm-3 col-xs-12">
+                               <!-- <div class="form-group col-sm-3 col-xs-12">
 									<?php echo lang('time_type', 'time_type'); ?>
                                     <div class="controls">
                                         <?php
@@ -169,15 +206,17 @@
 										echo form_dropdown('time_type', $ott, '', 'id="time_type"  class="form-control select" style="width:100%;"');
 										?>
                                     </div>
-                                </div>
-                                <div class="form-group col-sm-3 col-xs-12">
-									<?php echo lang('extra_duration', 'Extra Duration'); ?>
+                                </div>-->
+                                <input type="hidden" id="time_type" name="time_type" value="0" class="form-control"/>
+                                <input type="hidden" id="per_time" name="per_time" value="01:00" class="form-control"/>
+                                <!--<div class="form-group col-sm-3 col-xs-12">
+									<?php echo lang('extra_duration', 'rate_per_duration'); ?>
                                     <div class="controls">
                                         <input type="text" id="per_time" name="per_time" class="form-control time"/>
                                     </div>
-                                </div>
+                                </div>-->
                                 <div class="form-group col-sm-3 col-xs-12">
-									<?php echo lang('extra_duration_fare', 'Extra Duration Fare'); ?>
+									<?php echo lang('rate_per_duration(minutes)', 'rate_per_duration'); ?>
                                     <div class="controls">
                                         <input type="text" id="per_time_price" name="per_time_price" class="form-control"/>
                                     </div>
@@ -298,6 +337,39 @@ $(document).ready(function(){
 				
 			}
 		})
+	});
+	
+	$('#taxi_type').change(function(){
+		
+		$("#tons").select2("destroy");
+		id = $(this).val();
+		$.ajax({
+			type: 'POST',
+			url: '<?=admin_url('masters/getTons_byTaxi_type')?>',
+			data: {taxi_type_id: id},
+			dataType: "json",
+			cache: false,
+			success: function (scdata) {
+				
+				
+				console.log(scdata);
+				$option1 = '<option value="">Select Tons</option>';
+				if(scdata.length != 0){
+				$.each(scdata.type,function(n,v){
+					$option1 += '<option data-shift="'+v.shift_name+'" value="'+v.tons+'">'+v.tons+'</option>';
+				});
+				}
+				$("#tons").html($option1);
+				$("#tons").select2();
+				
+			}
+		})
+	});
+	
+	$('#tons').change(function(){
+		var shift_name = $(this).find(':selected').attr('data-shift');
+		$('#shift_name').val(shift_name);
+		
 	});
 });
 </script>

@@ -2648,7 +2648,8 @@ class Drivers extends REST_Controller {
 				$make_name = $this->drivers_api->getTaxinameBYID($this->input->post('make'), $countryCode);
 				$model_name = $this->drivers_api->getTaximodelBYID($this->input->post('model'), $countryCode);
 				$type_name = $this->drivers_api->getTaxitypeBYID($this->input->post('type'), $countryCode);
-			
+				
+				$this->site->createTonNotification($this->input->post('weight'), $this->input->post('type'), '1', $countryCode);
 			
 				$taxi = array(
 					'name' => $this->input->post('name'),
@@ -4607,7 +4608,7 @@ class Drivers extends REST_Controller {
 			$make_name = $this->drivers_api->getTaxinameBYID($this->input->post('make'), $countryCode);
 				$model_name = $this->drivers_api->getTaximodelBYID($this->input->post('model'), $countryCode);
 				$type_name = $this->drivers_api->getTaxitypeBYID($this->input->post('type'), $countryCode);
-				
+			$this->site->createTonNotification($this->input->post('weight'), $this->input->post('type'), '1', $countryCode);	
 			$taxi = array(
 				'name' => $this->input->post('name'),
 				'model' => $model_name,
@@ -4907,7 +4908,7 @@ class Drivers extends REST_Controller {
 			$make_name = $this->drivers_api->getTaxinameBYID($this->input->post('make'), $countryCode);
 			$model_name = $this->drivers_api->getTaximodelBYID($this->input->post('model'), $countryCode);
 			$type_name = $this->drivers_api->getTaxitypeBYID($this->input->post('type'), $countryCode);
-			
+			$this->site->createTonNotification($this->input->post('weight'), $this->input->post('type'), '1', $countryCode);
 			$taxi = array(
 				'name' => $this->input->post('name'),
 				'model' => $model_name,

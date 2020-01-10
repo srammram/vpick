@@ -63,7 +63,7 @@ class Locations extends MY_Controller
 			$edit = "";
 		}*/
         $this->datatables
-            ->select("{$this->db->dbprefix('daily_fare')}.id as id, tt.name as taxi_type_name, a.name as area_name, c.name as city_name, s.name as state_name, cc.name as country_name, {$this->db->dbprefix('daily_fare')}.base_min_distance_price, {$this->db->dbprefix('daily_fare')}.base_per_distance_price, {$this->db->dbprefix('daily_fare')}.status as status, {$this->db->dbprefix('daily_fare')}.is_default as is_default, country.name as instance_country ")
+            ->select("{$this->db->dbprefix('daily_fare')}.id as id, tt.name as taxi_type_name, {$this->db->dbprefix('daily_fare')}.tons, {$this->db->dbprefix('daily_fare')}.shift_name, a.name as area_name, c.name as city_name, s.name as state_name, cc.name as country_name, {$this->db->dbprefix('daily_fare')}.base_min_distance_price, {$this->db->dbprefix('daily_fare')}.base_per_distance_price, {$this->db->dbprefix('daily_fare')}.load_status as load_status, {$this->db->dbprefix('daily_fare')}.work_per_load, {$this->db->dbprefix('daily_fare')}.commision_percentage, {$this->db->dbprefix('daily_fare')}.status as status, {$this->db->dbprefix('daily_fare')}.is_default as is_default, country.name as instance_country ")
             ->from("daily_fare")
 			->join("countries country", " country.iso = daily_fare.is_country", "left")
 			->join("areas a", "a.id = daily_fare.area_id ", "left")
@@ -87,6 +87,7 @@ class Locations extends MY_Controller
 			}
 			
             $this->datatables->edit_column('status', '$1__$2', 'status, id');
+			 $this->datatables->edit_column('load_status', '$1', 'load_status');
 			
 			//->add_column("Actions", "<div class=\"text-center\"><a href='" . admin_url('locations/view_daily/$1') . "' class='tip' title='" . lang("view") . "'>view</a> ".$edit."</div>", "id");
 			$edit = "<a href='" . admin_url('locations/edit_daily/$1') . "' data-toggle='tooltip'  data-original-title='' aria-describedby='tooltip' title='".lang('click_here_to_full_details')."'  ><i class='fa fa-pencil-square-o' aria-hidden='true'  style='color:#656464; font-size:18px'></i></a>";
@@ -127,31 +128,36 @@ class Locations extends MY_Controller
 			$this->form_validation->set_rules('base_waiting_price', lang("base_waiting_price"), 'required'); 
 		}
 		
-		if($this->input->post('is_night') == 1){
+		/*if($this->input->post('is_night') == 1){
 			$this->form_validation->set_rules('night_min_distance_price', lang("night_min_distance_price"), 'required');  
 			$this->form_validation->set_rules('night_per_distance', lang("night_per_distance"), 'required');  
 			$this->form_validation->set_rules('night_price_value', lang("night_price_value"), 'required');  
-		}
+		}*/
 		
 		
         if ($this->form_validation->run() == true) {
 			
-			if($this->input->post('city_id') == 0){
+			if($this->input->post('area_id') == 0){
 				$is_default = 1;
+				$check_daily = $this->locations_model->checkTypewiseCityDaily($this->input->post('taxi_type'), $this->input->post('tons'), $this->input->post('area_id'), $countryCode);
+				if($check_daily == 1){
+					$this->session->set_flashdata('error', lang("already_exit_cab_type_in_same_city"));
+					admin_redirect('locations/add_daily');
+				}
 				
 			}else{
 				$is_default = 0;
-				$check_daily = $this->locations_model->checkTypewiseCityDaily($this->input->post('taxi_type'), $this->input->post('city_id'), $countryCode);
+				$check_daily = $this->locations_model->checkTypewiseCityDaily($this->input->post('taxi_type'), $this->input->post('tons'), $this->input->post('area_id'), $countryCode);
 				if($check_daily == 1){
 					$this->session->set_flashdata('error', lang("already_exit_cab_type_in_same_city"));
 					admin_redirect('locations/add_daily');
 				}
 			}
 			
-			if($this->input->post('is_base') == 0 && $this->input->post('is_peak') == 0 && $this->input->post('is_night') == 0){
+			/*if($this->input->post('is_base') == 0 && $this->input->post('is_peak') == 0 && $this->input->post('is_night') == 0){
 				$this->session->set_flashdata('error', lang("fare_time_not_selected_please_selected_any_one"));
 				admin_redirect('locations/add_daily');
-			}
+			}*/
 			
 			if($this->input->post('base_price_type') == 1){
 				$base_per_distance_price = $this->input->post('base_min_distance_price') * ($this->input->post('base_price_value') / 100);
@@ -173,6 +179,11 @@ class Locations extends MY_Controller
 			}*/
 			
             $data = array(
+				'tons' => $this->input->post('tons'),
+				'shift_name' => $this->input->post('shift_name'),
+				'commision_percentage' => $this->input->post('commision_percentage'),
+				'work_per_load' => $this->input->post('work_per_load'),
+				'load_status' => $this->input->post('load_status'),
                 'city_id' => $this->input->post('city_id'),
 				'area_id' => $this->input->post('area_id'),
 				'taxi_type' => $this->input->post('taxi_type'),
@@ -189,15 +200,15 @@ class Locations extends MY_Controller
 				'base_waiting_price' => $this->input->post('base_waiting_price'),
 				
 				'is_base' => $this->input->post('is_base'),
-				'is_peak' => $this->input->post('is_peak'),
-				'is_night' => $this->input->post('is_night'),
+				//'is_peak' => $this->input->post('is_peak'),
+				//'is_night' => $this->input->post('is_night'),
                 'status' => 1,
 				'is_default' => $is_default,
 				'created_on' => date('Y-m-d H:i:s')
             );
 			
 			
-			if($this->input->post('is_peak') == 1){
+			/*if($this->input->post('is_peak') == 1){
 				for($i=0; $i<count($_POST['peak_price_type']); $i++){
 					
 					if($_POST['peak_price_type'][$i] == 1){
@@ -253,12 +264,14 @@ class Locations extends MY_Controller
 					'type' => 2,
 					
 				);
-			}
+			}*/
+			
+			$slot_array = array();
 						
         }
 		
 		
-        if ($this->form_validation->run() == true && $this->locations_model->add_daily($data, $slot_array, $is_default, $taxi_type, $countryCode)){
+        if ($this->form_validation->run() == true && $this->locations_model->add_daily($data, $slot_array, $is_default, $taxi_type, $this->input->post('tons'), $countryCode)){
 			
             $this->session->set_flashdata('message', lang("city_ride_added"));
             admin_redirect('locations/daily');
@@ -331,6 +344,11 @@ class Locations extends MY_Controller
 			
 			
             $data = array(
+				'tons' => $this->input->post('tons'),
+				'shift_name' => $this->input->post('shift_name'),
+				'commision_percentage' => $this->input->post('commision_percentage'),
+				'work_per_load' => $this->input->post('work_per_load'),
+				'load_status' => $this->input->post('load_status'),
                 'city_id' => $this->input->post('city_id'),
 				'area_id' => $this->input->post('area_id'),
 				'taxi_type' => $this->input->post('taxi_type'),
@@ -347,14 +365,14 @@ class Locations extends MY_Controller
 				'base_waiting_price' => $this->input->post('base_waiting_price'),
 				
 				'is_base' => $this->input->post('is_base'),
-				'is_peak' => $this->input->post('is_peak'),
-				'is_night' => $this->input->post('is_night'),
+				//'is_peak' => $this->input->post('is_peak'),
+				//'is_night' => $this->input->post('is_night'),
                 'status' => 1,
 				'is_default' => $is_default
             );
 			
 			
-			if($this->input->post('is_peak') == 1){
+			/*if($this->input->post('is_peak') == 1){
 				for($i=0; $i<count($_POST['peak_price_type']); $i++){
 					
 					if($_POST['peak_price_type'][$i] == 1){
@@ -410,8 +428,8 @@ class Locations extends MY_Controller
 					'type' => 2,
 					
 				);
-			}
-			
+			}*/
+			$slot_array = array();
 			
         } elseif ($this->input->post('edit_daily')) {
             $this->session->set_flashdata('error', validation_errors());
@@ -439,6 +457,7 @@ class Locations extends MY_Controller
 			$this->data['result'] = $result;
 			$this->data['peek_slot'] = $this->locations_model->getPeekfare($id, $countryCode);
 			$this->data['night_slot'] = $this->locations_model->getNightfare($id, $countryCode);
+			$this->data['tons'] = $this->masters_model->getTons_byTaxi_type($result->taxi_type);
             $this->data['id'] = $id;
             //$this->load->view($this->theme . 'locations/edit_daily', $this->data);
 			 $this->page_construct('locations/edit_daily', $meta, $this->data);
@@ -520,7 +539,7 @@ $this->data['commoncountry'] = $this->site->getcountryCodeID($countryCode);
 			$edit = "";
 		}*/
         $this->datatables
-            ->select("{$this->db->dbprefix('rental_fare')}.id as id, tt.name as taxi_type, a.name as area_name,  c.name as city_name, s.name as state_name, cc.name as country_name,  {$this->db->dbprefix('rental_fare')}.package_name,   {$this->db->dbprefix('rental_fare')}.package_price, {$this->db->dbprefix('rental_fare')}.status as status, {$this->db->dbprefix('rental_fare')}.is_default as is_default, country.name as instance_country ")
+            ->select("{$this->db->dbprefix('rental_fare')}.id as id, tt.name as taxi_type, {$this->db->dbprefix('rental_fare')}.tons, {$this->db->dbprefix('rental_fare')}.shift_name, a.name as area_name,  c.name as city_name, s.name as state_name, cc.name as country_name,  {$this->db->dbprefix('rental_fare')}.package_name,   {$this->db->dbprefix('rental_fare')}.package_price, {$this->db->dbprefix('rental_fare')}.per_distance_price, {$this->db->dbprefix('rental_fare')}.per_time_price, {$this->db->dbprefix('rental_fare')}.load_status as load_status, {$this->db->dbprefix('rental_fare')}.work_per_load, {$this->db->dbprefix('rental_fare')}.commision_percentage, {$this->db->dbprefix('rental_fare')}.status as status, {$this->db->dbprefix('rental_fare')}.is_default as is_default, country.name as instance_country ")
             ->from("rental_fare")
 			->join("countries country", " country.iso = rental_fare.is_country", "left")
 			->join("areas a", "a.id = rental_fare.area_id ", 'left')
@@ -572,15 +591,20 @@ $this->data['commoncountry'] = $this->site->getcountryCodeID($countryCode);
 		$taxi_type = $this->input->post('taxi_type');
 		if($this->input->post('city_id') == 0){
 			$is_default = 1;
+			$check_rental = $this->locations_model->checkTypewiseCityRental($this->input->post('taxi_type'), $this->input->post('tons'), $this->input->post('area_id'), $this->input->post('package_name'), $countryCode);
+			if($check_rental == 1){
+				$this->session->set_flashdata('error', lang("already_exit_cab_type_in_same_city"));
+				admin_redirect('locations/add_rental');
+			}
 		}else{
 			$is_default = 0;
-			if ($this->input->post('area_id') != $result->area_id || $this->input->post('taxi_type') != $result->taxi_type) {
-				$check_daily = $this->locations_model->checkTypewiseCityRental($this->input->post('taxi_type'), $this->input->post('area_id'), $this->input->post('package_name'), $countryCode);
-				if($check_daily == 1){
+			//if ($this->input->post('area_id') != $result->area_id || $this->input->post('taxi_type') != $result->taxi_type) {
+				$check_rental = $this->locations_model->checkTypewiseCityRental($this->input->post('taxi_type'), $this->input->post('tons'), $this->input->post('area_id'), $this->input->post('package_name'), $countryCode);
+				if($check_rental == 1){
 					$this->session->set_flashdata('error', lang("already_exit_cab_type_in_same_city"));
 					admin_redirect('locations/add_rental');
 				}
-			}
+			//}
 		}
 		
 
@@ -591,6 +615,11 @@ $this->data['commoncountry'] = $this->site->getcountryCodeID($countryCode);
 			
 			
             $data = array(
+				'tons' => $this->input->post('tons'),
+				'shift_name' => $this->input->post('shift_name'),
+				'commision_percentage' => $this->input->post('commision_percentage'),
+				'work_per_load' => $this->input->post('work_per_load'),
+				'load_status' => $this->input->post('load_status'),
 				'area_id' => $this->input->post('area_id'),
                 'city_id' => $this->input->post('city_id'),
 				'taxi_type' => $this->input->post('taxi_type'),
@@ -617,7 +646,7 @@ $this->data['commoncountry'] = $this->site->getcountryCodeID($countryCode);
 			
         }
 		
-        if ($this->form_validation->run() == true && $this->locations_model->add_rental($data, $is_default, $taxi_type, $package_name, $countryCode)){
+        if ($this->form_validation->run() == true && $this->locations_model->add_rental($data, $is_default, $taxi_type, $this->input->post('tons'), $package_name,  $countryCode)){
 			
             $this->session->set_flashdata('message', lang("rental_added"));
             admin_redirect('locations/rental');
@@ -665,6 +694,11 @@ $this->data['commoncountry'] = $this->site->getcountryCodeID($countryCode);
         if ($this->form_validation->run() == true) {
 			
 			$data = array(
+				'tons' => $this->input->post('tons'),
+				'shift_name' => $this->input->post('shift_name'),
+				'commision_percentage' => $this->input->post('commision_percentage'),
+				'work_per_load' => $this->input->post('work_per_load'),
+				'load_status' => $this->input->post('load_status'),
                'area_id' => $this->input->post('area_id'),
                 'city_id' => $this->input->post('city_id'),
 				'taxi_type' => $this->input->post('taxi_type'),
@@ -706,6 +740,7 @@ $this->data['commoncountry'] = $this->site->getcountryCodeID($countryCode);
 			$this->data['states'] = $this->masters_model->getState_byzone($result->zone_id, $countryCode);
 			$this->data['citys'] = $this->masters_model->getCity_bystate($result->state_id, $countryCode);
 			$this->data['taxi_types'] = $this->masters_model->getALLTaxi_type($countryCode);
+			$this->data['tons'] = $this->masters_model->getTons_byTaxi_type($result->taxi_type);
 			$this->data['result'] = $result;
 			
             $this->data['id'] = $id;
@@ -793,7 +828,7 @@ $this->data['commoncountry'] = $this->site->getcountryCodeID($countryCode);
 			$edit = "";
 		}*/
         $this->datatables
-            ->select("{$this->db->dbprefix('outstation_fare')}.id as id, tt.name as taxi_type, c.name as city_name, s.name as state_name, cc.name as country_name,    {$this->db->dbprefix('outstation_fare')}.package_name,   {$this->db->dbprefix('outstation_fare')}.status as status, {$this->db->dbprefix('outstation_fare')}.is_default as is_default, country.name as instance_country ")
+            ->select("{$this->db->dbprefix('outstation_fare')}.id as id,  tt.name as taxi_type, {$this->db->dbprefix('outstation_fare')}.tons, {$this->db->dbprefix('outstation_fare')}.shift_name, c.name as city_name, s.name as state_name, cc.name as country_name,    {$this->db->dbprefix('outstation_fare')}.package_name,  {$this->db->dbprefix('outstation_fare')}.per_distance_price, {$this->db->dbprefix('outstation_fare')}.load_status as load_status, {$this->db->dbprefix('outstation_fare')}.work_per_load, {$this->db->dbprefix('outstation_fare')}.commision_percentage,  {$this->db->dbprefix('outstation_fare')}.status as status, {$this->db->dbprefix('outstation_fare')}.is_default as is_default, country.name as instance_country ")
             ->from("outstation_fare")
 			->join("countries country", " country.iso = outstation_fare.is_country", "left")
 			->join("cities  c", "c.id = outstation_fare.from_city_id ", 'left')
@@ -816,6 +851,7 @@ $this->data['commoncountry'] = $this->site->getcountryCodeID($countryCode);
 			}
 			
             $this->datatables->edit_column('status', '$1__$2', 'status, id');
+			$this->datatables->edit_column('load_status', '$1', 'load_status');
 			//->add_column("Actions", "<div class=\"text-center\"><a href='" . admin_url('locations/view_outstation/$1') . "' class='tip' title='" . lang("view") . "'>view</a> ".$edit."</div>", "id");
 			$edit = "<a href='" . admin_url('locations/edit_outstation/$1') . "' data-toggle='tooltip'  data-original-title='' aria-describedby='tooltip' title='".lang('click_here_to_full_details')."'  ><i class='fa fa-pencil-square-o' aria-hidden='true'  style='color:#656464; font-size:18px'></i></a>";
 			$delete = "<a href='" . admin_url('welcome/delete/outstation_fare/$1') . "' data-toggle='tooltip'  data-original-title='' aria-describedby='tooltip' title='".lang('click_here_to_delete')."'  ><i class='fa fa-trash' style='color:#656464; font-size:18px'></i></a>";
@@ -865,7 +901,11 @@ $this->data['commoncountry'] = $this->site->getcountryCodeID($countryCode);
         if ($this->form_validation->run() == true) {
 			
             $data = array(
-				
+				'tons' => $this->input->post('tons'),
+				'shift_name' => $this->input->post('shift_name'),
+				'commision_percentage' => $this->input->post('commision_percentage'),
+				'work_per_load' => $this->input->post('work_per_load'),
+				'load_status' => $this->input->post('load_status'),
                 'from_city_id' => $this->input->post('from_city_id'),
 				'to_city_id' => $this->input->post('to_city_id') ? $this->input->post('to_city_id') : 0,
 				'taxi_type' => $this->input->post('taxi_type'),
@@ -890,7 +930,7 @@ $this->data['commoncountry'] = $this->site->getcountryCodeID($countryCode);
 			
         }
 		
-        if ($this->form_validation->run() == true && $this->locations_model->add_outstation($data, $is_default, $taxi_type, $countryCode)){
+        if ($this->form_validation->run() == true && $this->locations_model->add_outstation($data, $is_default, $taxi_type, $this->input->post('tons'), $countryCode)){
 			
             $this->session->set_flashdata('message', lang("outstation_added"));
             admin_redirect('locations/outstation');
@@ -936,6 +976,12 @@ $this->data['commoncountry'] = $this->site->getcountryCodeID($countryCode);
         if ($this->form_validation->run() == true) {
 			
 			$data = array(
+				'tons' => $this->input->post('tons'),
+				'shift_name' => $this->input->post('shift_name'),
+				'commision_percentage' => $this->input->post('commision_percentage'),
+				'work_per_load' => $this->input->post('work_per_load'),
+				'load_status' => $this->input->post('load_status'),
+				
                 'from_city_id' => $this->input->post('from_city_id'),
 				'to_city_id' => $this->input->post('to_city_id') ? $this->input->post('to_city_id') : 0,
 				'taxi_type' => $this->input->post('taxi_type'),
@@ -988,6 +1034,7 @@ $this->data['commoncountry'] = $this->site->getcountryCodeID($countryCode);
 			$this->data['pzones'] = $this->masters_model->getZone_bycountry($result->permanent_country_id);
 			$this->data['pstates'] = $this->masters_model->getState_byzone($result->permanent_zone_id);
 			$this->data['pcitys'] = $this->masters_model->getCity_bystate($result->permanent_state_id);
+			$this->data['tons'] = $this->masters_model->getTons_byTaxi_type($result->taxi_type);
 			
 			$this->data['taxi_types'] = $this->masters_model->getALLTaxi_type($countryCode);
 			$this->data['result'] = $result;

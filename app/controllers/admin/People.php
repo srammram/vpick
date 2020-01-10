@@ -3144,7 +3144,7 @@ $this->data['commoncountry'] = $this->site->getcountryCodeID($countryCode);
         $this->datatables
             ->select("{$this->db->dbprefix('users')}.id as id, {$this->db->dbprefix('users')}.created_on, {$this->db->dbprefix('users')}.refer_code, {$this->db->dbprefix('users')}.first_name, {$this->db->dbprefix('users')}.last_name, {$this->db->dbprefix('users')}.email, {$this->db->dbprefix('users')}.mobile,  up.gender,  If(up.is_approved = 1 && t.is_verify = 1 && t.complete_taxi = 1 && ud.pancard_verify = 1 && uadd.local_verify = 1 && uadd.permanent_verify = 1 && ub.is_verify = 1 && ud.aadhar_verify = 1 && ud.license_verify = 1 && ud.police_verify = 1, '1', '0') as status, 
 			
-			If({$this->db->dbprefix('users')}.join_type = 2 && up.is_approved = 1 && t.complete_taxi = 1 && ud.pancard_verify = 1 && uadd.local_verify = 1 && uadd.permanent_verify = 1 && ub.is_verify = 1 && ud.aadhar_verify = 1 && ud.license_verify = 1 && ud.police_verify = 1, '1', '0') as join_type, country.name as instance_country
+			If({$this->db->dbprefix('users')}.complete_user = 1 && t.complete_taxi = 1 , '1', '0') as join_type, country.name as instance_country
 			
 			")
             ->from("users")
@@ -3205,7 +3205,7 @@ $this->data['commoncountry'] = $this->site->getcountryCodeID($countryCode);
 			$this->datatables->where('users.is_delete', 0);
 			$this->datatables->group_by("users.id");
             //$this->datatables->edit_column('active', '$1__$2', 'id, active')
-            $this->datatables->edit_column('status', '$1__$2', 'id, status')
+            $this->datatables->edit_column('status', '$1__$2__$3', 'id, status, join_type')
 			->edit_column('join_type', '$1__$2', 'id, join_type');
 			
 			//if($this->Vendor == $this->session->userdata('group_id')){
@@ -3481,6 +3481,7 @@ $this->data['commoncountry'] = $this->site->getcountryCodeID($countryCode);
 			$model_name = $this->people_model->getTaximodelBYID($this->input->post('model'), $countryCode);
 			$type_name = $this->people_model->getTaxitypeBYID($this->input->post('type'), $countryCode);
 			
+			$this->site->createTonNotification($this->input->post('weight'), $this->input->post('type'), $this->session->userdata('user_id'), $countryCode);
 			
 			$taxi = array(
 				'make' => $make_name,
@@ -4510,6 +4511,7 @@ $this->data['commoncountry'] = $this->site->getcountryCodeID($countryCode);
 		}else{
 			$countryCode = $this->countryCode;	
 		}
+		
 		$this->data['commoncountry'] = $this->site->getcountryCodeID($countryCode);
 		$this->site->users_logs($countryCode,$this->session->userdata('user_id'), $this->getUserIpAddr, json_encode($_POST), $_SERVER['REQUEST_URI']);
 		$group_id = $this->Driver;
@@ -4764,7 +4766,7 @@ $this->data['commoncountry'] = $this->site->getcountryCodeID($countryCode);
 			$model_name = $this->people_model->getTaximodelBYID($this->input->post('model'), $countryCode);
 			$type_name = $this->people_model->getTaxitypeBYID($this->input->post('type'), $countryCode);
 			
-			
+			$this->site->createTonNotification($this->input->post('weight'), $this->input->post('type'), $this->session->userdata('user_id'), $countryCode);
 			$taxi = array(
 				'make' => $make_name,
 				'make_id' => $this->input->post('make'),
@@ -5008,6 +5010,7 @@ $this->data['commoncountry'] = $this->site->getcountryCodeID($countryCode);
 			$this->data['pcitys'] = $this->masters_model->getCity_bystate($result->permanent_state_id);
 			$this->data['pareas'] = $this->masters_model->getArea_bycity($result->permanent_city_id);
 			$this->data['makes'] = $this->masters_model->getALLTaxi_make($countryCode);
+			
 			$this->data['categorys'] = $this->masters_model->getALLTaxi_category($countryCode);
 			$this->data['types'] = $this->masters_model->getcategoryALLTaxi_type($result->category, $countryCode);	
 			$this->data['fuel_types'] = $this->masters_model->getALLTaxi_fuel($countryCode);

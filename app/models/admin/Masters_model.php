@@ -311,14 +311,47 @@ class Masters_model extends CI_Model
 		return false;
     }
 	/*### Taxi Type*/
-	function add_taxi_type($data, $countryCode){
+	function add_taxi_type($tons_array, $shift_array, $data, $countryCode){
 		$data['is_country'] = $countryCode;
 		$this->db->insert('taxi_type', $data);
         if($id = $this->db->insert_id()){
+			if(!empty($shift_array)){
+				foreach($shift_array as $shift){
+					$shift['taxi_type_id'] = $id;
+					$this->db->insert('taxi_shift', $shift);
+				}
+			}
+			if(!empty($tons_array)){
+				foreach($tons_array as $tons){
+					$tons['taxi_type_id'] = $id;
+					$this->db->insert('taxi_tons', $tons);
+				}
+			}
 	    	return true;
 		}
 		return false;
     }
+	
+	function update_taxi_tons($id,$tons_array,$shift_array, $countryCode){
+		if($id){
+			if(!empty($shift_array)){
+				foreach($shift_array as $shift){
+					$shift['taxi_type_id'] = $id;
+					$this->db->insert('taxi_shift', $shift);
+				}
+			}
+			if(!empty($tons_array)){
+				foreach($tons_array as $tons){
+					$tons['taxi_type_id'] = $id;
+					$this->db->insert('taxi_tons', $tons);
+					$this->db->update('tons_notification', array('created_status' => 1), array('taxi_type_id' => $id, 'tons' => $tons['tons']));
+				}
+			}
+	    	return true;
+		}
+		return false;
+	}
+	
 	function update_taxi_type($id,$data, $countryCode){
 		$this->db->where('id',$id);
 		$this->db->where('is_country', $countryCode);
@@ -338,6 +371,32 @@ class Masters_model extends CI_Model
 		}
 		return false;
     }
+	
+	function getTaxitypeandTons($id){
+		$tons = array();
+		$this->db->select('t.id, t.name, t.is_country, GROUP_CONCAT(tn.tons) as pending_tons');
+		$this->db->from('taxi_type t');
+		$this->db->join('tons_notification tn', 'tn.taxi_type_id = t.id AND tn.created_status = 0');
+		$this->db->where('t.id',$id);
+
+		$q = $this->db->get();
+		if($q->num_rows()>0){
+			$row = $q->row();
+			$this->db->select('tons, shift_name');
+			$this->db->where('taxi_type_id', $id);
+			$t = $this->db->get('taxi_tons');
+			if($t->num_rows()>0){
+				foreach (($t->result()) as $tow) {
+					$tons[] = $tow;
+				}
+				$row->tons = $tons;
+			}
+			return $row;
+		}
+		return false;
+	}
+	
+	
 	
 	function getcategoryALLTaxi_type($category_id, $countryCode){
 		$this->db->where('category_id', $category_id);
@@ -1239,6 +1298,19 @@ class Masters_model extends CI_Model
 		return false;
     }
 	
+	
+	function getTons_byTaxi_type($taxi_type_id){
+		$val = array();
+		$t = $this->db->get_where('taxi_tons',array('taxi_type_id' => $taxi_type_id));
+       	if($t->num_rows()>0){
+			$val['type'] =  $t->result();
+		}
+		
+		if($val){
+			return $val;
+		}
+		return false;
+    }
 	function getTaxitype_byCountry($countryCode){
 		$val = array();
 		$t = $this->db->get_where('taxi_type',array('is_country' => $countryCode));

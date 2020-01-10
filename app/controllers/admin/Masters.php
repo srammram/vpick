@@ -371,7 +371,12 @@ class Masters extends MY_Controller
 				'taxi_bodyweight_formate' => $this->input->post('taxi_bodyweight_formate'),
 				'taxi_bodysize_formate' => $this->input->post('taxi_bodysize_formate'),
 				'wallet_min_add_money' => $this->input->post('wallet_min_add_money'),
+				'day_shift_from_time' => $this->input->post('day_shift_from_time'),
+				'day_shift_to_time' => $this->input->post('day_shift_to_time'),
+				'night_shift_from_time' => $this->input->post('night_shift_from_time'),
+				'night_shift_to_time' => $this->input->post('night_shift_to_time'),
 				'driver_default_set_payment' => $this->input->post('driver_default_set_payment')
+				
 				
 
 			);
@@ -1282,6 +1287,10 @@ class Masters extends MY_Controller
 		}else{
 			$countryCode = $this->countryCode;	
 		}
+		
+		if($_GET['ton_notification'] != ''){
+			$this->db->update('tons_notification', array('is_read' => 1), array('id' =>  $_GET['ton_notification']));
+		}
 		$this->data['commoncountry'] = $this->site->getcountryCodeID($countryCode);
 		$this->site->users_logs($countryCode,$this->session->userdata('user_id'), $this->getUserIpAddr, json_encode($_POST), $_SERVER['REQUEST_URI']);
 
@@ -1299,12 +1308,13 @@ class Masters extends MY_Controller
 		}
         $this->load->library('datatables');
         $this->datatables
-            ->select("{$this->db->dbprefix('taxi_type')}.id as id, {$this->db->dbprefix('taxi_type')}.name,  timage.image, timage.image_hover, timage.mapcar, p.name as category_name, {$this->db->dbprefix('taxi_type')}.status as status, country.name as instance_country")
+            ->select("{$this->db->dbprefix('taxi_type')}.id as id, {$this->db->dbprefix('taxi_type')}.name,  timage.image, timage.image_hover, timage.mapcar, p.name as category_name, {$this->db->dbprefix('taxi_type')}.status as status, GROUP_CONCAT(tn.tons) as tons, country.name as instance_country")
             ->from("taxi_type")
 			->join("countries country", " country.iso = taxi_type.is_country", "left")
+			->join("tons_notification tn", " tn.taxi_type_id = taxi_type.id", "left")
 			->join("taxi_image timage", " timage.id = taxi_type.taxi_image_id", "left")
 			->join("taxi_category p", "p.id = taxi_type.category_id", 'left')
-			->where('taxi_type.is_delete', 0);
+			->where('taxi_type.is_delete', 0)->group_by("{$this->db->dbprefix('taxi_type')}.id");
 			
 			if($this->session->userdata('group_id') == 1 && $countryCode != ''){
 				$this->datatables->where("taxi_type.is_country", $countryCode);
@@ -1317,7 +1327,9 @@ class Masters extends MY_Controller
 			$edit = "<a href='" . admin_url('masters/edit_taxi_type/$1') . "' data-toggle='modal' data-target='#myModal' data-original-title='' aria-describedby='tooltip' title='".lang('click_here_to_full_details')."'  ><i class='fa fa-pencil-square-o' aria-hidden='true'  style='color:#656464; font-size:18px'></i></a>";
 			$delete = "<a href='" . admin_url('welcome/delete/taxi_type/$1') . "' data-toggle='tooltip'  data-original-title='' aria-describedby='tooltip' title='".lang('click_here_to_delete')."'  ><i class='fa fa-trash' style='color:#656464; font-size:18px'></i></a>";
 			
-			$this->datatables->add_column("Actions", "<div>".$edit."</div><div>".$delete."</div>", "id");
+			$tons = "<a href='" . admin_url('masters/edit_taxi_tons/$1') . "'  title='".lang('click_here_to_tons')."'  ><i class='fa fa-list' style='color:#656464; font-size:18px'></i></a>";
+			
+			$this->datatables->add_column("Actions", "<div>".$edit."</div><div>".$delete."</div><div>".$tons."</div>", "id");
 			
         $this->datatables->unset_column('id');
         echo $this->datatables->generate();
@@ -1351,6 +1363,18 @@ class Masters extends MY_Controller
 				'taxi_image_id' => $this->input->post('taxi_image_id'),
                 'status' => 1,
             );
+			for($i=0; $i<count($_POST['tons']); $i++){
+				$tons_array[] = array(
+					'tons' => $_POST['tons'][$i],
+					'shift_name' => $_POST['shift'][$i],
+					'created_on' => date('Y-m-d H:i:s')
+				);
+				
+				$shift_array[] = array(
+					'shift_name' => $_POST['shift'][$i],
+					'created_on' => date('Y-m-d H:i:s')
+				);
+			}
 			
 			if ($_FILES['outstation_image']['size'] > 0) {
 				
@@ -1420,7 +1444,7 @@ class Masters extends MY_Controller
             admin_redirect("masters/taxi_type");
         }
 		
-        if ($this->form_validation->run() == true && $this->masters_model->add_taxi_type($data, $countryCode)){
+        if ($this->form_validation->run() == true && $this->masters_model->add_taxi_type($tons_array, $shift_array, $data, $countryCode)){
 			
             $this->session->set_flashdata('message', lang("cab_type_added"));
             admin_redirect('masters/taxi_type');
@@ -1543,6 +1567,66 @@ class Masters extends MY_Controller
             $this->data['id'] = $id;
             $this->load->view($this->theme . 'masters/edit_taxi_type', $this->data);
         }
+    }
+	
+	function edit_taxi_tons($id){
+		$result = $this->masters_model->getTaxitypeandTons($id);
+		if($this->session->userdata('group_id') == 1){
+			if($result->is_country != ''){
+				$countryCode = $result->is_country;	
+			}else{
+				$countryCode = $this->input->post('is_country');	
+			}	
+		}else{
+			$countryCode = $this->countryCode;	
+		}
+		$this->data['commoncountry'] = $this->site->getcountryCodeID($countryCode);
+		$this->site->users_logs($countryCode,$this->session->userdata('user_id'), $this->getUserIpAddr, json_encode($_POST), $_SERVER['REQUEST_URI']);
+		
+		if($this->input->post('update_tons')){
+				foreach($result->tons as $t){
+				
+					$exitTons[] = $t->tons;
+				}
+			for($i=0; $i<count($_POST['tons']); $i++){
+				
+				if($_POST['tons'][$i] != ''){
+					if(!in_array($_POST['tons'][$i], $exitTons)){
+					$tons_array[] = array(
+						'tons' => $_POST['tons'][$i],
+						'shift_name' => $_POST['shift'][$i],
+						'created_on' => date('Y-m-d H:i:s')
+					);
+					
+					$shift_array[] = array(
+						'shift_name' => $_POST['shift'][$i],
+						'created_on' => date('Y-m-d H:i:s')
+					);
+					}
+				}
+				
+				
+			}
+			
+			if ($this->masters_model->update_taxi_tons($id,$tons_array,$shift_array, $countryCode)){
+			
+            	$this->session->set_flashdata('message', lang("taxi_tons_updated"));
+            	admin_redirect('masters/edit_taxi_tons/'.$id);
+			
+			}
+		
+		}else{
+			
+		
+		
+       
+            $this->data['error'] = (validation_errors() ? validation_errors() : $this->session->flashdata('error'));
+            $bc = array(array('link' => base_url(), 'page' => lang('home')), array('link' => admin_url('masters/currencies'), 'page' => lang('currencies')), array('link' => '#', 'page' => lang('profile')));
+            $meta = array('page_title' => lang('tons'), 'bc' => $bc);
+            $this->data['tons'] = $result;
+			
+            $this->page_construct('masters/edit_taxi_tons', $meta, $this->data);
+		}
     }
    
     function taxi_type_status($status,$id){
@@ -4002,6 +4086,21 @@ $this->data['commoncountry'] = $this->site->getcountryCodeID($countryCode);
             foreach($data['category'] as $k => $rowt){
                 $options['category'][$k]['id'] = $rowt->id;
                 $options['category'][$k]['text'] = $rowt->name;
+            }
+			
+        }
+        echo json_encode($options);exit;
+	}
+	
+	
+	function getTons_byTaxi_type(){
+		$taxi_type_id = $this->input->post('taxi_type_id');
+		$data = $this->masters_model->getTons_byTaxi_type($taxi_type_id);
+        $options = array();
+        if($data){
+            foreach($data['type'] as $k => $rowt){
+                $options['type'][$k]['shift_name'] = $rowt->shift_name;
+                $options['type'][$k]['tons'] = $rowt->tons;
             }
 			
         }

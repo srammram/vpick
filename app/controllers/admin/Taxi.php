@@ -898,6 +898,12 @@ $this->data['commoncountry'] = $this->site->getcountryCodeID($countryCode);
 	function taxi_status($status, $id){
 		$result = $this->taxi_model->getTaxiDataedit($id, $countryCode);
 		
+		$checkTons = $this->site->checkTons($result->weight, $result->type);
+		if($checkTons != FALSE){
+			$this->session->set_flashdata('error', $result->type_name.'-'.$result->weight.lang('Tons<br>not_create. please create tons and fare. after verify taxi account'));
+            admin_redirect('taxi');
+		}
+		
 		if($this->session->userdata('group_id') == 1){
 			if($result->is_country != ''){
 				$countryCode = $result->is_country;	

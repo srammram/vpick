@@ -37,6 +37,44 @@
                                         }
                                         echo form_dropdown('taxi_type', $t, $result->taxi_type, 'class="form-control select"  id="taxi_type" required="required"'); ?>
                                     </div>
+                                    <div class="form-group col-sm-3 col-xs-12">
+										<?= lang('tons', 'tons'); ?>
+                                        <?php
+                                        $ton[''] = 'Select Tons';
+                                        foreach ($tons['type'] as $trow) {
+                                            $ton[$trow->tons] = $trow->tons;
+                                        }
+                                        
+                                        echo form_dropdown('tons', $ton, $result->tons, 'class="form-control select"  id="tons" required="required"'); ?>
+                                    </div>
+                                    
+                                   <div class="form-group col-md-3 col-xs-12">
+										<?= lang('accessing', 'accessing'); ?>
+                                        <?php echo form_input('shift_name', $result->shift_name, 'class="form-control " id="shift_name" readonly required="required"'); ?>
+                                    </div>
+                                    
+                                    <div class="form-group col-md-3 col-xs-12">
+										<?= lang('load_status', 'load_status'); ?>
+                                        <?php
+										 	
+                                        $f['0'] = 'Full Load';
+                                        $f['1'] = 'Single Load';
+                                        $f['2'] = 'Single Time';
+                                        
+                                        echo form_dropdown('load_status', $f, $result->load_status, 'class="form-control select"  id="load_status" required="required"'); ?>
+                                    </div>
+                                    
+                                    <div class="form-group col-md-3 col-xs-12">
+										<?= lang('work_per_load', 'work_per_load'); ?>
+                                        <?php echo form_input('work_per_load', $result->work_per_load, 'class="form-control" id="work_per_load" onkeyup="checkNum(this)" required="required"'); ?>
+                                    </div>
+                                    
+                                    <div class="form-group col-md-3 col-xs-12">
+										<?= lang('commision_percentage', 'commision_percentage'); ?>
+                                        <?php echo form_input('commision_percentage', $result->commision_percentage, 'class="form-control " id="commision_percentage" onkeyup="checkNum(this)" required="required"'); ?>
+                                    </div>
+                                    
+                                    <div class="clearfix"></div>
                                     
                                     <h2 class="box_he_de"><?= lang('from_location') ?></h2>  
                                     
@@ -145,7 +183,7 @@
                             
                      	    
                         <div class="col-md-12">  
-                        <h2 class="box_he_de"><?= lang('outstation_time') ?></h2>  	
+                        <h2 class="box_he_de"><?= lang('outstation_fare') ?></h2>  	
                        
                             <div class="col-md-12">
                                 <div class="form-group col-sm-3 col-xs-12">
@@ -207,14 +245,15 @@
                                         <input type="text" id="min_per_distance_price"  value="<?= $result->min_per_distance_price ?>" name="min_per_distance_price" class="form-control"/>
                                     </div>
                                 </div>-->
-                                <div class="form-group col-sm-3 col-xs-12">
+                                <!--<div class="form-group col-sm-3 col-xs-12">
 									<?php echo lang('extra_distance', 'Extra Distance'); ?>
                                     <div class="controls">
                                         <input type="text" id="per_distance"  value="<?= $result->per_distance ?>" name="per_distance" class="form-control"/>
                                     </div>
-                                </div>
+                                </div>-->
+                                <input type="hidden" id="per_distance"  value="<?= $result->per_distance ?>" name="per_distance" class="form-control"/>
                                 <div class="form-group col-sm-3 col-xs-12">
-									<?php echo lang('extra_fare', 'extra_fare'); ?>
+									<?php echo lang('rate_per_km', 'rate_per_km'); ?>
                                     <div class="controls">
                                         <input type="text" id="per_distance_price" value="<?= $result->per_distance_price ?>"  name="per_distance_price" class="form-control"/>
                                     </div>
@@ -380,6 +419,39 @@ $(document).ready(function(){
 				
 			}
 		})
+	});
+	
+	$('#taxi_type').change(function(){
+		
+		$("#tons").select2("destroy");
+		id = $(this).val();
+		$.ajax({
+			type: 'POST',
+			url: '<?=admin_url('masters/getTons_byTaxi_type')?>',
+			data: {taxi_type_id: id},
+			dataType: "json",
+			cache: false,
+			success: function (scdata) {
+				
+				
+				console.log(scdata);
+				$option1 = '<option value="">Select Tons</option>';
+				if(scdata.length != 0){
+				$.each(scdata.type,function(n,v){
+					$option1 += '<option data-shift="'+v.shift_name+'" value="'+v.tons+'">'+v.tons+'</option>';
+				});
+				}
+				$("#tons").html($option1);
+				$("#tons").select2();
+				
+			}
+		})
+	});
+	
+	$('#tons').change(function(){
+		var shift_name = $(this).find(':selected').attr('data-shift');
+		$('#shift_name').val(shift_name);
+		
 	});
 });
 </script>

@@ -1599,7 +1599,7 @@ $(document).ready(function () {
 				validators: {
                     
                     regexp: {
-                        regexp: /^[1-9]\d*(\.\d+)?$/,
+                        regexp: /^[0-9]\d*(\.\d+)?$/,
                         message: 'The Driver Allowance/day can only consist of number'
                     }
 				}	
@@ -1609,7 +1609,7 @@ $(document).ready(function () {
                     
 
                     regexp: {
-                        regexp: /^[1-9]\d*(\.\d+)?$/,
+                        regexp: /^[0-9]\d*(\.\d+)?$/,
                         message: 'The Driver night/day can only consist of number'
                     }
 				}	
@@ -2267,7 +2267,7 @@ $('form[class="edit_from"]').bootstrapValidator({
                    
 
                     regexp: {
-                        regexp: /^[1-9]\d*(\.\d+)?$/,
+                        regexp: /^[0-9]\d*(\.\d+)?$/,
                         message: 'The Driver Allowance/day can only consist of number'
                     }
 				}	
@@ -2277,7 +2277,7 @@ $('form[class="edit_from"]').bootstrapValidator({
                    
 
                     regexp: {
-                        regexp: /^[1-9]\d*(\.\d+)?$/,
+                        regexp: /^[0-9]\d*(\.\d+)?$/,
                         message: 'The Driver night/day can only consist of number'
                     }
 				}	
