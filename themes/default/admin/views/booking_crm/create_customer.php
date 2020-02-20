@@ -1,52 +1,4 @@
 
-<script>
-$('form[class="add_from"]').bootstrapValidator({
-        fields: {
-            name: {
-                validators: {
-                    notEmpty: {
-                        message: 'Please Enter the Name'
-                    },
-                   
-                }
-            },
-            
-            symbol:{
-                validators: {
-                    notEmpty: {
-                        message: 'Please Enter The symbol'
-                    }
-                }
-            },
-			
-			unicode_symbol:{
-                validators: {
-                    notEmpty: {
-                        message: 'Please Enter The symbol'
-                    }
-                }
-            },
-			
-            iso_code:{
-                validators: {
-                    notEmpty: {
-                        message: 'Please Enter The iso_code'
-                    }
-                }
-            },
-
-            numeric_iso_code:{
-                validators: {
-                    notEmpty: {
-                        message: 'Please Enter The numeric_iso_code'
-                    }
-                }
-            },
-            
-        },
-        submitButtons: 'input[type="submit"]'
-    });
-    </script>
 
 
 <?php defined('BASEPATH') OR exit('No direct script access allowed'); ?>
@@ -56,17 +8,17 @@ $('form[class="add_from"]').bootstrapValidator({
         <div class="row">
             <div class="col-lg-12">
 
-                
+               
 
-                <?php $attrib = array('class' => 'form-horizontal','class' => 'add_from','data-toggle' => 'validator', 'role' => 'form', 'autocomplete' => "off");
-                echo admin_form_open_multipart("masters/add_currency", $attrib);
+                <?php $attrib = array('class' => 'form-horizontal','class' => 'create_customer','data-toggle' => 'validator', 'role' => 'form', 'autocomplete' => "off");
+                echo admin_form_open_multipart("booking_crm/create_customer", $attrib);
                 ?>
                 <div class="row">
                 	
                     <div class="col-md-6">
                     	<div class="form-group col-sm-12 <?php if($this->session->userdata('group_id') != 1){ echo 'hidden'; } ?>">
-						<?php echo lang('instance_of_country', 'is_country'); ?>
-                        <select <?php if($this->session->userdata('group_id') == 1){ echo 'required'; } ?> class="form-control select is_country"  name="is_country" id="is_country">
+						<?php echo lang('instance_of_country', 'instance_of_country'); ?>
+                        <select <?php if($this->session->userdata('group_id') == 1){ echo 'required'; } ?> class="form-control phonecode select is_country"  name="is_country" id="is_country">
                             <option value="">Select Country</option>
                             <?php
                             foreach($AllCountrys as $AllCountry){
@@ -78,28 +30,31 @@ $('form[class="add_from"]').bootstrapValidator({
                         </select>
                         </div>
                         <div class="col-md-12">                                   
-                           	<?php
-							$phonecode = $this->site->getPhonecode($_GET['is_country']);
-							?>
                             <div class="form-group">
+                            	<?php 
+								if($this->session->userdata('group_id') != 1){
+								$p = $this->site->getcountryCodeID($this->countryCode); 
+								}
+								?>
                                 <?php echo lang('phonecode', 'phonecode'); ?>
                                 <div class="controls">
-                                    <input type="text" id="phonecode" name="phonecode" value="<?= $phonecode ? $phonecode : 0 ?>" readonly class="form-control"                                            />
+                                    <input type="text" id="phonecode" name="phonecode" value="<?= $p->phonecode ?>" class="form-control" readonly
+                                          />
                                 </div>
                             </div>
                             <div class="form-group">
-                                <?php echo lang('mobile', 'booking_phone'); ?>
+                                <?php echo lang('mobile', 'mobile'); ?>
                                 <div class="controls">
-                                    <input type="text" id="booking_phone" name="booking_phone" required class="form-control"                                            />
+                                    <input type="text" id="mobile" name="mobile" required class="form-control"  />
                                 </div>
                             </div>
                             <div class="form-group">
-                                <?php echo lang('name', 'booking_name'); ?>
+                                <?php echo lang('name', 'name'); ?>
                                 <div class="controls">
-                                    <input type="text" id="booking_name" name="booking_name" required class="form-control"                                           />
+                                    <input type="text" id="name" name="name" required class="form-control" />
                                 </div>
                             </div>
-                            
+                          
                             
                         </div>
                        
@@ -107,7 +62,7 @@ $('form[class="add_from"]').bootstrapValidator({
                     </div>                   
                 </div>
 
-                <p><?php echo form_submit('add_currency', lang('submit'), 'class="btn btn-primary"'); ?></p>
+                <p><?php echo form_submit('create_customer', lang('submit'), 'class="btn btn-primary"'); ?></p>
 
                 <?php echo form_close(); ?>
  </div>
@@ -117,15 +72,90 @@ $('form[class="add_from"]').bootstrapValidator({
 </div>
 
 <script>
+$('.create_customer').bootstrapValidator({
+        fields: {
+            name: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please Enter the Name'
+                    },
+					
+                   
+                }
+            },
+            
+            mobile:{
+                validators: {
+                    notEmpty: {
+                        message: 'Please Enter The mobile'
+                    },
+					remote: {
+						type: 'POST',
+						url: '<?=admin_url('booking_crm/exituserRide')?>',
+						data:{
+							   phonecode: $('[name="phonecode"]').val(),
+						   
+						},
+						
+						message: 'Customer already riding. do not accept booking.',
+						delay: 1000
+                	}
+                },
+				
+            },
+			
+			is_country:{
+                validators: {
+                    notEmpty: {
+                        message: 'Please Select country'
+                    }
+                }
+            },
+			
+           
+            
+        },
+        submitButtons: 'input[type="submit"]'
+    });
+    </script>
 
-$(document).on('change', '#is_country', function(){
+<script>
+$(document).on('change', '.phonecode', function(){
 	
-        var site = '<?php echo site_url() ?>';
-		var is_country = $('#is_country').val();
-	  window.location.href = site+"admin/booking_crm/create_customer?is_country="+is_country;
-		
-    
-})
-</script>
+	var iso = $(this).val();
+	$.ajax({
+		type: 'POST',
+		url: '<?=admin_url('masters/getCountrysAllData')?>',
+		data: {iso: iso},
+		dataType: "json",
+		cache: false,
+		success: function (scdata) {
+			console.log(scdata);
+			$('#phonecode').val(scdata.phonecode);
+		}
+	});
+});
 
+$(document).on('change', '#mobile', function(){
+	var phonecode = $('#phonecode').val();
+	var mobile = $(this).val();
+	$.ajax({
+		type: 'POST',
+		url: '<?=admin_url('booking_crm/exitUser')?>',
+		data: {mobile: mobile, phonecode: phonecode,},
+		dataType: "json",
+		cache: false,
+		success: function (scdata) {
+			console.log(scdata);
+			if(scdata.name == ''){
+				$('#name').attr('readonly', false);
+			}else{
+				$('#name').attr('readonly', true);
+			}
+			$('#name').val(scdata.name);
+		}
+	});
+});
+
+</script>
 

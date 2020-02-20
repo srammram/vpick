@@ -1,18 +1,40 @@
 <script>
-    function currency_status(x) {
-        var y = x.split("__");
-        return y[0] == 1 ?
-        '<a href="'+site.base_url+'enquiry/close_transfer/'+ y[1] +'"><span class="label label-info">Open</span></a>' :
-		y[0] == 2 ?
-        '<a href="'+site.base_url+'enquiry/open/'+ y[1] +'"><span class="label label-warning">Transfer</span></a>' :
+    function view_status(x) {
+              
 		
-		y[0] == 3 ?
-        '<a href="'+site.base_url+'enquiry/reopen/'+ y[1] +'"><span class="label label-warning">Close</span></a>' :
+       return '<a href="'+site.base_url+'booking_crm/tracking/'+ y[1] +'"><i class="fa fa-eye" style="color:#656464; font-size:18px"></i><a/>';
+    }
+	
+	function ride_status(x) {
+       //1-Request, 2-Booked, 3-Onride, 4-Waiting, 5-Completed, 6-Cancelled, 7-Ride Later, 8-Rejected, 9-Incomplete, 10-Next Ride 
+        return x == 1 ?
+        '<span class="label label-danger">Request</span>' :
+		x == 2 ?
+		'<span class="label label-info">Booked</span>' :
+		x == 3 ?
+		'<span class="label label-warning">Onride</span>' :
+		x == 4 ?
+		'<span class="label label-primary">Waiting</span>' :
+		x == 5 ?
+		'<span class="label label-success">Completed</span>' :
+		x == 6 ?
+		'<span class="label label-primary">Cancelled</span>' :
+		x == 7 ?
+		'<span class="label label-warning">Ride Later</span>' :
+		x == 8 ?
+		'<span class="label label-info">Rejected</span>' :
+		x == 9 ?
+		'<span class="label label-success">Incomplete</span>' :
 		
-		y[0] == 4 ?
-        '<a href="'+site.base_url+'enquiry/close_transfer/'+ y[1] +'"><span class="label label-warning">Reopen</span></a>' :
+        '<span class="label label-danger">No Rides</span>';
+    }
+	
+	function booking_status(x) {
+       
+        return x == 1 ?
+        '<span class="label label-success">Close</span>' :
 		
-        '<a href="'+site.base_url+'enquiry/open/'+ y[1] +'"><span class="label label-danger">Process</span><a/>';
+        '<span class="label label-danger">Open</span>';
     }
 	
 	function bank_default(a) {
@@ -28,7 +50,7 @@
             "aLengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "<?= lang('all') ?>"]],
             "iDisplayLength": <?= $Settings->rows_per_page ?>,
             'bProcessing': true, 'bServerSide': true,
-            'sAjaxSource': '<?= admin_url('enquiry/getEnquiry/?status='.$_GET['enquiry_status'].'&is_country='.$_GET['is_country'].'&sdate='.$_GET['sdate'].'&edate='.$_GET['edate']) ?>',
+            'sAjaxSource': '<?= admin_url('booking_crm/getBookings/?status='.$_GET['status'].'&is_country='.$_GET['is_country'].'&sdate='.$_GET['sdate'].'&edate='.$_GET['edate']) ?>',
             'fnServerData': function (sSource, aoData, fnCallback) {
                 aoData.push({
                     "name": "<?= $this->security->get_csrf_token_name() ?>",
@@ -36,7 +58,7 @@
                 });
                 $.ajax({'dataType': 'json', 'type': 'POST', 'url': sSource, 'data': aoData, 'success': fnCallback});
             },
-            "aoColumns": [ {"mRender": empty_status}, {"mRender": empty_status}, {"mRender": empty_status}, {"mRender": empty_status}, {"mRender": empty_status}, {"mRender": currency_status}, {"mRender": empty_status}, {"bSortable": true}]
+            "aoColumns": [ {"mRender": empty_status}, {"mRender": empty_status}, {"mRender": empty_status}, {"mRender": ride_status}, {"mRender": booking_status}, {"mRender": empty_status}, {"bSortable": true}]
         });
     });
 </script>
@@ -126,11 +148,10 @@
                            class="table table-bordered table-hover table-striped">
                         <thead>
                         <tr>
-                            <th width="150px"><?php echo lang('ticket_type'); ?></th>
-                            <th width="150px"><?php echo lang('ticket'); ?></th>
+                        	<th width="150px"><?php echo lang('ticket'); ?></th>
                             <th width="150px"><?php echo lang('date'); ?></th>
-                            <th class="col-xs-2"><?php echo lang('services type'); ?></th>
-                            <th width="150px"><?php echo lang('customer_name'); ?></th>
+                            <th width="150px"><?php echo lang('evalution_number'); ?></th>
+                            <th width="150px"><?php echo lang('ride_status'); ?></th>
                              <th width="150px"><?php echo lang('status'); ?></th>
                              <th style="width: 33.33%!important;"><?php echo lang('instance'); ?></th>
                              <th width="150px"><?php echo lang('action'); ?></th>

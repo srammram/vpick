@@ -16,6 +16,53 @@ class Wallet_model extends CI_Model
 		}
 		return false;
 	}*/
+	
+	function addMoneyOnlineAccount($group_id, $cash_array, $wallet_array, $payment_array, $transaction_status, $is_country){
+		if($transaction_status == 'Success'){
+		if(!empty($cash_array)){
+			$this->db->insert_batch('account', $cash_array);
+			$this->db->insert_batch('wallet', $wallet_array);
+			$this->db->insert('onlinepayment', $payment_array);
+			return true;			
+		}
+		}else{
+			$this->db->insert('onlinepayment', $payment_array);
+			return true;	
+		}
+		return false;
+	}
+	
+	function addMoneyOfflineAccount($group_id, $cash_array, $wallet_array, $is_country){
+		
+		if(!empty($cash_array)){
+			$this->db->insert_batch('account', $cash_array);
+			$this->db->insert_batch('wallet', $wallet_array);
+			return true;			
+		}
+		return false;
+	}
+		
+	function addMoneyOffline($group_id, $payment_mode, $payment_gateway, $account_array, $payment_array, $wallet_array,  $countryCode, $user_id){
+		
+		if(!empty($account_array)){
+			$this->db->insert('account', $account_array);
+			
+			$account_id = $this->db->insert_id();
+			if($group_id == 1 || $group_id == 2){
+				$this->db->insert('wallet', $wallet_array);
+				if($wallet_id = $this->db->insert_id()){
+					$payment_array['method_id'] = $wallet_id;
+					$this->db->insert('multiple_gateway', $payment_array);
+					$this->db->update('account', array('type_id' => $wallet_id, 'account_status' => 3), array('id' => $account_id));
+				}
+				/*if($group_id == 4 || $group_id == 5){
+					$this->site->adminUserDebit($countryCode, 2, 1, $account_array['credit'], $user_id);
+				}*/
+			}
+			return true;
+		}
+		return false;	
+	}
 
 	function addMoneyCashwallet($user_id, $wallet_array, $payment_array,  $countryCode, $transaction_status){
 		if($transaction_status == 'Success'){

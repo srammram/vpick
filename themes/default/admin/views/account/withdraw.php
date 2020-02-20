@@ -50,9 +50,12 @@
 	
 	
 	function mobile_status(mob) {
-		
-		//var mobile = mob.slice(-4);		
-		return mob;
+		if(mob == null){
+			return 'N/A';
+		}else{
+			var mobile = mob.slice(-4);		
+			return '******'+mobile;
+		}
     }
 	
     $(document).ready(function () {
@@ -86,7 +89,7 @@
                    
                 }
                 var nCells = nRow.getElementsByTagName('th');
-                nCells[4].innerHTML = total_fare;
+                nCells[4].innerHTML = total_fare.toFixed(2);
                // nCells[6].innerHTML = heyycab_fee;
 				//nCells[7].innerHTML = driver_share;
 				//nCells[9].innerHTML = settlement;

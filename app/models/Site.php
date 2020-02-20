@@ -676,47 +676,6 @@ function GetDrivingDistanceNew1($point1_lat, $point1_long, $point2_lat, $point2_
 		return false;
 	}
 	
-	/*function getFare_old($customer_id, $ride_type, $taxi_type, $start_lng, $start_lng, $end_lat, $end_lng){
-		$data = array();
-		$start_pincode = $this->findLocationPINCODE($start_lng, $start_lng);
-		$end_pincode = $this->findLocationPINCODE($end_lat, $end_lng);
-		
-		
-		$start_q = $this->db->select('city_id')->where('pincode', $start_pincode)->get('areas');
-		if ($start_q->num_rows() > 0) {
-            $start_city_id = $start_q->row('city_id');
-        }else{
-			$start_city_id = 0;
-		}
-		
-		$end_q = $this->db->select('city_id')->where('pincode', $end_pincode)->get('areas');
-		if ($end_q->num_rows() > 0) {
-            $end_city_id = $start_q->row('city_id');
-        }else{
-			$end_city_id = 0;
-		}
-		
-		if($ride_type == 1){
-			$c = $this->db->select('df.base_min_distance, df.base_min_distance_price, df.base_per_distance, df.base_per_distance_price')->from('daily_fare df')->where('city_id', $city_id)->where('taxi_type', $taxi_type)->get();
-			
-			if ($c->num_rows() > 0) {
-				$result = array('free_distance' => $free_distance, 'min_distance' => $c->row('base_min_distance'), 'min_distance_price' => $c->row('base_min_distance_price'), 'per_distance_price' => $c->row('base_per_distance_price'));
-				return $result;
-			}else{
-				$d = $this->db->select('df.base_min_distance, df.base_min_distance_price, df.base_per_distance, df.base_per_distance_price')->from('daily_fare df')->where('is_default', 1)->get();
-				if ($d->num_rows() > 0) {
-					$result = array('free_distance' => $free_distance, 'min_distance' => $d->row('base_min_distance'), 'min_distance_price' => $d->row('base_min_distance_price'), 'per_distance_price' => $d->row('base_per_distance_price'));
-					return $result;
-				}
-			}
-			
-		}elseif($ride_type == 2){
-			return false;
-		}elseif($ride_type == 3){
-			return false;
-		}
-		return false;
-	}*/
 	
 	
 	function getFareestimate($start_lat, $start_lng, $taxi_type, $ride_type, $countryCode){
@@ -2378,6 +2337,8 @@ function GetDrivingDistanceNew1($point1_lat, $point1_long, $point2_lat, $point2_
 		
 		return $fare;
 	}
+	
+	
     public function get_setting($countryCode) {
         $this->db->select('*');
 		$this->db->where('is_country', $countryCode);
@@ -2805,6 +2766,29 @@ function GetDrivingDistanceNew1($point1_lat, $point1_long, $point2_lat, $point2_
         }
         return FALSE;
 	}
+	
+	function get_booking_cancel_notification($countryCode){
+		$this->db->select('b.ticket_code, b.ride_id, b.driver_id, b.customer_id, b.is_country');
+		$this->db->from('bookingcrm_notification bn');
+		$this->db->join('bookingcrm b', 'b.id = bn.bookingcrm_id');
+		$this->db->where('bn.is_read', 0);
+		$this->db->where('bn.cancel_notification', 1);
+		if(!empty($countryCode)){
+		$this->db->where('bn.is_country', $countryCode);
+		}
+		$q = $this->db->get();
+		 if ($q->num_rows() > 0) {
+			 $b = 0;
+            foreach (($q->result()) as $row) {
+                $data['result'][] = $row;
+				
+				$b++;
+            }
+			$data['booking_count'] = $b;
+            return $data;
+        }
+        return FALSE;
+	}
     
 	function insertNotification($data, $countryCode){
 		$q = $this->db->insert('notification', array('user_type' => $data['user_type'], 'user_id' => $data['user_id'], 'title' => $data['title'], 'message' => $data['message'], 'created_on' => date('Y-m-d H:i:s'), 'is_country' => $countryCode ));
@@ -2892,6 +2876,270 @@ function GetDrivingDistanceNew1($point1_lat, $point1_long, $point2_lat, $point2_
 				return false;	
 			}
 		}
+	}
+	
+	function exituserRide($mobile, $phonecode){
+		$this->db->select('u.id');
+		$this->db->from('users u');
+		$this->db->join('rides r', 'r.customer_id = u.id AND (r.status = 1 OR r.status = 2 OR r.status = 3 OR r.status = 9 OR r.status = 10)');
+		$this->db->where('u.country_code', $phonecode);
+		$this->db->where('u.mobile', $mobile);
+		$q = $this->db->get();
+		//print_r($this->db->last_query());
+		if($q->num_rows()>0){
+			return json_encode(array(
+				'valid' => false,
+			));
+		}else{
+			return json_encode(array(
+				'valid' => true,
+			));	
+		}
+		
+	}
+	
+	function exitUser($mobile, $phonecode){
+		$this->db->select('u.first_name');
+		$this->db->from('users u');
+		$this->db->where('u.country_code', $phonecode);
+		$this->db->where('u.mobile', $mobile);
+		$q = $this->db->get();
+		//print_r($this->db->last_query());
+		if($q->num_rows()>0){
+			
+			return json_encode(array(
+				'name' => $q->row('first_name'),
+			));
+			
+		}else{
+			return json_encode(array(
+				'name' => '',
+			));	
+		}
+		
+	}
+	
+	
+	function getAdminUser($is_country, $group_id){
+		$q = $this->db->select('id')->where('is_country', $is_country)->where('group_id', $group_id)->get('users');
+		if($q->num_rows()>0){
+			return $q->row('id');
+		}
+		return 0;
+	}
+	
+	
+	function getcashBank($company_id, $countryCode){
+		$q = $this->db->select('bank_id')->where('company_id', $company_id)->where('is_country', $countryCode)->where('bank_type', 1)->get('company_bank');
+		if($q->num_rows()>0){
+			return $q->row('bank_id');
+		}
+		return 0;
+	}
+	
+	function adminUserDebit($is_country, $group_id, $type, $paid_amount, $user_id, $transaction_no){
+		
+		
+		$admin_user = $this->getAdminUser($is_country, $group_id);
+		$account_array = array(
+			'type' => $type,
+			'debit' => $paid_amount,
+			'account_date'	=> date('Y-m-d H:i:s'),
+			'account_transaction_no' => $transaction_no,
+			'account_transaction_date' => date('Y-m-d H:i:s'),
+			'user_id' => $admin_user,
+			'user_type' => 0,
+			'account_verify' => 1,
+			'account_verify_on' => date('Y-m-d H:i:s'),
+			'account_verify_by' => $user_id,
+			'is_country' => $is_country
+		 );
+		 
+		 $payment_array = array(
+			'method' => 8,
+			'user_id' => $admin_user,
+			'amount' => $paid_amount,
+			'payment_transaction_id' => $transaction_no,
+			'transaction_status' => 'success',
+			'transaction_type' => 'Debit',
+			'gateway_id' => 0,
+			'created_on' => date('Y-m-d H:i:s'),
+			'is_country' => $is_country
+		);
+		
+		$wallet_array = array(
+			'user_id' =>  $admin_user,
+			'user_type' => 0,
+			'wallet_type' => 1,
+			'flag' => 5,
+			'cash' => $paid_amount,
+			'description' => 'Transfer Money - Backend',
+			'created' => date('Y-m-d H:i:s'),
+			'is_country' => $is_country
+		);
+		
+		if(!empty($account_array)){
+			$this->db->insert('account', $account_array);
+			
+			$account_id = $this->db->insert_id();
+			if($group_id == 1 || $group_id == 2){
+				$this->db->insert('wallet', $wallet_array);
+				if($wallet_id = $this->db->insert_id()){
+					$payment_array['method_id'] = $wallet_id;
+					$this->db->insert('multiple_gateway', $payment_array);
+					$this->db->update('account', array('type_id' => $wallet_id, 'account_status' => 3), array('id' => $account_id));
+				}
+			}
+			return true;
+		}
+		
+		return false;	
+	}
+	
+	function adminUserCredit($is_country, $group_id, $type, $paid_amount, $user_id, $transaction_no){
+		
+		
+		$admin_user = $this->getAdminUser($is_country, $group_id);
+		$account_array = array(
+			'type' => $type,
+			'debit' => $paid_amount,
+			'account_date'	=> date('Y-m-d H:i:s'),
+			'account_transaction_no' => $transaction_no,
+			'account_transaction_date' => date('Y-m-d H:i:s'),
+			'user_id' => $admin_user,
+			'user_type' => 0,
+			'account_verify' => 1,
+			'account_verify_on' => date('Y-m-d H:i:s'),
+			'account_verify_by' => $user_id,
+			'is_country' => $is_country
+		 );
+		 
+		 $payment_array = array(
+			'method' => 8,
+			'user_id' => $admin_user,
+			'amount' => $paid_amount,
+			'payment_transaction_id' => $transaction_no,
+			'transaction_status' => 'success',
+			'transaction_type' => 'Credit',
+			'gateway_id' => 0,
+			'created_on' => date('Y-m-d H:i:s'),
+			'is_country' => $is_country
+		);
+		
+		$wallet_array = array(
+			'user_id' =>  $admin_user,
+			'user_type' => 0,
+			'wallet_type' => 1,
+			'flag' => 3,
+			'cash' => $paid_amount,
+			'description' => 'Refunded Money - Backend',
+			'created' => date('Y-m-d H:i:s'),
+			'is_country' => $is_country
+		);
+		
+		if(!empty($account_array)){
+			$this->db->insert('account', $account_array);
+			
+			$account_id = $this->db->insert_id();
+			if($group_id == 1 || $group_id == 2){
+				$this->db->insert('wallet', $wallet_array);
+				if($wallet_id = $this->db->insert_id()){
+					$payment_array['method_id'] = $wallet_id;
+					$this->db->insert('multiple_gateway', $payment_array);
+					$this->db->update('account', array('type_id' => $wallet_id, 'account_status' => 3), array('id' => $account_id));
+				}
+			}
+			return true;
+		}
+		
+		return false;	
+	}
+	
+	function Ridewallet_new($admin_account_array, $admin_payment_array, $admin_wallet_array, $driver_account_array, $driver_payment_array, $driver_wallet_array){
+		
+		if(!empty($admin_account_array) && !empty($driver_account_array)){
+			
+			if(!empty($admin_account_array)){			
+				$this->db->insert('account', $admin_account_array);			
+				$admin_account_id = $this->db->insert_id();			
+				$this->db->insert('wallet', $admin_wallet_array);
+				if($admin_wallet_id = $this->db->insert_id()){
+					$payment_array['method_id'] = $admin_wallet_id;
+					$this->db->insert('multiple_gateway', $admin_payment_array);
+					$this->db->update('account', array('type_id' => $wallet_id, 'account_status' => 3), array('id' => $admin_account_id));
+				}
+			}
+			
+			if(!empty($driver_account_array)){			
+				$this->db->insert('account', $driver_account_array);			
+				$driver_account_id = $this->db->insert_id();			
+				$this->db->insert('wallet', $driver_wallet_array);
+				if($driver_wallet_id = $this->db->insert_id()){
+					$payment_array['method_id'] = $driver_wallet_id;
+					$this->db->insert('multiple_gateway', $driver_payment_array);
+					$this->db->update('account', array('type_id' => $driver_wallet_id, 'account_status' => 3), array('id' => $driver_account_id));
+				}
+			}
+			
+			return true;
+		}
+		return false;	
+	}
+	
+	function checkRide($user_id, $user_type){
+		if($user_type == 1){
+			$this->db->select('id');
+			$this->db->where('customer_id', $user_id);
+			$this->db->where('status', 3);
+			$q = $this->db->get('rides');
+			if($q->num_rows()>0){
+				return $q->row('id');
+			}
+		}elseif($user_type == 2){
+			$this->db->select('id');
+			$this->db->where('driver_id', $user_id);
+			$this->db->where('status', 3);
+			$q = $this->db->get('rides');
+			if($q->num_rows()>0){
+				return $q->row('id');
+			}
+		}
+		return 0;
+	}
+	
+	function getAccountPendingCash($countryCode, $account_ids){
+		$this->db->select('SUM(debit) as amount');
+		$this->db->where('is_country', $countryCode);
+		$this->db->where_in('id', $account_ids);
+		$q = $this->db->get('account');
+		if($q->num_rows()>0){
+			return $q->row('amount');
+		}
+		return 0;
+	}
+	
+	function checkCompanytype($company_id){
+		$q = $this->db->select('is_office')->where('id', $company_id)->get('company');
+		if($q->num_rows()>0){
+			return $q->row('is_office');
+		}
+		return 0;
+	}
+	
+	function onlineBank($is_country, $payment_gateway){
+		$q = $this->db->select('bank_id')->where('id', $payment_gateway)->get('payment_gateway');
+		if($q->num_rows()>0){
+			return $q->row('bank_id');
+		}
+		return 0;
+	}
+	
+	function getUserCompany($is_country, $is_office){
+		$q = $this->db->select('id')->where('is_country', $is_country)->where('is_office', $is_office)->get('company');
+		if($q->num_rows()>0){
+			return $q->row('id');
+		}
+		return 0;
 	}
     
 }

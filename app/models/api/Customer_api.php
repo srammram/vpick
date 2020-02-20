@@ -2377,7 +2377,7 @@ ORDER BY distance ASC LIMIT 1";
 		$where = "  ";
 	}
 	
-	$query = "SELECT  d.id, d.first_name, d.mobile, d.country_code, d.oauth_token, d.is_daily, d.is_rental, d.is_outstation, dcs.current_latitude latitude, dcs.current_longitude longitude, dcs.mode, d.first_name, up.last_name, up.photo as driver_photo, t.name as taxi_name, t.model, t.number, t.type, t.photo as taxi_photo,  tt.name type_name, ti.image, ti.image_hover, ti.mapcar type_image,  g.name as group_name,   ( 6371 * acos( cos( radians({$data['latitude']}) ) * cos( radians( dcs.current_latitude ) ) * cos( radians( dcs.current_longitude ) - radians({$data['longitude']}) ) + sin( radians({$data['latitude']}) ) * sin( radians( dcs.current_latitude ) ) ) ) AS distance FROM {$this->db->dbprefix('users')}  AS d 
+	$query = "SELECT  d.id, d.first_name, d.mobile, d.country_code, d.oauth_token, t.is_daily, t.is_rental, t.is_outstation, dcs.current_latitude latitude, dcs.current_longitude longitude, dcs.mode, d.first_name, up.last_name, up.photo as driver_photo, t.name as taxi_name, t.model, t.number, t.type, t.photo as taxi_photo,  tt.name type_name, ti.image, ti.image_hover, ti.mapcar type_image,  g.name as group_name,   ( 6371 * acos( cos( radians({$data['latitude']}) ) * cos( radians( dcs.current_latitude ) ) * cos( radians( dcs.current_longitude ) - radians({$data['longitude']}) ) + sin( radians({$data['latitude']}) ) * sin( radians( dcs.current_latitude ) ) ) ) AS distance FROM {$this->db->dbprefix('users')}  AS d 
 	LEFT JOIN {$this->db->dbprefix('driver_current_status')} AS dcs ON dcs.driver_id = d.id  
 	LEFT JOIN {$this->db->dbprefix('user_profile')} AS up ON up.user_id = d.id 
 	 
@@ -2616,4 +2616,138 @@ ORDER BY distance ASC";
 		
 		return 0;
     }
+	
+	function gettruckcategory($is_country){
+		$q = $this->db->select('*')->where('is_country', $is_country)->get('taxi_category');
+		if($q->num_rows()>0){
+		   
+			return $q->result();
+		}
+		return false;
+	}
+	
+	function gettrucktype($is_country, $category_id){
+		//$query = "SELECT tt.id, tt.category_id, tc.name as category_name, tt.name, tt.taxi_image_id, ti.image, ti.image_hover, ti.mapcar  FROM {$this->db->dbprefix('taxi_type')}  AS tt 
+		  //JOIN {$this->db->dbprefix('taxi_image')} AS ti ON ti.id = tt.taxi_image_id
+		  
+		$this->db->select('tt.*, tc.name as category_name, ti.image, ti.image_hover, ti.mapcar');
+		$this->db->from('taxi_type tt');
+		$this->db->join('taxi_image ti', 'ti.id = tt.taxi_image_id');
+		$this->db->join('taxi_category tc', 'tc.id = tt.category_id');
+		if($category_id != 0){
+			$this->db->where('tt.category_id', $category_id);
+		}
+		$this->db->where('tt.is_country', $is_country);
+		$q = $this->db->get();
+		if($q->num_rows()>0){
+		   
+			return $q->result();
+		}
+		return false;
+	}
+	
+	function trucktons($is_country, $type_id, $distance, $latitude, $longitude, $range_min, $range_max){
+		$this->db->select('tt.*, t.name as type_name, df.base_min_distance, df.base_min_distance_price, df.base_per_distance, df.base_per_distance_price, "available"');
+		$this->db->from('taxi_tons tt');
+		$this->db->join('taxi_type t', 't.id = tt.taxi_type_id');
+		$this->db->join('daily_fare df', 'df.taxi_type = tt.taxi_type_id AND df.tons = tt.tons AND df.is_base = 1 AND df.is_default = 1');
+		if($type_id != 0){
+			$this->db->where('tt.taxi_type_id', $type_id);
+		}
+		$this->db->where("tt.tons >=", $range_min);
+		$this->db->where("tt.tons <=", $range_max);
+		//$this->db->where('tt.is_country', $is_country);
+		$q = $this->db->get();
+		if($q->num_rows()>0){
+		   	foreach($q->result() as $row){
+				
+				$query1 = "SELECT  COUNT(d.id) as available, ( 6371 * acos( cos( radians({$latitude}) ) * cos( radians( dcs.current_latitude ) ) * cos( radians( dcs.current_longitude ) - radians({$longitude}) ) + sin( radians({$latitude}) ) * sin( radians( dcs.current_latitude ) ) ) ) AS distance FROM {$this->db->dbprefix('users')}  AS d 
+	LEFT JOIN {$this->db->dbprefix('driver_current_status')} AS dcs ON dcs.driver_id = d.id  
+	
+	LEFT JOIN {$this->db->dbprefix('taxi')} AS t ON t.id = dcs.taxi_id  
+	
+	JOIN {$this->db->dbprefix('taxi_type')} AS tt ON tt.id = t.type 
+	LEFT JOIN {$this->db->dbprefix('groups')} AS g ON g.id = d.group_id 
+	LEFT JOIN {$this->db->dbprefix('user_setting')} AS us ON us.user_id = d.id  AND us.ride_stop = 0
+	WHERE tt.id = ".$row->taxi_type_id." AND t.max_weight = ".$row->tons."  AND  dcs.mode = 1  AND dcs.is_connected = 1 AND dcs.allocated_status = 1 GROUP BY d.id   HAVING distance <= {$distance}  
+ORDER BY distance ASC LIMIT 1";
+				
+				$t = $this->db->query($query1);
+				if ($t->num_rows() > 0) {
+					 $row->available = $t->row('available');					
+					 $data[] = $row;
+				}
+			}
+			
+			return $data;
+		}
+		return false;
+	}
+	/*
+	function FaregetAllTaxiTypesnew($latitude, $longitude, $distance, $countryCode){
+		
+		$query = "SELECT tt.id, tt.category_id, tt.name, tt.taxi_image_id, ti.image, ti.image_hover, ti.mapcar  FROM {$this->db->dbprefix('taxi_type')}  AS tt 
+		  JOIN {$this->db->dbprefix('taxi_image')} AS ti ON ti.id = tt.taxi_image_id
+		  
+		 JOIN {$this->db->dbprefix('daily_fare')} AS df ON df.taxi_type = tt.id  AND df.is_default = 1 
+		 WHERE tt.is_country = '".$countryCode."' GROUP BY tt.id
+		";
+		
+		
+		$q = $this->db->query($query);
+		//print_r($this->db->last_query());die;
+		
+		if ($q->num_rows() > 0) {
+            foreach (($q->result()) as $row) {
+				
+				$row->units = 'Km';
+				//echo $row->id;
+				
+				$fare[$row->id] = $this->site->getFareestimate($latitude, $longitude, $row->id, 1, $countryCode);
+				
+				//print_r($fare[$row->id]);
+				$row->min_price = $fare[$row->id]['min_distance_price'] != NULL ? $fare[$row->id]['min_distance_price'] : '0';
+				$row->min_distance = $fare[$row->id]['min_distance'] != NULL ? $fare[$row->id]['min_distance'] : '0';
+				$row->per_distance = $fare[$row->id]['per_distance'] != NULL ? $fare[$row->id]['per_distance'] : '0';
+				$row->per_distance_price = $fare[$row->id]['per_distance_price'] != NULL ? $fare[$row->id]['per_distance_price'] : '0';	
+				
+				
+				$query1 = "SELECT  COUNT(d.id) as available, ( 6371 * acos( cos( radians({$latitude}) ) * cos( radians( dcs.current_latitude ) ) * cos( radians( dcs.current_longitude ) - radians({$longitude}) ) + sin( radians({$latitude}) ) * sin( radians( dcs.current_latitude ) ) ) ) AS distance FROM {$this->db->dbprefix('users')}  AS d 
+	LEFT JOIN {$this->db->dbprefix('driver_current_status')} AS dcs ON dcs.driver_id = d.id  
+	
+	LEFT JOIN {$this->db->dbprefix('taxi')} AS t ON t.id = dcs.taxi_id  
+	
+	JOIN {$this->db->dbprefix('taxi_type')} AS tt ON tt.id = t.type 
+	LEFT JOIN {$this->db->dbprefix('groups')} AS g ON g.id = d.group_id 
+	LEFT JOIN {$this->db->dbprefix('user_setting')} AS us ON us.user_id = d.id  AND us.ride_stop = 0
+	WHERE tt.id = ".$row->id."  AND  dcs.mode = 1  AND dcs.is_connected = 1 AND dcs.allocated_status = 1 GROUP BY d.id   HAVING distance <= {$distance}  
+ORDER BY distance ASC LIMIT 1";
+				
+				$t = $this->db->query($query1);
+				//print_r($this->db->last_query());
+				if ($t->num_rows() > 0) {
+					$row->available = $t->row('available');					
+					
+					
+					 $data[] = $row;
+				}else{
+					$row->available = "0";
+					//$data[] = $row;
+				}
+               
+			   
+				
+            }
+			//print_r($data);
+			//die;
+            return $data;
+        }
+		
+		
+		return FALSE;
+	}
+	*/
+	
+	
+	
 }

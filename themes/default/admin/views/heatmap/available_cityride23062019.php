@@ -216,7 +216,7 @@ $(document).ready(function(e) {
 </script>
 <script src="<?=base_url('serverkapp/node_modules/socket.io/node_modules/socket.io-client/dist/socket.io.js')?>"></script>
 <script>
-var socket = io.connect('http://'+window.location.hostname+':9000');
+var socket = io.connect('http://'+window.location.hostname+':7000');
 
 
  socket.on('connect', function(){

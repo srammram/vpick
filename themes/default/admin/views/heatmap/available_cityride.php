@@ -211,7 +211,8 @@ function getUnique(array){
 <script src="<?=base_url('serverkapp/node_modules/socket.io/node_modules/socket.io-client/dist/socket.io.js')?>"></script>
 
 <script>
-var socket = io.connect('http://'+window.location.hostname+':5000');
+//alert('http://'+window.location.hostname+':9000');
+var socket = io.connect('http://'+window.location.hostname+':7000');
 socket.on('connect', function(){
 	 console.log('S Connect');	 
 });
@@ -296,15 +297,28 @@ socket.on('admin_drivers_location', function(data){
 				  // console.log(data.results[0].formatted_address+'test');
 				  var imageicon = '';
 				  if(admin_ride_id != 0){
-					  if(admin_status == 2){
-							markers[admin_driver_id].setIcon('http://13.235.8.87/themes/default/admin/assets/images/booked.png');
-						}else if(admin_status == 3){
-							markers[admin_driver_id].setIcon('http://13.235.8.87/themes/default/admin/assets/images/onging.png');
-						}else if(admin_status == 9){
-							markers[admin_driver_id].setIcon('http://13.235.8.87/themes/default/admin/assets/images/incomplete.png');
+					    if(imageicon != ''){
+							if(admin_status == 2){
+								markers[admin_driver_id].setIcon('http://13.235.8.87/themes/default/admin/assets/images/booked.png');
+							}else if(admin_status == 3){
+								markers[admin_driver_id].setIcon('http://13.235.8.87/themes/default/admin/assets/images/onging.png');
+							}else if(admin_status == 9){
+								markers[admin_driver_id].setIcon('http://13.235.8.87/themes/default/admin/assets/images/incomplete.png');
+							}else{
+								markers[admin_driver_id].setIcon('http://13.235.8.87/themes/default/admin/assets/images/online.png');
+							}
 						}else{
-							markers[admin_driver_id].setIcon('http://13.235.8.87/themes/default/admin/assets/images/online.png');
+							if(admin_status == 2){
+								imageicon = 'http://13.235.8.87/themes/default/admin/assets/images/booked.png';
+							}else if(admin_status == 3){
+								imageicon = 'http://13.235.8.87/themes/default/admin/assets/images/onging.png';
+							}else if(admin_status == 9){
+								imageicon = 'http://13.235.8.87/themes/default/admin/assets/images/incomplete.png';
+							}else{
+								imageicon = 'http://13.235.8.87/themes/default/admin/assets/images/online.png';
+							}
 						}
+					    
 				  }else{
 					  imageicon =  'http://13.235.8.87/themes/default/admin/assets/images/online.png'
 				  }

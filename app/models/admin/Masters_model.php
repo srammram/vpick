@@ -623,6 +623,77 @@ class Masters_model extends CI_Model
 		}
 		return false;
     }
+	/*### Company*/
+    function add_company($data, $company_bank, $countryCode){
+		
+		$data['is_country'] = $countryCode;
+		$this->db->insert('company', $data);
+        $company_id = $this->db->insert_id();	
+		if($company_id){
+			if(!empty($company_bank)){
+				foreach($company_bank as $row){
+					$row['company_id'] = $company_id;
+					$row['is_country'] = $countryCode;
+					$this->db->insert('company_bank', $row);
+				}
+			}
+			return true;
+		}
+		return false;
+    }
+    function update_company($id,$data,$countryCode){
+		
+		$this->db->where('id',$id);
+		$data['is_country'] = $countryCode;
+		if($this->db->update('company',$data)){
+	    	return true;
+		}
+		return false;
+    }
+	
+	/*function getBankByAccountNO($account_no){
+		$this->db->select('*');
+		$this->db->from('company');
+		$this->db->where('account_no',$account_no);
+		$q = $this->db->get();
+		if($q->num_rows()>0){
+			return true;
+		}
+		return false;
+    }*/
+	
+    function getCompanyby_ID($id){
+		$this->db->select('*');
+		$this->db->from('company');
+		$this->db->where('id',$id);
+		$q = $this->db->get();
+		if($q->num_rows()>0){
+			return $q->row();
+		}
+		return false;
+    }
+	function getALLCompany($countryCode){
+		//if($countryCode != ''){
+		$this->db->where('is_country', $countryCode);
+		//}
+		$q = $this->db->get('company');
+		if($q->num_rows()>0){
+			foreach (($q->result()) as $row) {
+                $data[] = $row;
+            }
+			return $data;
+		}
+		return false;
+	}
+    function update_company_status($data,$id, $countryCode){
+		$this->db->where('id',$id);
+		$this->db->where('is_country', $countryCode);
+		if($this->db->update('company',$data)){
+			return true;
+		}
+		return false;
+    }
+	
 	/*### Bank*/
     function add_bank($data, $is_default, $countryCode){
 		if($is_default == 1){
@@ -634,8 +705,6 @@ class Masters_model extends CI_Model
 		$this->db->insert('admin_bank', $data);
         return $this->db->insert_id();	
     }
-	
-	
     function update_bank($id,$data, $is_default, $countryCode){
 		if($is_default == 1){
 			$this->db->where('is_default', $is_default);
@@ -645,7 +714,7 @@ class Masters_model extends CI_Model
 		}
 		
 		$this->db->where('id',$id);
-		$this->db->where('is_country', $countryCode);
+		$data['is_country'] = $countryCode;
 		if($this->db->update('admin_bank',$data)){
 	    	return true;
 		}
@@ -685,6 +754,22 @@ class Masters_model extends CI_Model
 		}
 		return false;
 	}
+	
+	function getALLBankOnly($countryCode){
+		//if($countryCode != ''){
+		$this->db->where('is_country', $countryCode);
+		$this->db->where('account_type', 0);
+		//}
+		$q = $this->db->get('admin_bank');
+		if($q->num_rows()>0){
+			foreach (($q->result()) as $row) {
+                $data[] = $row;
+            }
+			return $data;
+		}
+		return false;
+	}
+	
     function update_bank_status($data,$id, $countryCode){
 		$this->db->where('id',$id);
 		$this->db->where('is_country', $countryCode);
@@ -1285,6 +1370,42 @@ class Masters_model extends CI_Model
 		return false;
     }
 	
+	function getBranchPending($countryCode, $settlement_date, $company_id, $company_type){
+		
+		$this->db->select('a.id, a.debit, a.account_transaction_no');
+		$this->db->from('account a');
+		$this->db->where('a.company_id', $company_id);
+		$this->db->where('a.account_type', 1);
+		$this->db->where('a.payment_mode', 0);
+		$this->db->where('a.account_status', 0);
+		$this->db->where("DATE(a.account_transaction_date) <=", $settlement_date);
+		$q = $this->db->get();
+		
+		if($q->num_rows()>0){
+			return $q->result();
+		}
+		return false;	
+	}
+	function getCompanyBank($countryCode, $settlement_type, $company_id, $company_type){
+		$this->db->select('cb.bank_id, b.account_type, b.account_no, b.bank_name');
+		$this->db->from('company_bank cb');
+		$this->db->join('admin_bank b', 'b.id = cb.bank_id');
+		$this->db->where('cb.is_country', $countryCode);
+		if($company_type == 1 && $settlement_type == 0){
+			$this->db->where('cb.bank_type', $settlement_type);
+		}elseif($company_type == 0 && $settlement_type == 0){
+			$this->db->where('cb.bank_type', $settlement_type);
+		}elseif($company_type == 1 && $settlement_type == 1){
+			$this->db->where('cb.bank_type', $settlement_type);
+		}
+		$this->db->where('cb.company_id', $company_id);
+		$q = $this->db->get();
+       	if($q->num_rows()>0){
+			return $q->result();
+		}
+		return false;	
+	}
+	
 	function getTaxicategory_byCountry($countryCode){
 		$val = array();
 		$t = $this->db->get_where('taxi_category',array('is_country' => $countryCode));
@@ -1346,6 +1467,13 @@ class Masters_model extends CI_Model
 		return false;
     }
 	
+	function getBranch($countryCode){
+		$q = $this->db->get_where('company',array('is_country'=>$countryCode, 'is_office' => 0));
+       	if($q->num_rows()>0){
+			return $q->result();
+		}
+		return false;
+    }
 	
 	function getCountry_bycontinent($continent_id, $countryCode){
 		$q = $this->db->get_where('countries',array('continent_id'=>$continent_id));

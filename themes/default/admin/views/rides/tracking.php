@@ -30,6 +30,7 @@
             overflow: hidden;
         }
 </style>
+
 <div class="box">
     
     <?php 
@@ -78,7 +79,11 @@
                 <p class="col-xs-6">
                 <strong><?= lang('customer') ?> <?php if($rides->customer_id != 0){ ?><small><a href="<?= admin_url('people/customer_view/'.$rides->customer_id) ?>">Click here</a></small><?php } ?></strong><br>
                 <?= $rides->cfname ?> <?= $rides->clname ?><br>
-                <?= $rides->cccode.$rides->cmobile ?>
+                
+                 <?php
+				$cmob = $rides->cccode.$rides->cmobile;
+				echo $cmob = '******'.substr($cmob, -4);
+				?>
                 </p>
                 <p class="col-xs-6">
                 <?php 
@@ -87,14 +92,22 @@
                 <strong><?= lang('vendor') ?> <?php if($rides->vendor_id != 0){ ?><small><a href="<?= admin_url('people/vendor_edit/'.$rides->vendor_id) ?>">Click here</a></small><?php } ?></strong>
                 <br>
                 <?= $rides->vfname ?> <?= $rides->vlname ?> <br>
-                <?= $rides->vccode.$rides->vmobile ?>
+                
+                <?php
+				$vmob = $rides->vccode.$rides->vmobile;
+				echo $vmob = '******'.substr($vmob, -4);
+				?>
                 <?php
 				}
 				?>
                 <strong><?= lang('driver') ?> <?php if($rides->driver_id != 0){ ?><small><a href="<?= admin_url('people/driver_edit/'.$rides->driver_id) ?>">Click here</a></small><?php } ?></strong>
                 <br>
                 <?= $rides->dfname ?> <?= $rides->dlname ?> <br>
-                <?= $rides->dccode.$rides->dmobile ?>
+                
+                 <?php
+				$cmob = $rides->dccode.$rides->dmobile;
+				echo $cmob = '******'.substr($cmob, -4);
+				?>
                 </p>
                 <div class="clearfix"></div>
                 <p class="col-xs-6">
@@ -276,6 +289,19 @@
 </div>
 <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>-->
 <script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyBxxnqAHBqmceXMT1YwJsuEvx40yXPqG3M&sensor=false"></script>
+<script src="<?=base_url('serverkapp/node_modules/socket.io/node_modules/socket.io-client/dist/socket.io.js')?>"></script>
+
+<script>
+function mobile_status(mob) {
+	if(mob == null){
+		return 'N/A';
+	}else{
+		var mobile = mob.slice(-4);		
+		return '******'+mobile;
+	}
+}
+</script>
+
 <script>
 $(document).ready(function() {
 var ride_id = <?= $id ?>;
@@ -293,35 +319,23 @@ var droplat     = "<?= $rides->end_lat ?>";
 var droplon     = "<?= $rides->end_lng ?>";
 var dropAddress = "<?= $drop ?>";
 var dropIcon	= "http://13.233.9.134/themes/default/admin/assets/images/track.png";
-<?php
-if($rides->status == 2 || $rides->status == 3 || $rides->status == 4){
-?>
-var carlat		= "<?= $rides->driver_latitude ?>";
-var carlng		= "<?= $rides->driver_longitude ?>";
-var driver_lat	= "<?= $rides->driver_latitude ?>";
-var driver_lng	= "<?= $rides->driver_longitude ?>";
 
-var carAddress	= "<?= $driveraddress ?>";
-var carIcon	= "http://13.233.9.134/themes/default/admin/assets/images/track.png";
-<?php
-}else{
-?>
-var carlat		= 0;
-var carlng		= 0;
-var carAddress	= 0;
-var carIcon	= 0;
-<?php
-}
-?>
+var cablat     = "";
+var cablon     = "";
+var cabAddress = "";
+var cabIcon	   = "";
+var cabStatus  = "0";
+var Drivermarkers = [];
+var zoom = 7;
 
-function initialize() {
+function initialize(zoom) {
 
     directionsDisplay = new google.maps.DirectionsRenderer({
         suppressMarkers: true
     });
 
     var mapOptions = {
-        zoom: 10,
+        zoom: zoom,
         mapTypeId: google.maps.MapTypeId.ROADMAP,
     }
 
@@ -340,34 +354,35 @@ function initialize() {
 	
     directionsDisplay.setMap(map);
 	
-	calcRoute(pickUpLat,pickUplon,pickAddress,pickIcon,  droplat,droplon,dropAddress,dropIcon);
-		
+	calcRoute(pickUpLat,pickUplon,pickAddress,pickIcon,  droplat,droplon,dropAddress,dropIcon, cablat,cablon,cabIcon, cabStatus);
+	<?php
+	if($rides->status == 5){
+	?>	
 		var flightPlanCoordinates = <?= $rides->location ?>;
         var flightPath = new google.maps.Polyline({
           path: flightPlanCoordinates,
           geodesic: true,
-          strokeColor: '#FF0000',
+          strokeColor: '#f2b818',
           strokeOpacity: 2,
           strokeWeight: 4
         });
 
         flightPath.setMap(map);
-		
+	<?php
+	}
+	?>	
 }
 	
-function calcRoute(pickUpLat,pickUplon,pickAddress,pickIcon,  droplat,droplon,dropAddress,dropIcon, carlat, carlng, carAddress, carIcon) {
+function calcRoute(pickUpLat,pickUplon,pickAddress,pickIcon,  droplat,droplon,dropAddress,dropIcon, cablat,cablon,cabIcon, cabStatus) {
 	
 	var start = new google.maps.LatLng(pickUpLat,pickUplon);
     var end = new google.maps.LatLng(droplat,droplon);
+	var cab = new google.maps.LatLng(cablat,cablon);
+	console.log('recived');
 	
-	if(carlat != 0 && carlng != 0){
-		var car = new google.maps.LatLng(carlat,carlng);
-		if(!carMarker) {
-			carMarker = createMarker(car,carAddress,carIcon);
-		} else {
-			carMarker.setPosition(car);
-		}
-	}
+	console.log(pickUpMarker);
+	console.log(dropToMarker);
+	console.log(carMarker);
 	
 	if(!pickUpMarker) {
         pickUpMarker = createMarker(start,pickAddress,pickIcon);
@@ -378,7 +393,23 @@ function calcRoute(pickUpLat,pickUplon,pickAddress,pickIcon,  droplat,droplon,dr
 	if(!dropToMarker) {
         dropToMarker = createMarker(end,dropAddress,dropIcon);
     } else {
-        dropToMarker.setPosition(start);
+        dropToMarker.setPosition(end);
+    }
+	
+	if(!carMarker) {
+        carMarker = createMarker(cab,'cab',cabIcon);
+    } else {
+		console.log('set');
+		if(cabStatus == 2){
+			carMarker.setIcon('http://13.235.8.87/themes/default/admin/assets/images/booked.png');
+		}else if(cabStatus == 3){
+			carMarker.setIcon('http://13.235.8.87/themes/default/admin/assets/images/onging.png');
+		}else if(cabStatus == 9){
+			carMarker.setIcon('http://13.235.8.87/themes/default/admin/assets/images/incomplete.png');
+		}else{
+			carMarker.setIcon('http://13.235.8.87/themes/default/admin/assets/images/online.png');
+		}
+        carMarker.setPosition(cab);
     }
 	
     var request = {
@@ -394,6 +425,11 @@ function calcRoute(pickUpLat,pickUplon,pickAddress,pickIcon,  droplat,droplon,dr
             var route = response.routes[0];
         }
     });
+}
+
+function deleteMarkers(admin_driver_id) {
+    Drivermarkers[admin_driver_id].setMap(null);
+	Drivermarkers.length-1;
 }
 
 
@@ -413,31 +449,18 @@ function createMarker(latlng,title,icon) {
     return marker;
 }
 
-initialize();
+initialize(zoom);
 
-function makeRequest(driver_lat, driver_lng){
-	 var myLatLng = { lat: driver_lat, lng: driver_lng};
-	 carMarker.setPosition(myLatLng);
-} 
-//setInterval(makeRequest(driver_lat, driver_lng), (3000));
+var booking_driver_id = '<?= $rides->driver_id ?>';
+var booking_customer_id = '<?= $rides->customer_id ?>';
+var booking_id = '<?= $rides->id ?>';
 
-});
-</script>
-<!--
-<script src="<?=base_url('serverkapp/node_modules/socket.io/node_modules/socket.io-client/dist/socket.io.js')?>"></script>
-
-<script>
 var socket = io.connect('http://'+window.location.hostname+':7000');
 socket.on('connect', function(){
 	 console.log('S Connect');	 
 });
 var addresslatlng = [];
 
-var online = 0;
-var booked = 0;
-var ongoing = 0;
-var incomplete = 0;
- 
 socket.on('admin_drivers_location', function(data){
 	var admin_driver_id = data.admin_driver_id;
 	var admin_ride_id = data.admin_ride_id;
@@ -447,99 +470,39 @@ socket.on('admin_drivers_location', function(data){
 	var is_connected = data.admin_is_connected;
 	
 	console.log(data);
-	if(admin_driver_id == 0 && admin_ride_id == 0){
-		console.log('No driver');
-	}else{
-		console.log('Data driver');
-		//console.log(markers);
+	if(admin_driver_id == booking_driver_id && admin_ride_id == booking_id){
+		console.log('Rides');
 		if(is_connected == 1){	
-			console.log(getUnique(multiple_driver));
-			
 			console.log('Connected');
 			
-			if(getUnique(multiple_driver).includes(admin_driver_id)){
-				console.log('Exit Driver');
-				
-				if(admin_ride_id != 0){
-						console.log('Exit Driver'+admin_driver_id);	
-						//console.log(markers[admin_driver_id]);	
-						console.log('setIcon');		
-						if(admin_status == 2){
-							markers[admin_driver_id].setIcon('http://13.235.8.87/themes/default/admin/assets/images/booked.png');
-						}else if(admin_status == 3){
-							markers[admin_driver_id].setIcon('http://13.235.8.87/themes/default/admin/assets/images/onging.png');
-						}else if(admin_status == 9){
-							markers[admin_driver_id].setIcon('http://13.235.8.87/themes/default/admin/assets/images/incomplete.png');
-						}else{
-							markers[admin_driver_id].setIcon('http://13.235.8.87/themes/default/admin/assets/images/online.png');
-						}
-					//var url_google = "https://maps.googleapis.com/maps/api/geocode/json?latlng=" + admin_lat + "," + admin_lng + "&key=AIzaSyAQggnzNxn0UFplcovbvhXQPsA8-zUsDk8";
-				//console.log(url_google);
-				 //var add = '';
-					//$.getJSON(url_google,function (data, textStatus) {
-					   // add = data.results[0].formatted_address;
-					   //console.log(data.results[0].formatted_address+'test');
-					  // markers[admin_driver_id].setContent(data.results[0].formatted_address);
-					   //markers[admin_driver_id] =  addMarker(lat_lng1, data.results[0].formatted_address,'http://13.233.9.134/themes/default/admin/assets/images/track.png', admin_driver_id);
-					//});
-					
-				}else{
-					console.log(admin_driver_id);	
-					console.log('Exit Driver@@@@@@@'+admin_driver_id);	
-					markers[admin_driver_id].setIcon('http://13.235.8.87/themes/default/admin/assets/images/online.png');
-					//markers[admin_driver_id].setIcon('http://13.233.9.134/themes/default/admin/assets/images/Completed.png');
-				}				
-				
-			}else{
-				console.log('New Driver');	
-				online = online + 1;		
-				//console.log(addresslatlng);
-				console.log(admin_driver_id+'Driver');
-				console.log(admin_lat);
-				console.log(admin_lng);
-				var lat_lng1 = new google.maps.LatLng(admin_lat,admin_lng);
-				
-
-				  var imageicon = '';
-				  if(admin_ride_id != 0){
-					  if(admin_status == 2){
-							markers[admin_driver_id].setIcon('http://13.235.8.87/themes/default/admin/assets/images/booked.png');
-						}else if(admin_status == 3){
-							markers[admin_driver_id].setIcon('http://13.235.8.87/themes/default/admin/assets/images/onging.png');
-						}else if(admin_status == 9){
-							markers[admin_driver_id].setIcon('http://13.235.8.87/themes/default/admin/assets/images/incomplete.png');
-						}else{
-							markers[admin_driver_id].setIcon('http://13.235.8.87/themes/default/admin/assets/images/online.png');
-						}
-				  }else{
-					  imageicon =  'http://13.235.8.87/themes/default/admin/assets/images/online.png'
-				  }
-				   markers[admin_driver_id] =  addMarker(lat_lng1, '',imageicon, admin_driver_id);
-
-				console.log( markers[admin_driver_id]);
-				
-				multiple_driver.push(admin_driver_id);	
-				
-			}
+			var lat_lng1 = new google.maps.LatLng(admin_lat,admin_lng);
+			
 		
-			changeMarkerPosition(map, marker, admin_driver_id, admin_lat, admin_lng);
-		}else{
-			var index = multiple_driver.indexOf(admin_driver_id);
-			if (index > -1) {
-				multiple_driver.splice(index, 1);
+			if(admin_status == 2){
+				cabIcon = 'http://13.235.8.87/themes/default/admin/assets/images/booked.png';
+			}else if(admin_status == 3){
+				cabIcon = 'http://13.235.8.87/themes/default/admin/assets/images/onging.png';
+			}else if(admin_status == 9){
+				cabIcon = 'http://13.235.8.87/themes/default/admin/assets/images/incomplete.png';
+			}else{
+				cabIcon = 'http://13.235.8.87/themes/default/admin/assets/images/online.png';
 			}
+				
+			console.log(cabIcon);
+			calcRoute(pickUpLat,pickUplon,pickAddress,pickIcon,  droplat,droplon,dropAddress,dropIcon, admin_lat,admin_lng,cabIcon, admin_status)
+			console.log('change emit');
+			
+		}else{
+			
 			deleteMarkers(admin_driver_id);
 		}
+	}else{
+		console.log('No rides');
 	}
 });
 
-//$('#online').text(online);
-//$('#booked').text(booked);
-//$('#ongoing').text(ongoing);
-//('#incomplete').text(incomplete);
-
-</script>-->
 
 
-    
+});
+</script>
 

@@ -42,9 +42,12 @@
 	
 	
 	function mobile_status(mob) {
-		
-		var mobile = mob.slice(-4);		
-		return '******'+mobile;
+		if(mob == null){
+			return 'N/A';
+		}else{
+			var mobile = mob.slice(-4);		
+			return '******'+mobile;
+		}
     }
 	
     $(document).ready(function () {

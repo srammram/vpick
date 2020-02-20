@@ -27,6 +27,13 @@ function cab_status(x) {
         '<a href="'+site.base_url+'people/employee_status/deactive/'+ y[1] +'"><span class="label label-danger">  '+lang['inactive']+'</span><a/>';*/
     }
 	
+	function admin_status(x) {
+       		
+        return x == 1 ?
+        '<span class="text-info">STAFF</span>' :
+        '<span class="text-primary">CUSTOMER</span>';
+    }
+	
 	function mobile_status(mob) {
 		
 		
@@ -56,7 +63,7 @@ function cab_status(x) {
                 });
                 $.ajax({'dataType': 'json', 'type': 'POST', 'url': sSource, 'data': aoData, 'success': fnCallback});
             },
-            "aoColumns": [ {"mRender": empty_status},  {"mRender": empty_status},{"mRender": empty_status}, {"mRender": empty_status}, {"mRender": mobile_status}, {"mRender": empty_status}, {"mRender": mobile_status}, {"mRender": empty_status}, {"mRender": empty_status}, {"mRender": empty_status},{"mRender": empty_status},{"mRender": cab_status}, {"mRender": empty_status}, {"bSortable": true}]
+            "aoColumns": [ {"mRender": admin_status},{"mRender": empty_status},  {"mRender": empty_status},{"mRender": empty_status}, {"mRender": empty_status}, {"mRender": mobile_status}, {"mRender": empty_status}, {"mRender": mobile_status}, {"mRender": empty_status}, {"mRender": empty_status}, {"mRender": empty_status},{"mRender": empty_status},{"mRender": cab_status}, {"mRender": empty_status}, {"bSortable": true}]
         });
     });
 </script>
@@ -150,7 +157,7 @@ function cab_status(x) {
                            class="table table-bordered table-hover table-striped">
                         <thead>
                         <tr>
-                            
+                            <th><?php echo lang('create_type') ?></th>
                             <th style="width:100px;"><?php echo lang('booking_timestamp'); ?></th>
                             <th class="col-xs-2"><?php echo lang('trip_code'); ?></th>
                             

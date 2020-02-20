@@ -20,7 +20,7 @@
                 $.ajax({'dataType': 'json', 'type': 'POST', 'url': sSource, 'data': aoData, 'success': fnCallback});
             },
             
-            "aoColumns": [ {"mRender": empty_status}, {"mRender": payment_gateway_status}, {"mRender": empty_status}, {"bSortable": false}]
+            "aoColumns": [ {"mRender": empty_status}, {"mRender": empty_status}, {"mRender": payment_gateway_status}, {"mRender": empty_status}, {"bSortable": false}]
         });
     });
 </script>
@@ -99,6 +99,7 @@
                         <tr>
                             
                             <th ><?php echo lang('name'); ?></th>
+                            <th ><?php echo lang('bank'); ?></th>
                             <th ><?php echo lang('status'); ?></th>
                             <th style="width: 33.33%!important;"><?php echo lang('instance'); ?></th>
                             <th ><?php echo lang('action'); ?></th>

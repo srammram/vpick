@@ -1,12 +1,11 @@
 
-
 <?php defined('BASEPATH') OR exit('No direct script access allowed'); ?>
 <div class="box">
     
     <div class="box-content">
         <div class="row">
             <div class="col-lg-12">
-                <?php $attrib = array('class' => 'form-horizontal', 'class' => 'edit_from', 'data-toggle' => 'validator', 'role' => 'form', 'autocomplete' => "off");
+                <?php $attrib = array('class' => 'form-horizontal', 'class' => 'add_form', 'data-toggle' => 'validator', 'role' => 'form', 'autocomplete' => "off");
                 echo admin_form_open_multipart("masters/edit_bank/".$bank->id, $attrib);
                 ?>
                 <div class="row">
@@ -26,7 +25,19 @@
                         </div>
 					</div>
                        <div class="col-md-12">  
-                        	<h2 class="box_he_de">Bank Details</h2>
+                        	<h2 class="box_he_de">Details</h2>
+                             <div class="form-group col-sm-3 col-xs-12">
+                                <?php echo lang('account_type', 'account_type'); ?>
+                                <div class="controls">
+                                    <select class="form-control select account_type"  name="account_type" id="account_type">
+                                        
+                                        
+                                        <option value="0" <?php if($bank->account_type == 0){ echo 'selected'; } ?>>Bank</option>
+                                        <option value="1" <?php if($bank->account_type == 1){ echo 'selected'; } ?>>Cash</option>
+                                       
+                                    </select>
+                                </div>
+                            </div>
                             <div class="form-group col-sm-3 col-xs-12">
                                 <?php echo lang('account_holder_name', 'account_holder_name'); ?>
                                 <div class="controls">
@@ -39,19 +50,19 @@
                                     <input type="text" id="account_no" name="account_no" value="<?= $bank->account_no ?>" class="form-control"/>
                                 </div>
                             </div>
-                            <div class="form-group col-sm-3 col-xs-12">
+                            <div class="form-group col-sm-3 col-xs-12 bank <?= $bank->account_type == 1 ? 'hidden' : '' ?>">
                                 <?php echo lang('bank_name', 'bank_name'); ?>
                                 <div class="controls">
                                     <input type="text" id="bank_name" name="bank_name" value="<?= $bank->bank_name ?>" onkeyup="inputFirstUpper(this)" class="form-control"/>
                                 </div>
                             </div>
-                            <div class="form-group col-sm-3 col-xs-12">
+                            <div class="form-group col-sm-3 col-xs-12 bank <?= $bank->account_type == 1 ? 'hidden' : '' ?>">
                                 <?php echo lang('branch_name', 'branch_name'); ?>
                                 <div class="controls">
                                     <input type="text" id="branch_name" name="branch_name" value="<?= $bank->branch_name ?>" onkeyup="inputFirstUpper(this)" class="form-control"/>
                                 </div>
                             </div>
-                            <div class="form-group col-sm-3 col-xs-12">
+                            <div class="form-group col-sm-3 col-xs-12 bank <?= $bank->account_type == 1 ? 'hidden' : '' ?>">
                                 <?php echo lang('ifsc_code', 'ifsc_code'); ?>
                                 <div class="controls">
                                     <input type="text" id="ifsc_code" name="ifsc_code" value="<?= $bank->ifsc_code ?>" onkeyup="inputUpper(this)" class="form-control"/>
@@ -59,17 +70,13 @@
                                 <p class="help-block-small"><?= lang('ex_ifsc') ?></p>
                             </div>
                             
-                            <div class="form-group col-sm-3 col-xs-12" style="margin-top: 20px;">
-                                    <input type="checkbox" class="checkbox" id="is_default" name="is_default" value="1" <?= $bank->is_default == 1 ? 'checked' : '' ?> />
-                                    <label for="extras" class="padding05"><?= lang('is_default') ?></label>
-                                </div>
-                                
+                           
                                 
                         </div>  
                 </div>
                    
 
-              <div class="col-sm-12 last_sa_se"><?php echo form_submit('update_bank', lang('update_bank'), 'class="btn btn-primary change_btn_save center-block"'); ?></div>
+              <div class="col-sm-12 last_sa_se"><?php echo form_submit('update_bank', lang('update'), 'class="btn btn-primary change_btn_save center-block"'); ?></div>
 
                 <?php echo form_close(); ?>
  </div>
@@ -83,3 +90,14 @@
         z-index:1 !important;
     }
 </style>
+<script>
+$(document).on('change', '#account_type', function(){
+	var b = $(this).val();
+	if(b == 0){
+		$('.bank').removeClass('hidden');
+	}else{
+		$('.bank').addClass('hidden');
+	}
+	//$('.add_from').bootstrapValidator('resetForm', true);
+});
+</script>

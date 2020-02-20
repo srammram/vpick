@@ -2103,19 +2103,20 @@ class Customers extends REST_Controller {
 	}
 	
 	
+	
 	public function truck_category_post(){
 		$data = array();
 		$countryCode = $this->input->post('is_country');
 		$this->form_validation->set_rules('latitude', $this->lang->line("latitude"), 'required');
 		$this->form_validation->set_rules('longitude', $this->lang->line("longitude"), 'required');
 		$this->form_validation->set_rules('is_country', $this->lang->line("instance"), 'required');
-		//$this->form_validation->set_rules('oauth_token', $this->lang->line("oauth_token"), 'required|callback_check_exist[oauth_token]');
+		$this->form_validation->set_rules('oauth_token', $this->lang->line("oauth_token"), 'required|callback_check_exist[oauth_token]');
 		if ($this->form_validation->run() == true) {
 			
 			$search_data = $this->site->insertSearch($this->input->post('latitude'), $this->input->post('longitude'), $countryCode);
 			
 			$settings = $this->customer_api->getSettings($countryCode);
-			//$user_data = $this->customer_api->getCustomer($this->input->post('oauth_token'), $countryCode);
+			$user_data = $this->customer_api->getCustomer($this->input->post('oauth_token'), $countryCode);
 			$this->site->users_logs($countryCode, $user_data->id, $this->getUserIpAddr, json_encode($_POST), $_SERVER['REQUEST_URI']);
 			
 			$outstanding_price = $this->customer_api->outstanding_price($user_data->id, $countryCode);
@@ -2173,13 +2174,13 @@ class Customers extends REST_Controller {
 		$this->form_validation->set_rules('latitude', $this->lang->line("latitude"), 'required');
 		$this->form_validation->set_rules('longitude', $this->lang->line("longitude"), 'required');
 		$this->form_validation->set_rules('is_country', $this->lang->line("instance"), 'required');
-		//$this->form_validation->set_rules('oauth_token', $this->lang->line("oauth_token"), 'required|callback_check_exist[oauth_token]');
+		$this->form_validation->set_rules('oauth_token', $this->lang->line("oauth_token"), 'required|callback_check_exist[oauth_token]');
 		if ($this->form_validation->run() == true) {
 			
 			$search_data = $this->site->insertSearch($this->input->post('latitude'), $this->input->post('longitude'), $countryCode);
 			
 			$settings = $this->customer_api->getSettings($countryCode);
-			//$user_data = $this->customer_api->getCustomer($this->input->post('oauth_token'), $countryCode);
+			$user_data = $this->customer_api->getCustomer($this->input->post('oauth_token'), $countryCode);
 			$this->site->users_logs($countryCode, $user_data->id, $this->getUserIpAddr, json_encode($_POST), $_SERVER['REQUEST_URI']);
 			
 			$outstanding_price = $this->customer_api->outstanding_price($user_data->id, $countryCode);
@@ -3023,5 +3024,183 @@ class Customers extends REST_Controller {
 		$this->response($result);
 	}
 	
+	public function rangeton_post(){
+		$data = array();
+		$countryCode = $this->input->post('is_country');
+		$this->form_validation->set_rules('is_country', $this->lang->line("instance"), 'required');
+		$this->form_validation->set_rules('oauth_token', $this->lang->line("oauth_token"), 'required|callback_check_exist[oauth_token]');
+		if ($this->form_validation->run() == true) {
+			$this->site->users_logs($countryCode, $user_data->id, $this->getUserIpAddr, json_encode($_POST), $_SERVER['REQUEST_URI']);
+			$settings = $this->customer_api->getSettings($countryCode);
+			$data = array(
+				'min_range' => $settings->min_range,
+				'max_range' => $settings->max_range
+			);
+			$result = array( 'status'=> 1 , 'message'=> 'Success', 'data' => $data);
+				
+		}else{
+			$error = $this->form_validation->error_array();
+			 foreach($error as $key => $val){
+				 $errors[] = $val;
+			 }
+			 $result = array( 'status'=> 0 , 'message' => $errors[0]);
+		}
+		$this->response($result);
+	}
+	
+	public function truckcategory_post(){
+		$data = array();
+		$countryCode = $this->input->post('is_country');
+		$this->form_validation->set_rules('is_country', $this->lang->line("instance"), 'required');
+		$this->form_validation->set_rules('oauth_token', $this->lang->line("oauth_token"), 'required|callback_check_exist[oauth_token]');
+		if ($this->form_validation->run() == true) {
+			$this->site->users_logs($countryCode, $user_data->id, $this->getUserIpAddr, json_encode($_POST), $_SERVER['REQUEST_URI']);
+			$types = $this->customer_api->gettruckcategory($countryCode);
+			
+			if(!empty($types)){
+				$data[0] = array(
+					'category_id' => "0",
+					'category_name' => 'All',
+				);
+				
+				foreach($types as $type){
+					
+					
+					$res = array(
+						'category_id' => $type->id,
+						'category_name' => $type->name,
+					);					
+					$data[] = $res;
+				}
+				$result = array( 'status'=> 1 , 'message'=> 'Success', 'data' => $data);
+			}else{
+				$result = array( 'status'=> 0 , 'message'=> 'Empty');
+			}
+				
+		}else{
+			$error = $this->form_validation->error_array();
+			 foreach($error as $key => $val){
+				 $errors[] = $val;
+			 }
+			 $result = array( 'status'=> 0 , 'message' => $errors[0]);
+		}
+		$this->response($result);
+	}
+	
+	public function trucktype_post(){
+		$data = array();
+		$countryCode = $this->input->post('is_country');
+		$this->form_validation->set_rules('is_country', $this->lang->line("instance"), 'required');
+		$this->form_validation->set_rules('category_id', $this->lang->line("category"), 'required');
+		$this->form_validation->set_rules('oauth_token', $this->lang->line("oauth_token"), 'required|callback_check_exist[oauth_token]');
+		if ($this->form_validation->run() == true) {
+			$settings = $this->customer_api->getSettings($countryCode);
+			$user_data = $this->customer_api->getCustomer($this->input->post('oauth_token'), $countryCode);
+			$this->site->users_logs($countryCode, $user_data->id, $this->getUserIpAddr, json_encode($_POST), $_SERVER['REQUEST_URI']);
+			
+			$outstanding_price = $this->customer_api->outstanding_price($user_data->id, $countryCode);
+			
+			$types = $this->customer_api->gettrucktype($countryCode, $this->input->post('category_id'));
+			
+			if(!empty($types)){
+				$default_image = site_url('assets/uploads/no_image.png');
+				$default_url = site_url('assets/uploads/');
+				foreach($types as $type){
+					
+					if(!empty($type->image)){
+						$type->image = $default_url.$type->image;
+					} else {
+						$type->image = $default_image;
+					}
+					if(!empty($type->image_hover)){
+						$type->image_hover = $default_url.$type->image_hover;
+					} else {
+						$type->image_hover = $default_image;
+					}
+					if(!empty($type->mapcar)){
+						$type->mapcar = $default_url.$type->image_hover;
+					} else {
+						$type->mapcar = $default_image;
+					}
+						
+					$res = array(
+						'type_id' => $type->id,
+						'type_name' => $type->name,
+						'category_id' => $type->category_id,
+						'category_name' => $type->category_name,
+						'image' => $type->image,
+						'image_hover' => $type->image_hover,
+						'mapcar' => $type->mapcar,
+						'units' => 'Km',
+					);					
+					$data[] = $res;
+				}
+				$result = array( 'status'=> 1 , 'message'=> 'Success', 'outstation_min_kilometer' => $settings->outstation_min_kilometer, 'cityride_max_kilometer' => $settings->cityride_max_kilometer, 'rental_max_kilometer' => $settings->rental_max_kilometer, 'outstanding_price' => $outstanding_price, 'outstanding_setting' => 1, 'data' => $data);
+			}else{
+				$result = array( 'status'=> 0 , 'message'=> 'Empty', 'outstation_min_kilometer' => $settings->outstation_min_kilometer, 'cityride_max_kilometer' => $settings->cityride_max_kilometer, 'rental_max_kilometer' => $settings->rental_max_kilometer, 'outstanding_price' => $outstanding_price, 'outstanding_setting' => 1);
+			}
+				
+		}else{
+			$error = $this->form_validation->error_array();
+			 foreach($error as $key => $val){
+				 $errors[] = $val;
+			 }
+			 $result = array( 'status'=> 0 , 'message' => $errors[0]);
+		}
+		$this->response($result);
+	}
+	
+	public function trucktons_post(){
+		$data = array();
+		$countryCode = $this->input->post('is_country');
+		$this->form_validation->set_rules('is_country', $this->lang->line("instance"), 'required');
+		$this->form_validation->set_rules('type_id', $this->lang->line("type"), 'required');
+		$this->form_validation->set_rules('latitude', $this->lang->line("type"), 'required');
+		$this->form_validation->set_rules('longitude', $this->lang->line("type"), 'required');
+		$this->form_validation->set_rules('range_min', $this->lang->line("range_min"), 'required');
+		$this->form_validation->set_rules('range_max', $this->lang->line("range_max"), 'required');
+		$this->form_validation->set_rules('oauth_token', $this->lang->line("oauth_token"), 'required|callback_check_exist[oauth_token]');
+		if ($this->form_validation->run() == true) {
+			$distance = 20;
+			
+			$types = $this->customer_api->trucktons($countryCode, $this->input->post('type_id'), $distance, $this->input->post('latitude'), $this->input->post('longitude'), $this->input->post('range_min'), $this->input->post('range_max'));
+			$settings = $this->customer_api->getSettings($countryCode);
+			$user_data = $this->customer_api->getCustomer($this->input->post('oauth_token'), $countryCode);
+			$this->site->users_logs($countryCode, $user_data->id, $this->getUserIpAddr, json_encode($_POST), $_SERVER['REQUEST_URI']);
+			
+			$outstanding_price = $this->customer_api->outstanding_price($user_data->id, $countryCode);
+			
+			if(!empty($types)){
+				
+				foreach($types as $type){
+					
+					$res = array(
+						'type_name' => $type->type_name,
+						'tons_id' => $type->id,
+						'tons' => $type->tons,
+						'min_price' => $type->base_min_distance_price,
+						'min_distance' => $type->base_min_distance,
+						'per_distance' => $type->base_per_distance,
+						'per_distance_price' => $type->base_per_distance_price,
+						'units' => 'Km',
+						'available' => $type->available
+					);	
+									
+					$data[] = $res;
+				}
+				$result = array( 'status'=> 1 , 'message'=> 'Success', 'outstation_min_kilometer' => $settings->outstation_min_kilometer, 'cityride_max_kilometer' => $settings->cityride_max_kilometer, 'rental_max_kilometer' => $settings->rental_max_kilometer, 'outstanding_price' => $outstanding_price, 'outstanding_setting' => 1, 'data' => $data);
+			}else{
+				$result = array( 'status'=> 0 , 'message'=> 'Empty', 'outstation_min_kilometer' => $settings->outstation_min_kilometer, 'cityride_max_kilometer' => $settings->cityride_max_kilometer, 'rental_max_kilometer' => $settings->rental_max_kilometer, 'outstanding_price' => $outstanding_price, 'outstanding_setting' => 1);
+			}
+				
+		}else{
+			$error = $this->form_validation->error_array();
+			 foreach($error as $key => $val){
+				 $errors[] = $val;
+			 }
+			 $result = array( 'status'=> 0 , 'message' => $errors[0]);
+		}
+		$this->response($result);
+	}
 	
 }

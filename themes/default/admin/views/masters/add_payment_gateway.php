@@ -56,7 +56,16 @@ $('form[class="add_from"]').bootstrapValidator({
                 <?php echo form_input('name', '', 'class="form-control" id="name" onkeyup="inputFirstUpper(this)" required="required"'); ?>
             </div>
             
-           
+            
+            <div class="form-group col-md-6 col-xs-12">
+				<?= lang('bank', 'bank'); ?>
+                <?php
+                $c[''] = 'Select Bank';
+                foreach ($admin_bank as $value) {
+                    $c[$value->id] = $value->bank_name.'('.$value->account_no.')';
+                }
+                echo form_dropdown('bank_id', $c, '', 'class="form-control select-continent select"  id="bank_id" required="required"'); ?>
+            </div>
             
             </div>
             
@@ -78,6 +87,29 @@ $('form[class="add_from"]').bootstrapValidator({
 <script>
 $(document).ready(function(){
 	$(".country_instance").select2();
+});
+$(document).ready(function(){
+	
+	$('.country_instance').change(function(){
+		$("#bank_id").select2("destroy");
+		var is_country = $(this).val();
+		$.ajax({
+			type: 'POST',
+			url: '<?=admin_url('masters/getCountry_byBank')?>',
+			data: {is_country: is_country},
+			dataType: "json",
+			cache: false,
+			success: function (scdata) {
+				console.log(scdata);
+				$option = '<option value="">Select Bank</option>';
+				$.each(scdata,function(n,v){
+					$option += '<option value="'+v.id+'">'+v.text+'</option>';
+				});
+				$("#bank_id").html($option);
+				$("#bank_id").select2();
+			}
+		})
+	});
 });
 </script>
 

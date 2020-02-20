@@ -27,13 +27,14 @@
     </div><?php */?>
 
     <div class="box-content" style="padding: 30px 15px;">
-       <div class="row">
-      		<div class="col-sm-12">
-            	<a href="<?= admin_url('booking_crm/create_customer') ?>" class="btn btn-primary pull-right"><?= lang('create_booking') ?></a>
-     			
-      		</div>
-       </div>
-        
+      
+        <div class="row">
+            <div class="col-lg-12 text-center">
+				<a href="<?= admin_url('booking_crm/create_customer') ?>" class="btn btn-primary ">Create Booking Ride</a>
+               
+            </div>
+
+        </div>
     </div>
 </div>
 <?php if ($Owner) { ?>

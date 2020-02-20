@@ -159,7 +159,7 @@ $(document).ready(function(e) {
 </script>
 <script src="<?=base_url('serverkapp/node_modules/socket.io/node_modules/socket.io-client/dist/socket.io.js')?>"></script>
 <script>
-var socket = io('http://'+window.location.hostname+':5000');
+var socket = io('http://13.233.9.134:9000');
  socket.on('connect', function(){
 	console.log('Socket Connect');	 
 });

@@ -38,9 +38,9 @@ function admin_status(x3) {
                    
                 }
                 var nCells = nRow.getElementsByTagName('th');
-                nCells[5].innerHTML = total_fare;
-                nCells[6].innerHTML = heyycab_fee;
-				nCells[7].innerHTML = driver_share;
+                nCells[5].innerHTML = total_fare.toFixed(2);
+                nCells[6].innerHTML = heyycab_fee.toFixed(2);
+				nCells[7].innerHTML = driver_share.toFixed(2);
 				//nCells[9].innerHTML = settlement;
                
             },

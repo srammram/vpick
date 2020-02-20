@@ -33,6 +33,10 @@ $return_url = admin_url().'wallet/razorpay_addmoney/'.$group_id;
 					<div class="col-md-12">    	
 						<h2 class="box_he_de"><?= lang('payment_details') ?></h2>
 							<div class="col-md-12">
+                            	<input type="hidden" name="payment_gateway" id="payment_gateway" value="<?= $payment_gateway ? $payment_gateway : 0 ?>" />
+                                <input type="hidden" name="payment_mode" id="payment_mode" value="<?= $payment_mode ? $payment_mode : 0 ?>" />
+                                
+                               
 								<input type="hidden" name="is_country" id="user_id" value="<?= $is_country ?>" />
                                 <input type="hidden" name="user_id" id="user_id" value="<?= $user_id ?>" />
                                 <input type="hidden" name="offer" id="offer" value="<?= $offer ?>" />

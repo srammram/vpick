@@ -106,12 +106,21 @@ $return_url = admin_url().'account/callback';
 						</div>
 
 						
-						
+						 <div class="form-group col-sm-3 col-xs-12 payment_gateway_id">
+							<?php echo lang('payment_mode', 'payment_mode'); ?>
+							<?php
+							$pm[0] = 'Offline';
+							$pm[1] = 'Online';
+							
+
+							echo form_dropdown('payment_mode', $pm, '', 'class="tip form-control" required id="payment_mode" data-placeholder="' . lang("select") . ' ' . lang("payment_mode") . '" ');
+							?>
+						</div>
                         
                         <div class="form-group col-sm-3 col-xs-12 payment_gateway_id">
 							<?php echo lang('payment_gateway', 'Payment Gateway'); ?>
 							<?php
-							$pg[''] = 'Select Payment Gateway';
+							$pg[0] = 'Cash';
 							foreach ($payment_gateway as $pgateway) {
 								$pg[$pgateway->id] = $pgateway->name;
 							}

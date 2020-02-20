@@ -100,6 +100,8 @@ define( 'API_FIREBASE_ACCESS_KEY', 'AIzaSyAQggnzNxn0UFplcovbvhXQPsA8-zUsDk8' );#
 define( 'POST_SECURE', 'YZ23tlyEoGVfz3TY5wGsB6Hid9gdd0WnQAuFs2D9Zcltt8HQH294QR3XRV7gXEdDtrzO9YuO03G4GYQhr0qIzPVrTOsQa5UfYqDS' );#check oauth key
 define('ENCRYPT_API_KEY', 'Jy8fXejLdN1HPwpNIWfGk4rVd2s683fISwsSkFCNodmjIKWDRP6b5z90xOo7bPdiyrQVCQv2B5yniL1EfVavxfiPCK1UQta09iBpVk7AqBb2M9DbiiyCEoR4n2iGN4qomPiVsO10AeyGpOTVMUn34L');
 
+define('STRIPE_KEY_ID', 'pk_test_maagmgE7CTbjFsoXLEUObrKm00fL6by7fG');
+define('STRIPE_KEY_SECRET', 'sk_test_lOLgjctdpeOc132LkIIlgYBu0099Ts6rv1');
 
 define('RAZOR_KEY_ID', 'rzp_test_fk5NJi3Xs7ZEhM');
 define('RAZOR_KEY_SECRET', 'EM4am0FxCkwy9qBWxq1ix4Cx');

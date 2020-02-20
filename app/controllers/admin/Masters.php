@@ -368,6 +368,10 @@ class Masters extends MY_Controller
 				'driver_using_members' => $this->input->post('driver_using_members'),
 				'driver_amount' => $this->input->post('driver_amount'),
 				
+				'driver_time' => $this->input->post('driver_time'),
+				'driver_count' => $this->input->post('driver_count'),
+				'customer_time' => $this->input->post('customer_time'),
+				
 				'taxi_bodyweight_formate' => $this->input->post('taxi_bodyweight_formate'),
 				'taxi_bodysize_formate' => $this->input->post('taxi_bodysize_formate'),
 				'wallet_min_add_money' => $this->input->post('wallet_min_add_money'),
@@ -1311,7 +1315,7 @@ class Masters extends MY_Controller
             ->select("{$this->db->dbprefix('taxi_type')}.id as id, {$this->db->dbprefix('taxi_type')}.name,  timage.image, timage.image_hover, timage.mapcar, p.name as category_name, {$this->db->dbprefix('taxi_type')}.status as status, GROUP_CONCAT(tn.tons) as tons, country.name as instance_country")
             ->from("taxi_type")
 			->join("countries country", " country.iso = taxi_type.is_country", "left")
-			->join("tons_notification tn", " tn.taxi_type_id = taxi_type.id", "left")
+			->join("tons_notification tn", " tn.taxi_type_id = taxi_type.id AND tn.created_status = 0", "left")
 			->join("taxi_image timage", " timage.id = taxi_type.taxi_image_id", "left")
 			->join("taxi_category p", "p.id = taxi_type.category_id", 'left')
 			->where('taxi_type.is_delete', 0)->group_by("{$this->db->dbprefix('taxi_type')}.id");
@@ -2160,7 +2164,205 @@ class Masters extends MY_Controller
 		redirect($_SERVER["HTTP_REFERER"]);
     }
 	
-	/*###### Currency*/
+	/*###### Company*/
+    function company($action = NULL)
+    {
+		if($this->session->userdata('group_id') == 1){
+			if($this->input->get('is_country') != ''){
+				$countryCode = $this->input->get('is_country');	
+			}else{
+				$countryCode = $this->input->post('is_country');	
+			}	
+		}else{
+			$countryCode = $this->countryCode;	
+		}
+		$this->data['commoncountry'] = $this->site->getcountryCodeID($countryCode);
+		$this->site->users_logs($countryCode,$this->session->userdata('user_id'), $this->getUserIpAddr, json_encode($_POST), $_SERVER['REQUEST_URI']);
+        $this->data['error'] = (validation_errors()) ? validation_errors() : $this->session->flashdata('error');
+        $this->data['action'] = $action;
+        $bc = array(array('link' => base_url(), 'page' => lang('home')), array('link' => '#', 'page' => lang('company')));
+        $meta = array('page_title' => lang('company'), 'bc' => $bc);
+        $this->page_construct('masters/company', $meta, $this->data);
+    }
+    function getCompany(){
+		if($this->session->userdata('group_id') == 1){
+			$countryCode = $this->input->get('is_country');	
+		}else{
+			$countryCode = $this->countryCode;	
+		}
+        $this->load->library('datatables');
+        $this->datatables
+            ->select("{$this->db->dbprefix('company')}.id as id, {$this->db->dbprefix('company')}.code,{$this->db->dbprefix('company')}.name,{$this->db->dbprefix('company')}.address, {$this->db->dbprefix('company')}.is_office as is_office, {$this->db->dbprefix('company')}.email, {$this->db->dbprefix('company')}.telephone, {$this->db->dbprefix('company')}.fax, {$this->db->dbprefix('company')}.register_number, {$this->db->dbprefix('company')}.starting_year, {$this->db->dbprefix('company')}.status as status, country.name as instance_country")
+            ->from("company")
+			->join("countries country", " country.iso = company.is_country", "left")
+			->where('company.is_delete', 0);
+			
+			if($this->session->userdata('group_id') == 1 && $countryCode != ''){
+				$this->datatables->where("company.is_country", $countryCode);
+			}elseif($this->session->userdata('group_id') != 1){
+				$this->datatables->where("company.is_country", $countryCode);
+			}
+			
+            $this->datatables->edit_column('is_office', '$1', 'is_office')
+             ->edit_column('status', '$1__$2', 'status, id');
+			
+            //->add_column("Actions", "<div class=\"text-center\"><a href='" . admin_url('masters/edit_bank/$1') . "' class='tip' title='" . lang("edit_bank") . "'><i class=\"fa fa-edit\"></i></a></div>", "id");
+			//$edit = "<a href='" . admin_url('masters/edit_company/$1') . "' data-toggle='tooltip'  data-original-title='' aria-describedby='tooltip' title='".lang('click_here_to_full_details')."'  ><i class='fa fa-pencil-square-o' aria-hidden='true'  style='color:#656464; font-size:18px'></i></a>";
+			$edit = "";
+			$delete = "<a href='" . admin_url('welcome/delete/company/$1') . "' data-toggle='tooltip'  data-original-title='' aria-describedby='tooltip' title='".lang('click_here_to_delete')."'  ><i class='fa fa-trash' style='color:#656464; font-size:18px'></i></a>";
+			
+			$this->datatables->add_column("Actions", "<div>".$edit."</div><div>".$delete."</div>", "id");
+
+        $this->datatables->unset_column('id');
+        echo $this->datatables->generate();
+    }
+	
+	
+    function add_company(){
+		if($this->session->userdata('group_id') == 1){
+			if($this->input->get('is_country') != ''){
+				$countryCode = $this->input->get('is_country');	
+			}else{
+				$countryCode = $this->input->post('is_country');	
+			}	
+		}else{
+			$countryCode = $this->countryCode;	
+		}
+		$this->data['commoncountry'] = $this->site->getcountryCodeID($countryCode);
+		$this->site->users_logs($countryCode,$this->session->userdata('user_id'), $this->getUserIpAddr, json_encode($_POST), $_SERVER['REQUEST_URI']);
+        $this->form_validation->set_rules('is_office', lang("is_office"), 'required');
+        
+		$this->form_validation->set_rules('register_number', lang("register_number"), 'required');    
+		if($this->input->post('is_office') == 0){
+			$this->form_validation->set_rules('register_number', lang("register_number"), 'required|is_unique[company.register_number]');    
+		}
+        if ($this->form_validation->run() == true) {
+			/*$check = $this->site->masterCheck('admin_bank', array('account_no' => $this->input->post('account_no'), 'is_country' => $countryCode));
+			if($check == TRUE){
+				$this->session->set_flashdata('error', lang('account_already_exits'));
+            	admin_redirect("masters/bank");
+				exit;	
+			}*/
+			
+            $data = array(
+				'code' => date('YmdHis'),
+				'name' => $this->input->post('name'),
+                'is_office' => $this->input->post('is_office'),
+				'branch_id' => $this->input->post('branch_id'),
+				'address' => $this->input->post('address'),
+				'lat' => $this->input->post('lat'),
+				'lng' => $this->input->post('lng'),
+				'email' => $this->input->post('email'),
+				'telephone' => $this->input->post('telephone'),
+				'fax' => $this->input->post('fax'),
+				'register_number' => $this->input->post('register_number'),
+				'starting_year' => $this->input->post('starting_year'),
+                'status' => 1,
+            );
+			$company_bank = array();
+			if(count($_POST['bank_id']) != 0){
+				for($i=0; $i<count($_POST['bank_id']); $i++){
+					$company_bank[]  = array(
+						'bank_id' => $_POST['bank_id'][$i],
+						'status' => 1
+					);
+				}
+			}
+           
+        }elseif ($this->input->post('add_bank')) {
+            $this->session->set_flashdata('error', validation_errors());
+            admin_redirect("masters/bank");
+        }
+		
+        if ($this->form_validation->run() == true && $this->masters_model->add_company($data, $company_bank, $countryCode)){
+			
+            $this->session->set_flashdata('message', lang("company_added"));
+            admin_redirect('masters/company');
+        } else {
+            $this->data['error'] = (validation_errors() ? validation_errors() : $this->session->flashdata('error'));
+            $bc = array(array('link' => base_url(), 'page' => lang('home')), array('link' => admin_url('masters/company'), 'page' => lang('company')), array('link' => '#', 'page' => lang('add_company')));
+            $meta = array('page_title' => lang('add_company'), 'bc' => $bc);
+			$this->data['AllBanks'] = $this->masters_model->getALLBank($countryCode);
+            $this->page_construct('masters/add_company', $meta, $this->data);
+        }
+    }
+    function edit_company($id){
+		$result = $this->masters_model->getCompanyby_ID($id);
+		if($this->session->userdata('group_id') == 1){
+			if($result->is_country != ''){
+				$countryCode = $result->is_country;	
+			}else{
+				$countryCode = $this->input->post('is_country');	
+			}	
+		}else{
+			$countryCode = $this->countryCode;	
+		}
+		$this->data['commoncountry'] = $this->site->getcountryCodeID($countryCode);
+		$this->site->users_logs($countryCode,$this->session->userdata('user_id'), $this->getUserIpAddr, json_encode($_POST), $_SERVER['REQUEST_URI']);
+		
+        $this->form_validation->set_rules('is_office', lang("is_office"), 'required');
+				
+        if ($this->form_validation->run() == true) {
+			/*if ($this->input->post('account_no') != $result->account_no) {
+				$check = $this->site->masterCheck('admin_bank', array('account_no' => $this->input->post('account_no'), 'is_country' => $countryCode));
+				if($check == TRUE){
+					$this->session->set_flashdata('error', lang('account_already_exits'));
+					admin_redirect("masters/bank");
+					exit;	
+				}
+			}*/
+			
+            
+            $data = array(
+				'is_office' => $this->input->post('is_office'),
+				'name' => $this->input->post('name'),
+				'branch_id' => $this->input->post('branch_id'),
+				'address' => $this->input->post('address'),
+				'lat' => $this->input->post('lat'),
+				'lng' => $this->input->post('lng'),
+				'email' => $this->input->post('email'),
+				'telephone' => $this->input->post('telephone'),
+				'fax' => $this->input->post('fax'),
+				'register_number' => $this->input->post('register_number'),
+				'starting_year' => $this->input->post('starting_year'),
+            );
+			
+        }
+		
+		
+        if ($this->form_validation->run() == true && $this->masters_model->update_company($id,$data, $countryCode)){
+			
+            $this->session->set_flashdata('message', lang("company_updated"));
+            admin_redirect('masters/company');
+        } else {
+            $this->data['error'] = (validation_errors() ? validation_errors() : $this->session->flashdata('error'));
+            $bc = array(array('link' => base_url(), 'page' => lang('home')), array('link' => admin_url('masters/company'), 'page' => lang('company')), array('link' => '#', 'page' => lang('profile')));
+            $meta = array('page_title' => lang('edit_company'), 'bc' => $bc);
+            $this->data['company'] = $result;
+            $this->page_construct('masters/edit_company', $meta, $this->data);
+        }
+    }
+    function company_status($status,$id){
+		if($this->session->userdata('group_id') == 1){
+			if($this->input->get('is_country') != ''){
+				$countryCode = $this->input->get('is_country');	
+			}else{
+				$countryCode = $this->input->post('is_country');	
+			}	
+		}else{
+			$countryCode = $this->countryCode;	
+		}
+		$this->data['commoncountry'] = $this->site->getcountryCodeID($countryCode);
+		$this->site->users_logs($countryCode,$this->session->userdata('user_id'), $this->getUserIpAddr, json_encode($_POST), $_SERVER['REQUEST_URI']);
+		$data['status'] = 0;
+		if($status=='activate'){
+			$data['status'] = 1;
+		}
+		$this->masters_model->update_company_status($data,$id, $countryCode);
+		redirect($_SERVER["HTTP_REFERER"]);
+    }
+	
+	/*###### Bank*/
     function bank($action = NULL)
     {
 		if($this->session->userdata('group_id') == 1){
@@ -2188,7 +2390,7 @@ class Masters extends MY_Controller
 		}
         $this->load->library('datatables');
         $this->datatables
-            ->select("{$this->db->dbprefix('admin_bank')}.id as id, {$this->db->dbprefix('admin_bank')}.account_holder_name,{$this->db->dbprefix('admin_bank')}.account_no, {$this->db->dbprefix('admin_bank')}.bank_name, {$this->db->dbprefix('admin_bank')}.branch_name, {$this->db->dbprefix('admin_bank')}.ifsc_code, {$this->db->dbprefix('admin_bank')}.is_default, {$this->db->dbprefix('admin_bank')}.status as status, country.name as instance_country")
+            ->select("{$this->db->dbprefix('admin_bank')}.id as id, {$this->db->dbprefix('admin_bank')}.account_holder_name,{$this->db->dbprefix('admin_bank')}.account_no, {$this->db->dbprefix('admin_bank')}.bank_name, {$this->db->dbprefix('admin_bank')}.branch_name, {$this->db->dbprefix('admin_bank')}.ifsc_code, {$this->db->dbprefix('admin_bank')}.account_type, {$this->db->dbprefix('admin_bank')}.status as status, country.name as instance_country")
             ->from("admin_bank")
 			->join("countries country", " country.iso = admin_bank.is_country", "left")
 			->where('admin_bank.is_delete', 0);
@@ -2199,7 +2401,7 @@ class Masters extends MY_Controller
 				$this->datatables->where("admin_bank.is_country", $countryCode);
 			}
 			
-            $this->datatables->edit_column('is_default', '$1', 'is_default')
+            $this->datatables->edit_column('account_type', '$1', 'account_type')
              ->edit_column('status', '$1__$2', 'status, id');
 			
             //->add_column("Actions", "<div class=\"text-center\"><a href='" . admin_url('masters/edit_bank/$1') . "' class='tip' title='" . lang("edit_bank") . "'><i class=\"fa fa-edit\"></i></a></div>", "id");
@@ -2227,9 +2429,6 @@ class Masters extends MY_Controller
 		$this->site->users_logs($countryCode,$this->session->userdata('user_id'), $this->getUserIpAddr, json_encode($_POST), $_SERVER['REQUEST_URI']);
         $this->form_validation->set_rules('account_no', lang("account_no"), 'required');
         $this->form_validation->set_rules('account_holder_name', lang("account_holder_name"), 'required');    
-		$this->form_validation->set_rules('bank_name', lang("bank_name"), 'required');     
-		$this->form_validation->set_rules('branch_name', lang("branch_name"), 'required');     
-		$this->form_validation->set_rules('ifsc_code', lang("ifsc_code"), 'required');     
 		
         if ($this->form_validation->run() == true) {
 			$check = $this->site->masterCheck('admin_bank', array('account_no' => $this->input->post('account_no'), 'is_country' => $countryCode));
@@ -2238,14 +2437,15 @@ class Masters extends MY_Controller
             	admin_redirect("masters/bank");
 				exit;	
 			}
+			$admin_user = $this->site->getAdminUser($countryCode, 2);
             $data = array(
+				'account_type' => $this->input->post('account_type'),
                 'account_holder_name' => $this->input->post('account_holder_name'),
                 'account_no' =>$this->input->post('account_no'),
-				'bank_name' =>$this->input->post('bank_name'),
-				'ifsc_code' =>$this->input->post('ifsc_code'),
-				'branch_name' => $this->input->post('branch_name'),
-				'user_id' => $this->session->userdata('user_id'),
-				'is_default' => $this->input->post('is_default') ? $this->input->post('is_default') : 0,
+				'bank_name' => $this->input->post('account_type') == 0 ? $this->input->post('bank_name') : '',
+				'ifsc_code' =>$this->input->post('account_type') == 0 ? $this->input->post('ifsc_code') : '',
+				'branch_name' => $this->input->post('account_type') == 0 ? $this->input->post('branch_name') : '',
+				'user_id' => $admin_user,
                 'status' => 1,
             );
            
@@ -2280,13 +2480,8 @@ class Masters extends MY_Controller
 		$this->site->users_logs($countryCode,$this->session->userdata('user_id'), $this->getUserIpAddr, json_encode($_POST), $_SERVER['REQUEST_URI']);
 		
         $this->form_validation->set_rules('account_no', lang("account_no"), 'required');
-		 
-      
-		
 		$this->form_validation->set_rules('account_holder_name', lang("account_holder_name"), 'required');  
-		$this->form_validation->set_rules('bank_name', lang("bank_name"), 'required');  
-		$this->form_validation->set_rules('ifsc_code', lang("ifsc_code"), 'required');  
-		$this->form_validation->set_rules('branch_name', lang("branch_name"), 'required');  
+		
 		
         if ($this->form_validation->run() == true) {
 			if ($this->input->post('account_no') != $result->account_no) {
@@ -2298,14 +2493,15 @@ class Masters extends MY_Controller
 				}
 			}
 			
+            $admin_user = $this->site->getAdminUser($countryCode, 2);
             $data = array(
-                 'account_holder_name' => $this->input->post('account_holder_name'),
+				'account_type' => $this->input->post('account_type'),
+                'account_holder_name' => $this->input->post('account_holder_name'),
                 'account_no' =>$this->input->post('account_no'),
-				'bank_name' =>$this->input->post('bank_name'),
-				'ifsc_code' =>$this->input->post('ifsc_code'),
-				'branch_name' => $this->input->post('branch_name'),
-				'user_id' => $this->session->userdata('user_id'),
-				'is_default' => $this->input->post('is_default') ? $this->input->post('is_default') : 0,
+				'bank_name' => $this->input->post('account_type') == 0 ? $this->input->post('bank_name') : '',
+				'ifsc_code' =>$this->input->post('account_type') == 0 ? $this->input->post('ifsc_code') : '',
+				'branch_name' => $this->input->post('account_type') == 0 ? $this->input->post('branch_name') : '',
+				'user_id' => $admin_user,
             );
 			
         }
@@ -4069,6 +4265,47 @@ $this->data['commoncountry'] = $this->site->getcountryCodeID($countryCode);
         $this->masters_model->update_pincode_status($data,$id, $countryCode);
 		redirect($_SERVER["HTTP_REFERER"]);
     }
+	
+	function getCountrysAllData(){
+		
+        $iso = $this->input->post('iso');
+        $data = $this->site->getcountryCodeID($iso);
+       
+        echo json_encode($data);exit;
+    }
+	function getCompanyBank(){
+		
+		if($this->session->userdata('group_id') == 1){
+			if($this->input->get('is_country') != ''){
+				$countryCode = $this->input->get('is_country');	
+			}else{
+				$countryCode = $this->input->post('is_country');	
+			}	
+		}else{
+			$countryCode = $this->countryCode;	
+		}
+        
+		$settlement_type = $this->input->post('settlement_type');
+		$settlement_date =  date('Y-m-d', strtotime(str_replace('/', '-', $this->input->post('settlement_date'))));
+		$company_type = $this->input->post('company_type');
+		$company_id = $this->input->post('company_id') ? $this->input->post('company_id') : 0;
+        $data = $this->masters_model->getCompanyBank($countryCode, $settlement_type, $company_id, $company_type);
+		$pending = $this->masters_model->getBranchPending($countryCode, $settlement_date, $company_id, $company_type);
+        $options = array();
+        if($data){
+            foreach($data as $k => $row){
+                $options['bank'][$k]['id'] = $row->bank_id;
+				if($row->account_type == 1){
+					$options['bank'][$k]['text'] = 'Cash ('.$row->account_no.')';
+				}else{
+                	$options['bank'][$k]['text'] = $row->bank_name.' ('.$row->account_no.')';
+				}
+            }
+			$options['pending'] = $pending;
+        }
+		echo json_encode($options);exit;
+    }
+	
     /*#### Json Country Zone State city area*/
 	function getTaxicategory_byCountry(){
 		if($this->session->userdata('group_id') == 1){
@@ -4196,6 +4433,62 @@ $this->data['commoncountry'] = $this->site->getcountryCodeID($countryCode);
         echo json_encode($options);exit;
     }
 	/*##*/
+	
+	function getBranchID(){
+		$data = array();
+		if($this->input->post('branch_id') != ''){
+			$data = $this->masters_model->getCompanyby_ID($this->input->post('branch_id'));
+		}
+		
+        echo json_encode($data);exit;
+    }
+	
+	function getBranch(){
+		if($this->session->userdata('group_id') == 1){
+			if($this->input->get('is_country') != ''){
+				$countryCode = $this->input->get('is_country');	
+			}else{
+				$countryCode = $this->input->post('is_country');	
+			}	
+		}else{
+			$countryCode = $this->countryCode;	
+		}
+       
+        $options = array();
+		if($this->input->post('is_office') == 1){
+			$data = $this->masters_model->getBranch($countryCode);
+			if($data){
+				foreach($data as $k => $row){
+					$options[$k]['id'] = $row->id;
+					$options[$k]['text'] = $row->name;
+				}
+			}
+		}
+        echo json_encode($options);exit;
+    }
+	
+	function getCountry_byBank(){
+		if($this->session->userdata('group_id') == 1){
+			if($this->input->get('is_country') != ''){
+				$countryCode = $this->input->get('is_country');	
+			}else{
+				$countryCode = $this->input->post('is_country');	
+			}	
+		}else{
+			$countryCode = $this->countryCode;	
+		}
+       
+        $data = $this->masters_model->getALLBankOnly($countryCode);
+        $options = array();
+        if($data){
+            foreach($data as $k => $row){
+                $options[$k]['id'] = $row->id;
+                $options[$k]['text'] = $row->bank_name.'('.$row->account_no.')';
+            }
+        }
+        echo json_encode($options);exit;
+    }
+	
 	
     function getCountry_bycontinent(){
 		if($this->session->userdata('group_id') == 1){
@@ -6159,9 +6452,10 @@ $this->data['commoncountry'] = $this->site->getcountryCodeID($countryCode);
 		}
         $this->load->library('datatables');
         $this->datatables
-            ->select("{$this->db->dbprefix('payment_gateway')}.id as id, {$this->db->dbprefix('payment_gateway')}.name,  {$this->db->dbprefix('payment_gateway')}.status as status, country.name as instance_country")
+            ->select("{$this->db->dbprefix('payment_gateway')}.id as id, {$this->db->dbprefix('payment_gateway')}.name, CONCAT(ab.account_no, '-', ab.bank_name) as bank,  {$this->db->dbprefix('payment_gateway')}.status as status, country.name as instance_country")
             ->from("payment_gateway")
 			->join("countries country", " country.iso = payment_gateway.is_country", "left")
+			->join("admin_bank ab", " ab.id = payment_gateway.bank_id", "left")
 			->where('payment_gateway.is_delete', 0);
 			
 			if($this->session->userdata('group_id') == 1 && $countryCode != ''){
@@ -6171,8 +6465,9 @@ $this->data['commoncountry'] = $this->site->getcountryCodeID($countryCode);
 			}
 			
             $this->datatables->edit_column('status', '$1__$2', 'status, id');
-			//->add_column("Actions", "<div class=\"text-center\"><a href='" . admin_url('masters/edit_taxi_type/$1') . "' data-toggle='modal' data-target='#myModal' class='tip' title='" . lang("edit_taxi_type") . "'><i class=\"fa fa-edit\"></i></a></div>", "id");
+			
 			$edit = "<a href='" . admin_url('masters/edit_payment_gateway/$1') . "' data-toggle='modal' data-target='#myModal'  data-original-title='' aria-describedby='tooltip' title='".lang('click_here_to_full_details')."'  ><i class='fa fa-pencil-square-o' aria-hidden='true'  style='color:#656464; font-size:18px'></i></a>";
+			
 			$delete = "<a href='" . admin_url('welcome/delete/payment_gateway/$1') . "' data-toggle='tooltip'  data-original-title='' aria-describedby='tooltip' title='".lang('click_here_to_delete')."'  ><i class='fa fa-trash' style='color:#656464; font-size:18px'></i></a>";
 			
 			$this->datatables->add_column("Actions", "<div>".$edit."</div><div>".$delete."</div>", "id");
@@ -6199,6 +6494,7 @@ $this->data['commoncountry'] = $this->site->getcountryCodeID($countryCode);
 			
             $data = array(
                 'name' => $this->input->post('name'),
+				'bank_id' => $this->input->post('bank_id'),
 				'code' => strtolower(str_replace(' ', '', $this->input->post('name'))),
                 'status' => 1,
 				'created_on' => date('Y-m-d H:i:s')
@@ -6215,7 +6511,7 @@ $this->data['commoncountry'] = $this->site->getcountryCodeID($countryCode);
             admin_redirect('masters/payment_gateway');
         } else {
             $this->data['error'] = (validation_errors() ? validation_errors() : $this->session->flashdata('error'));
-
+			$this->data['admin_bank'] = $this->masters_model->getALLBankOnly($countryCode);
             $this->load->view($this->theme . 'masters/add_payment_gateway', $this->data);
 			
         }
@@ -6249,6 +6545,7 @@ $this->data['commoncountry'] = $this->site->getcountryCodeID($countryCode);
 			
             $data = array(
 				'name' => $this->input->post('name'),
+				'bank_id' => $this->input->post('bank_id'),
 				'code' => strtolower(str_replace(' ', '', $this->input->post('name'))),
 				'created_on' => date('Y-m-d H:i:s')
             );
@@ -6266,7 +6563,7 @@ $this->data['commoncountry'] = $this->site->getcountryCodeID($countryCode);
         } else {
             $this->data['error'] = (validation_errors() ? validation_errors() : $this->session->flashdata('error'));
 			$this->data['result'] = $result;
-			
+			$this->data['admin_bank'] = $this->masters_model->getALLBankOnly($countryCode ? $countryCode : $result->is_country);
             $this->data['id'] = $id;
             $this->load->view($this->theme . 'masters/edit_payment_gateway', $this->data);
         }

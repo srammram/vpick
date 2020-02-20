@@ -48,9 +48,12 @@
 	
 	
 	function mobile_status(mob) {
-		
-		var mobile = mob.slice(-4);		
-		return '******'+mobile;
+		if(mob == null){
+			return 'N/A';
+		}else{
+			var mobile = mob.slice(-4);		
+			return '******'+mobile;
+		}
     }
 	
     $(document).ready(function () {
@@ -88,8 +91,8 @@
                    
                 }
                 var nCells = nRow.getElementsByTagName('th');
-                nCells[3].innerHTML = cash_wallet;
-                nCells[4].innerHTML = credit_wallet;
+                nCells[3].innerHTML = cash_wallet.toFixed(2);
+                nCells[4].innerHTML = credit_wallet.toFixed(2);
                
             }
 			

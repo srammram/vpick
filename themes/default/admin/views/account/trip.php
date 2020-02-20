@@ -47,17 +47,24 @@
         '<a href="javascript:void(0)"><span class="label label-danger">  Process</span><a/>';
     }
 	
-	
-	
 	function mobile_status(mob) {
+		if(mob == null){
+			return 'N/A';
+		}else{
+			var mobile = mob.slice(-4);		
+			return '******'+mobile;
+		}
+    }
+	
+	//function mobile_status(mob) {
 		/*if(mob != ''){
 		var mobile = mob.slice(-4);				
 		return '******'+mobile;
 		}else{
 			return '**********';
 		}*/
-		return mob;
-    }
+		//return mob;
+   // }
 	
 	function heyycab_share(mob) {
 		if(mob != '0.00'){
@@ -108,10 +115,10 @@
                    
                 }
                 var nCells = nRow.getElementsByTagName('th');
-                nCells[5].innerHTML = total_fare;
+                nCells[5].innerHTML = total_fare.toFixed(2);
                // nCells[6].innerHTML = heyycab_fee;
 				//nCells[7].innerHTML = driver_share;
-				nCells[9].innerHTML = settlement;
+				nCells[9].innerHTML = settlement.toFixed(2);
                
             },
 			

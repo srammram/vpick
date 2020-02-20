@@ -117,6 +117,830 @@ class Account extends MY_Controller
         }
     }  */
 	
+	public function dashboard() {
+		
+		$meta = array('page_title' => lang('dashboard'), 'bc' => $bc);
+		$this->page_construct('account/dashboard', $meta, $this->data);
+
+	}
+	
+	public function account_owner() {
+		if($this->session->userdata('group_id') == 1){
+			if($this->input->get('is_country') != ''){
+				$countryCode = $this->input->get('is_country');	
+			}else{
+				$countryCode = $this->input->post('is_country');	
+			}	
+		}else{
+			$countryCode = $this->countryCode;	
+		}
+		$this->data['commoncountry'] = $this->site->getcountryCodeID($countryCode);
+		$this->site->users_logs($countryCode,$this->session->userdata('user_id'), $this->getUserIpAddr, json_encode($_POST), $_SERVER['REQUEST_URI']);
+		$sdate = $_GET['sdate'];
+		$edate = $_GET['edate'];
+		
+		$meta = array('page_title' => lang('owner'), 'bc' => $bc);
+		$this->page_construct('account/account_owner', $meta, $this->data);
+
+	}
+	
+    function getAccountOwner(){
+		if($this->session->userdata('group_id') == 1){
+			$countryCode =  $_GET['is_country'];	
+		}else{
+			$countryCode = $this->countryCode;	
+		}
+		$group_id = $this->Driver;
+		
+		$sdate = $_GET['sdate'];
+		$edate = $_GET['edate'];
+		$driver_id = $_GET['driver_id'];
+		
+        $this->load->library('datatables');
+		 
+			
+		
+        $this->datatables
+            ->select("{$this->db->dbprefix('account')}.id as id, {$this->db->dbprefix('account')}.account_date, c.name as company_name, c.is_office, {$this->db->dbprefix('account')}.user_type as user_type, u.first_name, {$this->db->dbprefix('account')}.account_type, {$this->db->dbprefix('account')}.payment_mode, pg.name as payment_type, {$this->db->dbprefix('account')}.account_transaction_no, {$this->db->dbprefix('account')}.account_transaction_date, {$this->db->dbprefix('account')}.credit, {$this->db->dbprefix('account')}.debit, {$this->db->dbprefix('account')}.account_status as account_status, {$this->db->dbprefix('account')}.account_bank_status as account_bank_status, {$this->db->dbprefix('account')}.account_reconciliation as account_reconciliation, {$this->db->dbprefix('account')}.account_verify as account_verify,  country.name as instance_country 
+			
+			")
+            ->from("account")
+			->join("countries country", " country.iso = account.is_country", "left")
+			->join("users u", "u.id = account.user_id ", 'left')
+			->join("company c", "c.id = account.company_id ", 'left')
+			->join("payment_gateway pg", "pg.id = account.payment_type ", 'left');
+			
+			
+			
+			
+			if(!empty($sdate) && !empty($edate)){
+				$this->datatables->where("DATE({$this->db->dbprefix('account')}.account_date) >=", date("Y-m-d", strtotime(str_replace('/', '-', $sdate))));
+       			$this->datatables->where("DATE({$this->db->dbprefix('account')}.account_date) <=", date("Y-m-d", strtotime(str_replace('/', '-', $edate))));
+			}
+			
+			
+			if($this->session->userdata('group_id') == 1 && $countryCode != ''){
+				$this->datatables->where("account.is_country", $countryCode);
+			}elseif($this->session->userdata('group_id') != 1){
+				$this->datatables->where("account.is_country", $countryCode);
+			}
+			
+			
+			$this->datatables->group_by("account.id");
+            $this->datatables->edit_column('user_type', '$1', 'user_type');
+			$this->datatables->edit_column('account_status', '$1', 'account_status');
+			$this->datatables->edit_column('account_bank_status', '$1', 'account_bank_status');
+			$this->datatables->edit_column('account_reconciliation', '$1', 'account_reconciliation');
+			$this->datatables->edit_column('account_verify', '$1', 'account_verify');
+            //->edit_column('status', '$1__$2', 'id, status')
+			//->edit_column('join_type', '$1__$2', 'id, join_type');
+			$edit = "";
+			$this->datatables->add_column("Actions", "<div>".$edit."</div>", "id");
+		
+			
+			//$this->datatables->add_column("Actions", "<div class=\"text-center\"><a href='" . admin_url('account/driver_view/$1') . "' class='tip' title='" . lang("view") . "'>view</a></div>", "id");
+			//$this->datatables->unset_column('id');
+        echo $this->datatables->generate();
+		//echo $this->db->last_query();
+		
+		
+    }
+	
+	public function account_customer() {
+		if($this->session->userdata('group_id') == 1){
+			if($this->input->get('is_country') != ''){
+				$countryCode = $this->input->get('is_country');	
+			}else{
+				$countryCode = $this->input->post('is_country');	
+			}	
+		}else{
+			$countryCode = $this->countryCode;	
+		}
+		$this->data['commoncountry'] = $this->site->getcountryCodeID($countryCode);
+		$this->site->users_logs($countryCode,$this->session->userdata('user_id'), $this->getUserIpAddr, json_encode($_POST), $_SERVER['REQUEST_URI']);
+		$sdate = $_GET['sdate'];
+		$edate = $_GET['edate'];
+		
+		$meta = array('page_title' => lang('customer'), 'bc' => $bc);
+		$this->page_construct('account/account_customer', $meta, $this->data);
+
+	}
+	
+    function getAccountCustomer(){
+		if($this->session->userdata('group_id') == 1){
+			$countryCode =  $_GET['is_country'];	
+		}else{
+			$countryCode = $this->countryCode;	
+		}
+		$group_id = $this->Driver;
+		
+		$sdate = $_GET['sdate'];
+		$edate = $_GET['edate'];
+		$driver_id = $_GET['driver_id'];
+		
+        $this->load->library('datatables');
+		 
+			
+		
+        $this->datatables
+            ->select("{$this->db->dbprefix('account')}.id as id, {$this->db->dbprefix('account')}.account_date, c.name as company_name, c.is_office, u.first_name, {$this->db->dbprefix('account')}.account_type, {$this->db->dbprefix('account')}.payment_mode, pg.name as payment_type, {$this->db->dbprefix('account')}.account_transaction_no, {$this->db->dbprefix('account')}.account_transaction_date, {$this->db->dbprefix('account')}.credit, {$this->db->dbprefix('account')}.debit, {$this->db->dbprefix('account')}.account_status as account_status, {$this->db->dbprefix('account')}.account_bank_status as account_bank_status, {$this->db->dbprefix('account')}.account_reconciliation as account_reconciliation, {$this->db->dbprefix('account')}.account_verify as account_verify,  country.name as instance_country 
+			
+			")
+            ->from("account")
+			->join("countries country", " country.iso = account.is_country", "left")
+			->join("users u", "u.id = account.user_id ", 'left')
+			->join("company c", "c.id = account.company_id ", 'left')
+			->join("payment_gateway pg", "pg.id = account.payment_type ", 'left')
+			->where("account.user_type", 1);
+			
+			
+			
+			
+			if(!empty($sdate) && !empty($edate)){
+				$this->datatables->where("DATE({$this->db->dbprefix('account')}.account_date) >=", date("Y-m-d", strtotime(str_replace('/', '-', $sdate))));
+       			$this->datatables->where("DATE({$this->db->dbprefix('account')}.account_date) <=", date("Y-m-d", strtotime(str_replace('/', '-', $edate))));
+			}
+			
+			
+			if($this->session->userdata('group_id') == 1 && $countryCode != ''){
+				$this->datatables->where("account.is_country", $countryCode);
+			}elseif($this->session->userdata('group_id') != 1){
+				$this->datatables->where("account.is_country", $countryCode);
+			}
+			
+			
+			$this->datatables->group_by("account.id");
+            $this->datatables->edit_column('account_status', '$1', 'account_status');
+			$this->datatables->edit_column('account_bank_status', '$1', 'account_bank_status');
+			$this->datatables->edit_column('account_reconciliation', '$1', 'account_reconciliation');
+			$this->datatables->edit_column('account_verify', '$1', 'account_verify');
+            //->edit_column('status', '$1__$2', 'id, status')
+			//->edit_column('join_type', '$1__$2', 'id, join_type');
+			$edit = "";
+			$this->datatables->add_column("Actions", "<div>".$edit."</div>", "id");
+		
+			
+			//$this->datatables->add_column("Actions", "<div class=\"text-center\"><a href='" . admin_url('account/driver_view/$1') . "' class='tip' title='" . lang("view") . "'>view</a></div>", "id");
+			//$this->datatables->unset_column('id');
+        echo $this->datatables->generate();
+		//echo $this->db->last_query();
+		
+		
+    }
+	
+	public function account_driver() {
+		if($this->session->userdata('group_id') == 1){
+			if($this->input->get('is_country') != ''){
+				$countryCode = $this->input->get('is_country');	
+			}else{
+				$countryCode = $this->input->post('is_country');	
+			}	
+		}else{
+			$countryCode = $this->countryCode;	
+		}
+		$this->data['commoncountry'] = $this->site->getcountryCodeID($countryCode);
+		$this->site->users_logs($countryCode,$this->session->userdata('user_id'), $this->getUserIpAddr, json_encode($_POST), $_SERVER['REQUEST_URI']);
+		$sdate = $_GET['sdate'];
+		$edate = $_GET['edate'];
+		
+		$meta = array('page_title' => lang('driver'), 'bc' => $bc);
+		$this->page_construct('account/account_driver', $meta, $this->data);
+
+	}
+	
+    function getAccountDriver(){
+		if($this->session->userdata('group_id') == 1){
+			$countryCode =  $_GET['is_country'];	
+		}else{
+			$countryCode = $this->countryCode;	
+		}
+		$group_id = $this->Driver;
+		
+		$sdate = $_GET['sdate'];
+		$edate = $_GET['edate'];
+		$driver_id = $_GET['driver_id'];
+		
+        $this->load->library('datatables');
+		 
+			
+		
+        $this->datatables
+            ->select("{$this->db->dbprefix('account')}.id as id, {$this->db->dbprefix('account')}.account_date, c.name as company_name, c.is_office, u.first_name, {$this->db->dbprefix('account')}.account_type, {$this->db->dbprefix('account')}.payment_mode, pg.name as payment_type, {$this->db->dbprefix('account')}.account_transaction_no, {$this->db->dbprefix('account')}.account_transaction_date, {$this->db->dbprefix('account')}.credit, {$this->db->dbprefix('account')}.debit, {$this->db->dbprefix('account')}.account_status as account_status, {$this->db->dbprefix('account')}.account_bank_status as account_bank_status, {$this->db->dbprefix('account')}.account_reconciliation as account_reconciliation, {$this->db->dbprefix('account')}.account_verify as account_verify,  country.name as instance_country 
+			
+			")
+            ->from("account")
+			->join("countries country", " country.iso = account.is_country", "left")
+			->join("users u", "u.id = account.user_id ", 'left')
+			->join("company c", "c.id = account.company_id ", 'left')
+			->join("payment_gateway pg", "pg.id = account.payment_type ", 'left')
+			->where("account.user_type", 2);
+			
+			
+			
+			
+			if(!empty($sdate) && !empty($edate)){
+				$this->datatables->where("DATE({$this->db->dbprefix('account')}.account_date) >=", date("Y-m-d", strtotime(str_replace('/', '-', $sdate))));
+       			$this->datatables->where("DATE({$this->db->dbprefix('account')}.account_date) <=", date("Y-m-d", strtotime(str_replace('/', '-', $edate))));
+			}
+			
+			
+			if($this->session->userdata('group_id') == 1 && $countryCode != ''){
+				$this->datatables->where("account.is_country", $countryCode);
+			}elseif($this->session->userdata('group_id') != 1){
+				$this->datatables->where("account.is_country", $countryCode);
+			}
+			
+			
+			$this->datatables->group_by("account.id");
+            $this->datatables->edit_column('account_status', '$1', 'account_status');
+			$this->datatables->edit_column('account_bank_status', '$1', 'account_bank_status');
+			$this->datatables->edit_column('account_reconciliation', '$1', 'account_reconciliation');
+			$this->datatables->edit_column('account_verify', '$1', 'account_verify');
+            //->edit_column('status', '$1__$2', 'id, status')
+			//->edit_column('join_type', '$1__$2', 'id, join_type');
+			$edit = "";
+			$this->datatables->add_column("Actions", "<div>".$edit."</div>", "id");
+		
+			
+			//$this->datatables->add_column("Actions", "<div class=\"text-center\"><a href='" . admin_url('account/driver_view/$1') . "' class='tip' title='" . lang("view") . "'>view</a></div>", "id");
+			//$this->datatables->unset_column('id');
+        echo $this->datatables->generate();
+		//echo $this->db->last_query();
+		
+		
+    }
+	
+	
+	public function account_settlementlist() {
+		if($this->session->userdata('group_id') == 1){
+			if($this->input->get('is_country') != ''){
+				$countryCode = $this->input->get('is_country');	
+			}else{
+				$countryCode = $this->input->post('is_country');	
+			}	
+		}else{
+			$countryCode = $this->countryCode;	
+		}
+		$this->data['commoncountry'] = $this->site->getcountryCodeID($countryCode);
+		$this->site->users_logs($countryCode,$this->session->userdata('user_id'), $this->getUserIpAddr, json_encode($_POST), $_SERVER['REQUEST_URI']);
+		$sdate = $_GET['sdate'];
+		$edate = $_GET['edate'];
+		
+		$meta = array('page_title' => lang('driver'), 'bc' => $bc);
+		$this->page_construct('account/account_settlementlist', $meta, $this->data);
+
+	}
+	
+    function getAccountSettlement(){
+		if($this->session->userdata('group_id') == 1){
+			$countryCode =  $_GET['is_country'];	
+		}else{
+			$countryCode = $this->countryCode;	
+		}
+		$group_id = $this->Driver;
+		
+		$sdate = $_GET['sdate'];
+		$edate = $_GET['edate'];
+		
+        $this->load->library('datatables');
+		 
+			
+		
+        $this->datatables
+            ->select("{$this->db->dbprefix('settlement')}.id as id, {$this->db->dbprefix('settlement')}.settlement_date,   {$this->db->dbprefix('settlement')}.settlement_code, fu.first_name as from_user, fc.name as from_company, fb.account_no as from_bank, {$this->db->dbprefix('settlement')}.settlement_type,  tu.first_name as to_user, tc.name as to_company, tb.account_no as to_bank, {$this->db->dbprefix('settlement')}.settlement_amount, {$this->db->dbprefix('settlement')}.settlement_status as status,    {$this->db->dbprefix('settlement')}.to_verify as verify,  country.name as instance_country 
+			
+			")
+            ->from("settlement")
+			->join("countries country", " country.iso = settlement.is_country", "left")
+			->join("admin_bank fb", "fb.id = settlement.from_bank_id ", 'left')
+			->join("users fu", "fu.id = settlement.from_user_id ", 'left')
+			->join("company fc", "fc.id = settlement.from_company_id ", 'left')
+			->join("admin_bank tb", "tb.id = settlement.to_bank_id ", 'left')
+			->join("users tu", "tu.id = settlement.to_user_id ", 'left')
+			->join("company tc", "tc.id = settlement.to_company_id ", 'left')
+			;
+			
+			
+			
+			
+			if(!empty($sdate) && !empty($edate)){
+				$this->datatables->where("DATE({$this->db->dbprefix('settlement')}.settlement_date) >=", date("Y-m-d", strtotime(str_replace('/', '-', $sdate))));
+       			$this->datatables->where("DATE({$this->db->dbprefix('settlement')}.settlement_date) <=", date("Y-m-d", strtotime(str_replace('/', '-', $edate))));
+			}
+			
+			
+			if($this->session->userdata('group_id') == 1 && $countryCode != ''){
+				$this->datatables->where("settlement.is_country", $countryCode);
+			}elseif($this->session->userdata('group_id') != 1){
+				$this->datatables->where("settlement.is_country", $countryCode);
+			}
+			
+			
+			//$this->datatables->group_by("settlement.id");
+            $this->datatables->edit_column('status', '$1', 'status');
+			$this->datatables->edit_column('verify', '$1__$2', 'id, verify');
+            //->edit_column('status', '$1__$2', 'id, status')
+			//->edit_column('join_type', '$1__$2', 'id, join_type');
+			$edit = "";
+			$this->datatables->add_column("Actions", "<div>".$edit."</div>", "id");
+		
+			
+			//$this->datatables->add_column("Actions", "<div class=\"text-center\"><a href='" . admin_url('account/driver_view/$1') . "' class='tip' title='" . lang("view") . "'>view</a></div>", "id");
+			//$this->datatables->unset_column('id');
+        echo $this->datatables->generate();
+		//echo $this->db->last_query();
+		
+		
+    }
+	
+	function offline_account_verify($account_id){
+		if($this->session->userdata('group_id') == 1){
+			if($this->input->get('is_country') != ''){
+				$countryCode = $this->input->get('is_country');	
+			}else{
+				$countryCode = $this->input->post('is_country');	
+			}	
+		}else{
+			$countryCode = $this->countryCode;	
+		}
+		
+		$account_id = $account_id ? $account_id : $this->input->post('account_id');
+		
+		
+		//$payment_gateway = $this->account_model->getPaymentgateway($countryCode);
+		$this->data['commoncountry'] = $this->site->getcountryCodeID($countryCode);
+		$this->site->users_logs($countryCode,$this->session->userdata('user_id'), $this->getUserIpAddr, json_encode($_POST), $_SERVER['REQUEST_URI']);
+		
+		$this->data['account_id'] = $account_id;
+		//$driver_data = $this->account_model->getDriverBYId($id, $countryCode);
+		$result = $this->account_model->getOfflineaccount($account_id);
+		if($this->input->post('offline_submit')){
+			
+			
+			$this->form_validation->set_rules('account_verify', lang("account_verify"), 'required');
+			
+				if($this->input->post('account_verify') == 0){
+					$this->session->set_flashdata('error', (validation_errors()) ? validation_errors() : lang("please select verify button"));
+					admin_redirect('account/offline_account_verify/'.$account_id);
+				}
+				
+				 $account_array = array(
+					'account_status' => $result->payment_type != 0 ? 1 : 3,
+					'account_bank_status' => $result->payment_type != 0 ? 1 : 0,
+					'account_verify' => $this->input->post('account_verify'),
+					'account_verify_on'	=> date('Y-m-d H:i:s'),
+					'account_verify_by' => $this->session->userdata('user_id'),
+				 );
+				 
+				 if($result->credit != '0.00'){
+					 $paid_amount = $result->credit;
+					 $transaction_type = 'Credit';
+				 }elseif($result->debit != '0.00'){
+					  $paid_amount = $result->debit;
+					  $transaction_type = 'Debit';
+				 }
+				 
+				 
+				 $payment_array = array(
+					'method' => 8,
+					'user_id' => $result->user_id,
+					'amount' => $paid_amount,
+					'payment_transaction_id' => $result->account_transaction_no,
+					'transaction_status' => 'success',
+					'transaction_type' => $transaction_type,
+					'gateway_id' => $result->payment_type,
+					'created_on' => date('Y-m-d H:i:s'),
+					'is_country' => $result->is_country
+				);
+				
+				$wallet_array = array(
+					'user_id' =>  $result->user_id,
+					'user_type' => $result->user_type,
+					'wallet_type' => 1,
+					'flag' => 6,
+					'cash' => $paid_amount,
+					'description' => 'Add Money - Backend',
+					'created' => date('Y-m-d H:i:s'),
+					'is_country' => $result->is_country
+				);
+				
+			$adminUser = $this->site->adminUserDebit($result->is_country, 2, $result->type, $paid_amount, $this->session->userdata('user_id'), $result->account_transaction_no);
+				
+			$insert = $this->account_model->addMoneyOffline($account_id, $account_array, $payment_array, $wallet_array,  $countryCode);	
+			if($insert == TRUE && $adminUser == TRUE){
+				//wallet/owner
+				
+				if($result->user_type == 0){
+					$this->session->set_flashdata('message', lang("offline_addmoney_verify_success"));
+					admin_redirect('account/account_owner/');
+				}elseif($result->user_type == 1){
+					$this->session->set_flashdata('message', lang("offline_addmoney_verify_success"));
+					admin_redirect('account/account_customer/');
+				}elseif($result->user_type == 2){
+					$this->session->set_flashdata('message', lang("offline_addmoney_verify_success"));
+					admin_redirect('account/account_driver/');
+				}
+			}else{
+				$this->session->set_flashdata('error', (validation_errors()) ? validation_errors() : lang("offline_addmoney_verify_faild"));
+				admin_redirect('account/offline_account_verify/'.$account_id);
+			}
+			
+		
+		}
+		
+        $this->data['error'] = (validation_errors()) ? validation_errors() : $this->session->flashdata('error');
+		$this->data['result'] = $result;
+        $bc = array(array('link' => base_url(), 'page' => lang('home')), array('link' => '#', 'page' => lang('offline_account_verify')));
+        $meta = array('page_title' => lang('offline_account_verify'), 'bc' => $bc);
+        $this->page_construct('account/offline_account_verify', $meta, $this->data);
+    }
+	
+	function offline_account_reconciliation($account_id){
+		if($this->session->userdata('group_id') == 1){
+			if($this->input->get('is_country') != ''){
+				$countryCode = $this->input->get('is_country');	
+			}else{
+				$countryCode = $this->input->post('is_country');	
+			}	
+		}else{
+			$countryCode = $this->countryCode;	
+		}
+		
+		$account_id = $account_id ? $account_id : $this->input->post('account_id');
+		
+		
+		//$payment_gateway = $this->account_model->getPaymentgateway($countryCode);
+		$this->data['commoncountry'] = $this->site->getcountryCodeID($countryCode);
+		$this->site->users_logs($countryCode,$this->session->userdata('user_id'), $this->getUserIpAddr, json_encode($_POST), $_SERVER['REQUEST_URI']);
+		
+		$this->data['account_id'] = $account_id;
+		//$driver_data = $this->account_model->getDriverBYId($id, $countryCode);
+		$result = $this->account_model->getOfflineaccount($account_id);
+		if($this->input->post('offline_submit')){
+			
+			
+			$this->form_validation->set_rules('account_verify', lang("account_verify"), 'required');
+			
+				if($this->input->post('account_verify') == 0){
+					$this->session->set_flashdata('error', (validation_errors()) ? validation_errors() : lang("please select verify button"));
+					admin_redirect('account/offline_account_verify/'.$account_id);
+				}
+				
+				 $account_array = array(
+					'account_status' => $result->payment_type != 0 ? 1 : 3,
+					'account_bank_status' => $result->payment_type != 0 ? 1 : 0,
+					'account_verify' => $this->input->post('account_verify'),
+					'account_verify_on'	=> date('Y-m-d H:i:s'),
+					'account_verify_by' => $this->session->userdata('user_id'),
+				 );
+				 
+				 if($result->credit != '0.00'){
+					 $paid_amount = $result->credit;
+					 $transaction_type = 'Credit';
+				 }elseif($result->debit != '0.00'){
+					  $paid_amount = $result->debit;
+					  $transaction_type = 'Debit';
+				 }
+				 
+				 
+				 $payment_array = array(
+					'method' => 8,
+					'user_id' => $result->user_id,
+					'amount' => $paid_amount,
+					'payment_transaction_id' => $result->account_transaction_no,
+					'transaction_status' => 'success',
+					'transaction_type' => $transaction_type,
+					'gateway_id' => $result->payment_type,
+					'created_on' => date('Y-m-d H:i:s'),
+					'is_country' => $result->is_country
+				);
+				
+				$wallet_array = array(
+					'user_id' =>  $result->user_id,
+					'user_type' => $result->user_type,
+					'wallet_type' => 1,
+					'flag' => 6,
+					'cash' => $paid_amount,
+					'description' => 'Add Money - Backend',
+					'created' => date('Y-m-d H:i:s'),
+					'is_country' => $result->is_country
+				);
+				
+			$adminUser = $this->site->adminUserDebit($result->is_country, 2, $result->type, $paid_amount, $this->session->userdata('user_id'), $result->account_transaction_no);
+				
+			$insert = $this->account_model->addMoneyOffline($account_id, $account_array, $payment_array, $wallet_array,  $countryCode);	
+			if($insert == TRUE && $adminUser == TRUE){
+				//wallet/owner
+				
+				if($result->user_type == 0){
+					$this->session->set_flashdata('message', lang("offline_account_reconciliation_success"));
+					admin_redirect('account/account_owner/');
+				}elseif($result->user_type == 1){
+					$this->session->set_flashdata('message', lang("offline_account_reconciliation_success"));
+					admin_redirect('account/account_customer/');
+				}elseif($result->user_type == 2){
+					$this->session->set_flashdata('message', lang("offline_account_reconciliation_success"));
+					admin_redirect('account/account_driver/');
+				}
+			}else{
+				$this->session->set_flashdata('error', (validation_errors()) ? validation_errors() : lang("offline_account_reconciliation_faild"));
+				admin_redirect('account/offline_account_reconciliation/'.$account_id);
+			}
+			
+		
+		}
+		
+        $this->data['error'] = (validation_errors()) ? validation_errors() : $this->session->flashdata('error');
+		$this->data['result'] = $result;
+        $bc = array(array('link' => base_url(), 'page' => lang('home')), array('link' => '#', 'page' => lang('offline_account_reconciliation')));
+        $meta = array('page_title' => lang('offline_account_reconciliation'), 'bc' => $bc);
+        $this->page_construct('account/offline_account_reconciliation', $meta, $this->data);
+    }
+	
+	
+	public function account_settlement_verify($id) {
+		$result = $this->account_model->getSettlement($id);
+		if($this->session->userdata('group_id') == 1){
+			if($this->input->get('is_country') != ''){
+				$countryCode = $this->input->get('is_country');	
+			}else{
+				$countryCode = $result->is_country ? $result->is_country : $this->input->post('is_country');	
+			}	
+		}else{
+			$countryCode = $this->countryCode;	
+		}
+		
+		
+		
+		if($this->input->post('settlement_branch')){
+			if($this->input->post('to_verify') == 0){
+				$this->session->set_flashdata('error', lang("please select verify option"));
+				admin_redirect('account/account_settlement_verify/'.$id);
+			}
+			$admin_user = $this->site->getAdminUser($countryCode, 2);
+			$settlement = array(
+				'settlement_status' => 3,
+				'to_verify' => $this->input->post('to_verify'),
+				'to_verify_by' => $this->session->userdata('user_id'),
+				'to_verify_on' => date('Y-m-d H:i:s'),
+			);
+			
+			$cash_array = array(
+				'type' => 1,
+				'credit' => $result->settlement_amount,
+				'settlement_id' => $result->id,
+				'account_date' => date('Y-m-d'),
+				'account_type' => 1,
+				'company_id' => $result->to_company_id,
+				'company_bank_id' => $result->to_bank_id,
+				'account_status' => 3,
+				'account_transaction_no' => 'TRANS'.date('YmdHis'),
+				'account_transaction_date' => date('Y-m-d'),
+				'user_id' => $admin_user,
+				'user_type' => 0,
+				'account_verify' => 1,
+				'account_verify_on' => date('Y-m-d'),
+				'account_verify_by' => $this->session->userdata('user_id'),
+				'created_on' =>  date('Y-m-d'),
+				'created_by' => $this->session->userdata('user_id'),
+				'is_country' => $countryCode
+			);
+			
+			if ($this->account_model->branchSettlementverify($settlement, $cash_array, $id, $countryCode)){
+				$this->session->set_flashdata('message', lang("settlement verified"));
+				admin_redirect('account/account_settlementlist');
+			}
+		}
+		
+		$this->data['error'] = (validation_errors()) ? validation_errors() : $this->session->flashdata('error');
+		$this->data['result'] = $result;
+		$meta = array('page_title' => lang('settlement_verify'), 'bc' => $bc);
+		$this->page_construct('account/account_settlement_verify', $meta, $this->data);
+
+	}
+	
+	
+	
+	public function reconcilation() {
+		
+		if($this->session->userdata('group_id') == 1){
+			if($this->input->get('is_country') != ''){
+				$countryCode = $this->input->get('is_country');	
+			}else{
+				$countryCode = $this->input->post('is_country');	
+			}	
+		}else{
+			$countryCode = $this->countryCode;	
+		}
+		
+		if($this->input->post('reconcilation')){
+			$this->form_validation->set_rules('account_id[]', "account_id", 'required');   
+			if ($this->form_validation->run() == true) {
+				print_r($_POST);
+				die;
+				$admin_user = $this->site->getAdminUser($countryCode, 2);
+				$amount = $this->site->getAccountPendingCash($countryCode, $this->input->post('account_id'));
+				$account_ids = $this->input->post('account_id');
+			}
+			
+			if ($this->form_validation->run() == true && $this->account_model->reconcilation($settlement, $account_ids, $countryCode)){
+				$this->session->set_flashdata('message', lang("reconcilation has been success"));
+				admin_redirect('account/account_owner');
+			}
+		}
+		$this->data['reconcilation'] = $this->account_model->getReconcilation($countryCode);
+		$this->data['error'] = (validation_errors()) ? validation_errors() : $this->session->flashdata('error');		
+		$meta = array('page_title' => lang('reconcilation'), 'bc' => $bc);
+		$this->page_construct('account/reconcilation', $meta, $this->data);
+
+	}
+	
+	public function settlement_branch() {
+		
+		if($this->session->userdata('group_id') == 1){
+			if($this->input->get('is_country') != ''){
+				$countryCode = $this->input->get('is_country');	
+			}else{
+				$countryCode = $this->input->post('is_country');	
+			}	
+		}else{
+			$countryCode = $this->countryCode;	
+		}
+		
+		if($this->input->post('settlement_branch')){
+			$this->form_validation->set_rules('settlement_date', lang("settlement_date"), 'required');
+			$this->form_validation->set_rules('from_company_id', lang("from_company_id"), 'required');
+			$this->form_validation->set_rules('from_bank_id', lang("from_bank_id"), 'required');
+			$this->form_validation->set_rules('to_company_id', lang("to_company_id"), 'required');
+			$this->form_validation->set_rules('to_bank_id', lang("to_bank_id"), 'required');
+			
+			if ($this->form_validation->run() == true) {
+				$admin_user = $this->site->getAdminUser($countryCode, 2);
+				$amount = $this->site->getAccountPendingCash($countryCode, $this->input->post('account_id'));
+				$settlement = array(
+					'settlement_date' => date('Y-m-d', strtotime(str_replace('/', '-', $this->input->post('settlement_date')))),
+					'settlement_status' => 0,
+					'settlement_type' => $this->input->post('settlement_type'),
+					'settlement_code' => 'SET'.date('YmdHis'),
+					'settlement_amount' => $amount,
+					'from_user_id' => $this->session->userdata('user_id'),
+					'to_user_id' => $admin_user ? $admin_user : 0,
+					'from_company_id' => $this->input->post('from_company_id'),
+					'from_bank_id' => $this->input->post('from_bank_id'),
+					'to_company_id' => $this->input->post('to_company_id'),
+					'to_bank_id' => $this->input->post('to_bank_id'),
+					'created_by' =>  $this->session->userdata('user_id'),
+					'created_on' => date('Y-m-d H:i:s'),
+					'is_country' => $countryCode
+				);
+				
+				if ($_FILES['bank_challan']['size'] > 0) {
+					$config['upload_path'] = $this->upload_path.'document/bank_challan/';
+					$config['allowed_types'] = $this->photo_types;
+					$config['overwrite'] = FALSE;
+					$config['max_filename'] = 25;
+					$config['encrypt_name'] = TRUE;
+					$this->upload->initialize($config);
+					if (!$this->upload->do_upload('bank_challan')) {
+						$result = array( 'status'=> false , 'message'=> lang('image_not_uploaded'));
+					}
+					$bank_challan = $this->upload->file_name;
+					$settlement['bank_challan'] = 'document/bank_challan/'.$bank_challan;
+					$config = NULL;
+				}	
+				
+				$account_ids = $this->input->post('account_id');
+			}
+			if ($this->form_validation->run() == true && $this->account_model->branchSettlement($settlement, $account_ids, $countryCode)){
+				$this->session->set_flashdata('message', lang("branch has been paid to head office"));
+				admin_redirect('account/account_settlementlist');
+			}
+		}
+		
+		$this->data['error'] = (validation_errors()) ? validation_errors() : $this->session->flashdata('error');
+		$this->data['branch_company'] = $this->account_model->getBranch($countryCode);
+		$this->data['head_company'] = $this->account_model->getHeadOffice($countryCode);
+		
+		$meta = array('page_title' => lang('settlement_branch'), 'bc' => $bc);
+		$this->page_construct('account/settlement_branch', $meta, $this->data);
+
+	}
+	
+	public function bank_excel() {
+		
+		
+		if($this->session->userdata('group_id') == 1){
+			if($this->input->get('is_country') != ''){
+				$countryCode = $this->input->get('is_country');	
+			}else{
+				$countryCode = $this->input->post('is_country');	
+			}	
+		}else{
+			$countryCode = $this->countryCode;	
+		}
+		
+		if($this->input->post('import_files')){
+			$this->form_validation->set_rules('userfile', lang("upload_file"), 'xss_clean');   
+			if ($this->form_validation->run() == true) {
+				if (isset($_FILES["userfile"])) {
+
+				$this->load->library('upload');
+				$config['upload_path'] = $this->upload_path.'bankexcel/';
+				$config['allowed_types'] = 'xlsx|csv|xls';
+				$config['max_size'] = $this->allowed_file_size;
+				$config['overwrite'] = TRUE;
+				$config['encrypt_name'] = TRUE;
+				$config['max_filename'] = 25;
+				$this->upload->initialize($config);
+	
+				if (!$this->upload->do_upload()) {
+					$error = $this->upload->display_errors();
+					$this->session->set_flashdata('error', $error);
+					admin_redirect("account/bank_excel");
+				}
+				$csv = $this->upload->file_name;
+				$arrResult = array();
+                $handle = fopen($this->upload_path.'bankexcel/'.$csv, "r");
+                if ($handle) {
+                    while (($row = fgetcsv($handle, 5000, ",")) !== FALSE) {
+                        $arrResult[] = $row;
+                    }
+                    fclose($handle);
+                }
+                $titles = array_shift($arrResult);
+				if($this->input->post('payment_gateway') == 1){
+					$keys = array('col1', 'col2', 'col3');
+				}elseif($this->input->post('payment_gateway') == 3){
+					$keys = array('col1', 'col2', 'col3', 'col4');
+				}
+				$final = array();
+                foreach ($arrResult as $key => $value) {
+                    $final[] = array_combine($keys, $value);
+                }
+								
+				//$this->sma->print_arrays($final);
+				$rw = 2; $items = array();
+                foreach ($final as $csv_pr) {
+					 
+					
+					if($this->input->post('payment_gateway') == 1 || $this->input->post('payment_gateway') == 3){
+						$items[] = array(
+							
+							'transaction_date' => trim(date('Y-m-d H:i:s', strtotime($csv_pr['col1']))),
+							'transaction_no' => trim($csv_pr['col2']),
+							'amount' => trim($csv_pr['col3']),
+						);
+						$transaction_no[] = trim($csv_pr['col2']);
+					}elseif($this->input->post('payment_gateway') == 2){
+						$items[] = array(
+							
+							'transaction_date' =>  trim(date('Y-m-d H:i:s', strtotime($csv_pr['col1']))),
+							'transaction_no' => trim($csv_pr['col2']),
+							'amount' => trim($csv_pr['col4']),
+						);
+						$transaction_no[] = trim($csv_pr['col2']);
+					}
+					
+                    $rw++;
+				}
+				
+				$bank_array = array(
+					'import_date' => date('Y-m-d'),
+					'import_files' => $csv,
+					'payment_mode' => $this->input->post('payment_mode'),
+					'payment_type' => $this->input->post('payment_gateway'),
+					'created_by' => $this->session->userdata('user_id'),
+					'created_on' => date('Y-m-d H:i:s'),
+					'is_country' => $this->input->post('is_country')
+				);
+				$checkExite = $this->account_model->checkImport($transaction_no);
+				if($checkExite == FALSE){
+					$res = $this->account_model->import_bank_excel($bank_array, $items, $this->input->post('is_country'));
+					if($res == TRUE){
+						$this->session->set_flashdata('message', 'Success');
+           				admin_redirect("account/bank_excel");
+					}else{
+						$this->session->set_flashdata('error', 'Faild');
+           				admin_redirect("account/bank_excel");
+					}
+				}else{
+					$this->session->set_flashdata('error', 'Already import transaction files');
+           			admin_redirect("account/bank_excel");	
+				}
+					
+				
+		   		}
+			}else{
+				$this->session->set_flashdata('error', validation_errors());
+           		admin_redirect("account/bank_excel");
+			}
+		}
+		$this->data['payment_gateway'] = $this->site->getPaymentgateway($countryCode);
+		$meta = array('page_title' => lang('bank_excel'), 'bc' => $bc);
+		$this->page_construct('account/bank_excel', $meta, $this->data);
+
+	}
+	
 	public function success() {
 		
 		$meta = array('page_title' => lang('Razorpay Success | TechArise'), 'bc' => $bc);
@@ -358,7 +1182,7 @@ $this->data['commoncountry'] = $this->site->getcountryCodeID($countryCode);
 			
 			")
             ->from("users")
-			->join("countries country", " country.iso = users.is_country", "left")
+			->join("countries country", " country.iso = users.is_country")
 			->join("driver_payment dp", "dp.driver_id = users.id AND dp.is_edit != 0 ")
 			->where("users.group_id", $group_id);
 			
@@ -600,7 +1424,7 @@ $this->data['commoncountry'] = $this->site->getcountryCodeID($countryCode);
 						$result = array( 'status'=> false , 'message'=> lang('image_not_uploaded'));
 					}
 					$transaction_image = $this->upload->file_name;
-					$update['transaction_image'] = 'document/transaction/'.$transaction_image;
+					$update['account_transaction_image'] = 'document/transaction/'.$transaction_image;
 					$config = NULL;
 				}
 				

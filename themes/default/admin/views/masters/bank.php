@@ -9,8 +9,8 @@
 	function bank_default(a) {
        
         return a == 1 ?
-        '<a href=""><span class="label label-success">Yes</span></a>' :
-        '<a href=""><span class="label label-warning">No</span></a>';
+        '<a href=""><span class="label label-success">Cash Account</span></a>' :
+        '<a href=""><span class="label label-warning">Bank Account</span></a>';
     }
     $(document).ready(function () {
         'use strict';
@@ -110,7 +110,7 @@
                             <th class="col-xs-2"><?php echo lang('bank_name'); ?></th>
                             <th class="col-xs-2"><?php echo lang('branch_name'); ?></th>
                             <th class="col-xs-2"><?php echo lang('ifsc_code'); ?></th>
-                            <th style="width:100px;"><?php echo lang('default'); ?></th>
+                            <th style="width:100px;"><?php echo lang('account_type'); ?></th>
                             <th style="width:100px;"><?php echo lang('status'); ?></th>
                             <th style="width: 33.33%!important;"><?php echo lang('instance'); ?></th>
                             <th style="width:80px;"><?php echo lang('actions'); ?></th>
