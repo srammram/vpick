@@ -96,7 +96,7 @@ body {
 
 a {
 
-  color: #efb71c;
+  color:#006634;
 
   -webkit-transition: 0.5s;
 
@@ -108,7 +108,7 @@ a {
 
 a:hover, a:active, a:focus {
 
-  color: #efb71c;
+  color:#006634;
 
   outline: none;
 
@@ -144,7 +144,7 @@ h1, h2, h3, h4, h5, h6, figure {
 
   color: #fff;
 
-  background: #efb71c;
+  background:#006634;
 
 }
 
@@ -154,7 +154,7 @@ h1, h2, h3, h4, h5, h6, figure {
 
   color: #fff;
 
-  background: #efb71c;
+  background:#006634;
 
 }
 
@@ -164,7 +164,7 @@ h1, h2, h3, h4, h5, h6, figure {
 
   color: #fff;
 
-  background: #efb71c;
+  background:#006634;
 
 }
 
@@ -196,7 +196,7 @@ h1, h2, h3, h4, h5, h6, figure {
 
     top: 0;
 
-    background-color: #efb71c;
+    background-color:#006634;
 
   }
 
@@ -308,7 +308,7 @@ h1, h2, h3, h4, h5, h6, figure {
 
 .fh5co-nav ul li a:hover, .fh5co-nav ul li a:focus, .fh5co-nav ul li a:active {
 
-  color: white;
+  color: #31708f;
 
 }
 
@@ -428,13 +428,13 @@ h1, h2, h3, h4, h5, h6, figure {
 
 .fh5co-nav ul li.has-dropdown:hover a, .fh5co-nav ul li.has-dropdown:focus a {
 
-  color: #fff;
+  color:#31708f;
 
 }
 
 .fh5co-nav ul li.active > a {
 
-  color: #fff !important;
+  color: #31708f!important;
 
   position: relative;
 
@@ -442,7 +442,7 @@ h1, h2, h3, h4, h5, h6, figure {
 
 .fh5co-nav ul li.active > a:after {
 
-  background: #fff;
+  background:#31708f;
 
   height: 2px;
 
@@ -549,10 +549,8 @@ h1, h2, h3, h4, h5, h6, figure {
   left: 0;
 
   right: 0;
-
-  background: #efb71c;
-
- 
+background: rgb(56,136,97);
+background: linear-gradient(0deg, rgba(56,136,97,1) 0%, rgba(231,241,236,1) 100%);
 
 }
 
@@ -602,7 +600,7 @@ h1, h2, h3, h4, h5, h6, figure {
 
 .fh5co-cover.fh5co-cover-sm {
 
-  height: 200px;
+  height: 100px;
 
 }
 
@@ -724,7 +722,7 @@ h1, h2, h3, h4, h5, h6, figure {
 
   padding: 15px 30px;
 
-  background: #efb71c;
+  background:#006634;
 
   color: #fff;
 
@@ -972,7 +970,7 @@ h1, h2, h3, h4, h5, h6, figure {
 
   *display: inline;
 
-  color: #efb71c;
+  color: #006634;
 
   padding-left: 10px;
 
@@ -1018,7 +1016,7 @@ h1, h2, h3, h4, h5, h6, figure {
 
 .fh5co-contact-info ul li:before {
 
-  color: #efb71c;
+  color:#006634;
 
   position: absolute;
 
@@ -1148,7 +1146,7 @@ h1, h2, h3, h4, h5, h6, figure {
 
   font-size: 20px;
 
-  color: #efb71c;
+  color:#006634;
 
 }
 
@@ -1474,7 +1472,7 @@ h1, h2, h3, h4, h5, h6, figure {
 
   margin-left: -40px;
 
-  background: #efb71c;
+  background:#006634;
 
   position: relative;
 
@@ -1498,7 +1496,7 @@ h1, h2, h3, h4, h5, h6, figure {
 
   border-width: 0 0 9px 9px;
 
-  border-color: transparent transparent #efb71c transparent;
+  border-color: transparent transparent #006634 transparent;
 
 }
 
@@ -1516,7 +1514,7 @@ h1, h2, h3, h4, h5, h6, figure {
 
 .fh5co-blog .blog-text span.comment a i {
 
-  color: #efb71c;
+  color:#006634;
 
   padding-left: 7px;
 
@@ -1692,7 +1690,7 @@ h1, h2, h3, h4, h5, h6, figure {
 
   margin-top: -30px;
 
-  background: #efb71c;
+  background:#006634;
 
   -webkit-border-radius: 50%;
 
@@ -2436,11 +2434,11 @@ h1, h2, h3, h4, h5, h6, figure {
 
 .btn-primary {
 
-  background: #efb71c;
+  background:#006634;
 
   color: #fff;
 
-  border: 2px solid #efb71c;
+  border: 2px solid#006634;
 
 }
 
@@ -2456,15 +2454,15 @@ h1, h2, h3, h4, h5, h6, figure {
 
   background: transparent;
 
-  color: #efb71c;
+  color:#006634;
 
-  border: 2px solid #efb71c;
+  border: 2px solid #006634;
 
 }
 
 .btn-primary.btn-outline:hover, .btn-primary.btn-outline:focus, .btn-primary.btn-outline:active {
 
-  background: #efb71c;
+  background:#006634;
 
   color: #fff;
 
@@ -2722,7 +2720,7 @@ h1, h2, h3, h4, h5, h6, figure {
 
   box-shadow: none;
 
-  border-color: #efb71c;
+  border-color:#006634;
 
 }
 
@@ -2906,7 +2904,7 @@ h1, h2, h3, h4, h5, h6, figure {
 
 #fh5co-started .subscription_email img{padding: 5% 0px 25px;}
 
-#fh5co-started .subscription_email .btn{height: 54px;background-color: #efb71c;color: #333;border-color:#efb71c; }
+#fh5co-started .subscription_email .btn{height: 54px;background-color:#006634;color: #fff;border-color:#006634; }
 
 .world_map{
 
@@ -3148,7 +3146,7 @@ h1, h2, h3, h4, h5, h6, figure {
 
 
 
-.btn_learn a{ padding: 6px 12px;background-color: #333;    display: inline-block;font-size: 14px;border-radius: 5px;}
+.btn_learn a{ padding: 6px 12px;background-color:#006634;    display: inline-block;font-size: 14px;border-radius: 5px;color: #fff;}
 
 .phone a {color: #333}
 

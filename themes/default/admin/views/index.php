@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Heyycab</title>
+    <title>VPick</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="shortcut icon" href="<?= $assets ?>frontend/images/favicon.ico"/>
     
@@ -42,9 +42,9 @@
 
 						</span>
 
-						<h3>Heyycab for all occasions!</h3>
+						<h3>About VP<span style="text-transform: lowercase">ick</span></h3>
 
-						<p>Heyycab, an online e-hailing platform developed by SRAM & MRAM Group, a global conglomerate with 8 international alliances, 10 companies, spanning 5 continents and 35+ locations, 300+ employees with a sales turnaround of USD 800 Million (FY 2017-2018) specifically for the global community! We are a fast growing e-hailing service aggregator pioneering in B2B & B2C services, delivering seamless cab/taxi booking for city, outstation and hourly rentals. Our verified business partners list their vehicles and trusted drivers for our customer’s delight. More than 1 Lakh cabs waiting to give the best travel experience to the international traveller. GPS enabled rides with SOS & 24x7 support features.</p>
+						<p>Developed by SRAM MRAM Group, Vpick will surpass being a trusted brand, becoming an evangelist for seamless in-land freight operations, changing the face of logistics industry with its innovative technology.Vpick aims to make customers feel as good as owning their own vehicle, with responsive mobile app &24x7 call-centre.Vpick will provide doorstep pick-up & delivery for all ranges of B2B and B2C customers. Transporting goods in-land both intercity and intracity.Vpick will build affinity with its target audiences viz., Drivers, Fleet Operators, Customers acrossMalaysia, India, Cambodia, Bangladesh Cyprus, Czech Republic, Malta, Cyprus, Switzerland, Austria, New Zealand and Bahrain.  </p>
 
 					</div>
 
@@ -76,7 +76,7 @@
 
 						<h3>CITY DRIVE</h3>
 
-						<p>Now it’s easy to plan your routine day to day travel. Heyycab is luxury at your fingertips round the clock. We are here to drive you to your destination on-time every-time. Book in an instant, choose the cab of your choice and enjoy the affordable comfortable ride.</p></div>
+						<p>Now it’s easy to plan your routine day to day travel. VPick is luxury at your fingertips round the clock. We are here to drive you to your destination on-time every-time. Book in an instant, choose the cab of your choice and enjoy the affordable comfortable ride.</p></div>
 
 						<img src="<?= $assets ?>frontend/images/cab/city_taxi2.jpg" alt="taxi cab" class="img-responsive service_cab_img">
 
@@ -94,7 +94,7 @@
 
 						<h3 class="text-center">OUTSTATION</h3>
 
-						<p>Intercity travel made simple. Our travel partners ensure your one-way or two-way round about trips and tours with family & friends is filled with memories. Heyycab builds life long memories and becomes a vital part of your travelogues.</p></div>
+						<p>Intercity travel made simple. Our travel partners ensure your one-way or two-way round about trips and tours with family & friends is filled with memories. VPick builds life long memories and becomes a vital part of your travelogues.</p></div>
 
 						<img src="<?= $assets ?>frontend/images/cab/outstation3.jpg" alt="taxi cab" class="img-responsive service_cab_img">
 
@@ -124,7 +124,7 @@
 
 						<h3 class="text-center">RENTALS</h3>
 
-						<p>Plan your last minute travel itinerary with poise. Book a cab that suits your business needs or the long pending family outing. Customer-friendly Professional Drivers and Comfortable Cabs at Pocket friendly rates. Heyycab makes your travel hassle-free. </p></div>
+						<p>Plan your last minute travel itinerary with poise. Book a cab that suits your business needs or the long pending family outing. Customer-friendly Professional Drivers and Comfortable Cabs at Pocket friendly rates. VPick makes your travel hassle-free. </p></div>
 
 						<img src="<?= $assets ?>frontend/images/cab/rental2.jpg" alt="taxi cab" class="img-responsive service_cab_img">
 
@@ -164,149 +164,7 @@
 
 	</div>
 
-	<div id="fh5co-services" class="fh5co-bg-section heyycab_sh">
-
-		<div class="container">
-
-			<div class="row">
-
-			<div class="col-md-12 col-sm-12 col-xs-12 text-center">
-
-				<span class="chains">
-
-					<img src="<?= $assets ?>frontend/images/chains.png" alt="chains">
-
-				</span>
-
-				<h2>Why choose Heyycab? </h2>
-
-			</div>
-
-			<div class="col-md-10 col-md-offset-2 col-xs-12">
-
-				<div class="col-md-6 col-sm-6">
-
-					<div class="feature-center animate-box fadeIn animated-fast" data-animate-effect="fadeIn">
-
-						<span class="icon">
-
-							<i class="icon-eye"></i>
-
-						</span>
-
-						<h3>Ac Cabs</h3>
-
-					</div>
-
-					<div class="feature-center animate-box fadeIn animated-fast" data-animate-effect="fadeIn">
-
-						<span class="icon">
-
-							<i class="icon-eye"></i>
-
-						</span>
-
-						<h3>Pocket Friendly</h3>
-
-					</div>
-
-					<div class="feature-center animate-box fadeIn animated-fast" data-animate-effect="fadeIn">
-
-						<span class="icon">
-
-							<i class="icon-eye"></i>
-
-						</span>
-
-						<h3>Flexible Payment Modes</h3>
-
-					</div>
-
-					<div class="feature-center animate-box fadeIn animated-fast" data-animate-effect="fadeIn">
-
-						<span class="icon">
-
-							<i class="icon-eye"></i>
-
-						</span>
-
-						<h3>Safe Rides </h3>
-
-					</div>
-
-					<div class="feature-center animate-box fadeIn animated-fast" data-animate-effect="fadeIn">
-
-						<span class="icon">
-
-							<i class="icon-eye"></i>
-
-						</span>
-
-						<h3>GPS Enabled Cabs</h3>
-
-					</div>
-
-				</div>
-
-				<div class="col-md-5 col-md-offset-1 col-sm-6">
-
-					<div class="feature-center animate-box fadeIn animated-fast" data-animate-effect="fadeIn">
-
-						<span class="icon">
-
-							<i class="icon-eye"></i>
-
-						</span>
-
-						<h3>One-Way & Two-Way Trips</h3>
-
-					</div>
-
-					<div class="feature-center animate-box fadeIn animated-fast" data-animate-effect="fadeIn">
-
-						<span class="icon">
-
-							<i class="icon-eye"></i>
-
-						</span>
-
-						<h3>Hourly Rentals </h3>
-
-					</div>
-
-					<div class="feature-center animate-box fadeIn animated-fast" data-animate-effect="fadeIn">
-
-						<span class="icon">
-
-							<i class="icon-eye"></i>
-
-						</span>
-
-						<h3>Top-Rated Verified Drivers</h3>
-
-					</div>
-
-					<div class="feature-center animate-box fadeIn animated-fast" data-animate-effect="fadeIn">
-
-						<span class="icon">
-
-							<i class="icon-eye"></i>
-
-						</span>
-
-						<h3>SOS & 24 x7 Live Customer Support</h3>
-
-					</div>
-
-				</div>
-
-			</div>
-
-			</div>
-
-		</div>
-
-	</div>
+	
 
 	<div id="fh5co-started">
 

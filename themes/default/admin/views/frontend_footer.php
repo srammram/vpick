@@ -14,7 +14,7 @@
 
 					<h3>About Us</h3>
 
-						<p>HeyyCab, a journey of innovation started for you, our loyal customers, delivering the much awaited Trustworthy, Safe and Transparent transport solutions for all segments of B2B and B2C clientele across the globe...</p>
+						<p>Developed by SRAM MRAM Group, Vpick will surpass being a trusted brand, becoming an evangelist for seamless in-land freight operations, changing the face of logistics industry with its innovative technology...</p>
 
 						<p class="btn_learn"><a href="aboutus.php">Read More</a></p>
 
@@ -51,15 +51,11 @@
 					<p>
 
 						<ul class="fh5co-social-icons">
-
-							<li><a href="https://twitter.com/heyycab" target="_blank"><i class="icon-twitter" ></i></a></li>
-
-<!--							<li><a href="https://www.facebook.com/Heyycab-407798770070593" target="_blank"><i class="icon-facebook"></i></a></li>-->
-
-							<li><a href="https://www.youtube.com/channel/UClXPSxU-QasHvf8Bpc_inrw/" target="_blank"><i class="icon-youtube"></i></a></li>
-
-<!--							<li><a href="#"><i class="icon-dribbble"></i></a></li>-->
-
+							<li><a href="https://www.facebook.com/vpickapp/?modal=admin_todo_tour" target="_blank"><i class="icon-facebook"></i></a></li>
+							<li><a href="https://twitter.com/Vpickapp" target="_blank"><i class="icon-twitter" ></i></a></li>
+							<li><a href="https://www.youtube.com/channel/UCos2aNGQ1P1yRtTWW-IlcqQ" target="_blank"><i class="icon-youtube"></i></a></li>
+							<li><a href="https://www.instagram.com/vpickapp/" target="_blank"><i class="icon-instagram"></i></a></li>
+							<li><a href="https://www.linkedin.com/company/vpickapp/about/?viewAsMember=true" target="_blank"><i class="icon-linkedin"></i></a></li>
 						</ul>
 
 					</p>
@@ -76,7 +72,7 @@
 
 					<p>
 
-						<small class="block">&copy; 2019 Heyycab. All Rights Reserved.</small> 
+						<small class="block">&copy; 2020 VPick. All Rights Reserved.</small> 
 
 						<small class="block">Powered by <a href="JavaScript:Void(0);" onclick="window.open('https://srammram.com/', '_blank')";>SRAM & MRAM </a>Core Engine </small>
 

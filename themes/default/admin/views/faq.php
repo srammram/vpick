@@ -54,7 +54,7 @@
 
 							<div class="accordion-item">
 
-							  <a>1.	How to download the Heyycab App?</a>
+							  <a>1.	How to download the VPick App?</a>
 
 							  <div class="content">
 
@@ -68,7 +68,7 @@
 
 							<div class="accordion-item">
 
-							  <a>2.	How to register with HeyyCab?</a>
+							  <a>2.	How to register with VPick?</a>
 
 							  <div class="content">
 
@@ -96,7 +96,7 @@
 
 							<div class="accordion-item">
 
-							  <a>4.	How can I attach my car/taxi with Heyycab?</a>
+							  <a>4.	How can I attach my car/taxi with VPick?</a>
 
 							  <div class="content">
 
@@ -108,7 +108,7 @@
 
 							<div class="accordion-item">
 
-							  <a>5.	What type of vehicles can i register with Heyycab?</a>
+							  <a>5.	What type of vehicles can i register with VPick?</a>
 
 							  <div class="content">
 
@@ -166,7 +166,7 @@
 
 								<div class="accordion-item">
 
-								  <a>1.	How to sign up for franchisee? am running a travels business, how can I attach my cars and drivers with Heyycab?</a>
+								  <a>1.	How to sign up for franchisee? am running a travels business, how can I attach my cars and drivers with VPick?</a>
 
 								  <div class="content">
 
@@ -176,7 +176,7 @@
 
 									<p><b>Call:</b> Call our support team 0000000, share your details and complete your registration. </p>
 
-									<p>You can add any number of vehicles, list, manage and promote your cars and drivers with Heyycab.</p>
+									<p>You can add any number of vehicles, list, manage and promote your cars and drivers with VPick.</p>
 
 								  </div>
 
@@ -188,7 +188,7 @@
 
 								  <div class="content">
 
-									<p>Bookings will be received via HeyyCab app installed in your device. Any further support and training on using the app will be provided by the 24 x 7 support team. </p>
+									<p>Bookings will be received via VPick app installed in your device. Any further support and training on using the app will be provided by the 24 x 7 support team. </p>
 
 								  </div>
 

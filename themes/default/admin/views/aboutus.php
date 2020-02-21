@@ -41,34 +41,74 @@
                         <div class="col-md-12 col-xs-12 ">
                             <div class="desc">
                                 <h2 class="text-left">About Us</h2>
-                                <p>Heyycab, an online e-hailing platform developed by SRAM & MRAM Group, a global conglomerate with 8 international alliances, 10 companies, spanning 5 continents and 35+ locations, 300+ employees with a sales turnaround of USD 800 Million (FY 2017-2018) specifically for the global community! 
-    We are a fast growing e-hailing service aggregator pioneering in B2B & B2C services, delivering seamless cab/taxi booking for city, outstation and hourly rentals. Our verified business partners list their vehicles and trusted drivers for our customer’s delight. More than 1 Lakh cabs waiting to give the best travel experience to the international traveller. GPS enabled rides with SOS & 24x7 support features.</p>
-                                <p>HeyyCab, a journey of innovation started for you, our loyal customers, delivering the much awaited Trustworthy, Safe and Transparent transport solutions for all segments of B2B and B2C clientele across the globe.</p> 
-                                <p>Heyycab is a fast growing e-hailing service aggregator pioneering in Business-to-Business (B2B)& Business-to-Customer (B2C) services, delivering seamless cab/taxi booking for city, outstation and hourly rentals. We are the host of handpicked and verified business partners, listing their comfortable vehicles and trusted drivers to ensure customer’s delight. We have listed more than 1 Lakh cabs to give the best uninterrupted travel experience to both B2B and B2C customers. </p>
-                                <p>Hooked onto travelogues of globe trotters and driven by commitment to provide seamless mobility of a billions. Empowering self-made entrepreneurs who are tirelessly driving the nation ahead. Yielding comfort to customers with city and outstation rides. Yardmaster of taxi fleets greeting you on time and each time. Connecting cities and hearts of customers alike. App that is ahead of time, technology for everyone, anywhere. Building a brand that’s all about loyal customers and reliable partner base.  </p>
+                                <p>Developed by SRAM MRAM Group, Vpick will surpass being a trusted brand, becoming an evangelist for seamless in-land freight operations, changing the face of logistics industry with its innovative technology.</p>
+                               <p>Vpick aims to make customers feel as good as owning their own vehicle, with responsive mobile app &24x7 call-centre. </p>
+                               <p>Vpick will provide doorstep pick-up & delivery for all ranges of B2B and B2C customers. Transporting goods in-land both intercity and intracity.  </p>
+                               <p>Vpick will build affinity with its target audiences viz., Drivers, Fleet Operators, Customers acrossMalaysia, India, Cambodia, Bangladesh Cyprus, Czech Republic, Malta, Cyprus, Switzerland, Austria, New Zealand and Bahrain. </p>
                                 <ul>
-                                    <li>Made in India for the global community on the go!  </li>
-                                    <li>Easy cab booking, round the clock, on-time every-time</li>
-                                    <li>Taxi booking made simple and affordable</li>
-                                    <li>Pocket-Friendly & Flexible Payment Mode</li>
-                                    <li>Travel with the comfort of transparent rides led by technology </li>
-                                    <li>100% automated GPS GPRS based booking system</li>
-                                    <li>Accurate Trip tracker service </li>
-                                    <li>SOS alert in mobile app</li>
+                                    <li>Vpick :Mobile APP – for Android & IOS Platforms</li>
+                                    <li>In-Land Freight Management Service – Intracity& Intercity </li>
+                                    <li>DoorStep Pick-up & Delivery of Goods – listing all freight management services under one roof. </li>
+                                    <li>Payment – Vpick Wallet - Convenient, Transparent, Quick</li>
+                                    <li>GPS Enabled mobile app – Realtime tracking of customer and vehicle.</li>
+                                    <li>CRM – Ratings of Customers & Drivers, Creating healthy competition between Fleet operators </li>
+                                    <li>ROI – Helps Customers and Fleet Operators engage maximum results for the cost. </li>
+                                    <li>Manage Global Presence - 5 countries </li>
+                                    <li>Unlimited Fleet :Vpick - Does not own or operate its own fleet, but aggregates operators of all range, also single vehicle owners.
+                                    	<ul>
+                                    		<li>5000+ Vehicles (Malaysia, India, Cambodia, Bangladesh, Cyprus & Czech Republic) </li>
+                                    		<li>2000+ Vehicles (Malta, Cyprus, Switzerland, Austria, New Zealand & Bahrain)</li>
+                                    	</ul>
+                                    
+                                    </li>
+                                   
                                 </ul>
                             </div>
                             <div class="desc">
-                                <h3>Brains Behind HeyyCab!</h3>
-                                <p>We at Master tour organisers pvt ltd, since 1995 have been offering international and domestic travel services to customers and reputed business associates across the globe. We are familiar with the benchmark, diverse and global market expectation of travel industry. Futuristic technology connecting people and cities, HeyyCab, launched first in Pune, is an 100% authentic amalgamation of happy clients and committed partners. </p> 
+                                <h3>Vpick - Integrated Strategic Approach – Freight Management </h3>
+                                <p>Vpick will aggregate all divisions of freight management under one roof. Seamlessly operating all range of vehicles, also single vehicle owners with its GPS enabled mobile app – real-time tracking of customer, vehicle. This will help customers to book vehicles in vicinity. It will come handy for drivers to locate and navigate to customers with ease. </p>
+                                <p>Vpick is backed by an exclusive global portfolio – in-land freight management across 5 countries, both intercity and intracity operations. Its innovative technology aided service will avail cost-effective technology solution - easy to integrate with existing business – B2B & B2C. </p> 
                                 
                             </div>
+							<div class="desc">
+								<ul>
+									<li>Countries of Operations
+										<p>Malaysia, India, Cambodia, Bangladesh Cyprus, Czech Republic, Malta, Cyprus, Switzerland, Austria, New Zealand and Bahrain. </p>
+									</li>
+									<li>Individual Customers
+										<ul>
+											<li><b>Families</b> – Occasional</li>
+											<li><b>Working Men & Women </b> – Erratic/Last-Minute</li>
+											<li><b>Young Adults </b> – In-Sync with Digital Media – Influencing decision makers with facts/info</li>
+										</ul>
+									</li>
+									<li>Fleet Operators 
+										<ul>
+											<li><b>B2B </b> – Occasional</li>
+											<li><b>B2C </b> Residential / Individual Goods Transport</li>
+										</ul>
+									</li>
+									<li>Single Vehicle Owners
+										<ul>
+											<li>Trained Professionals with Own Vehicle - limited investments in marketing and promotions</li>
+										</ul>
+									</li>
+									<li>Drivers
+										<ul>
+											<li>Trained Professionals – Execute Trips with respective payments</li>
+										</ul>
+									</li>
+									<li>Packers
+										<ul>
+											<li>Trained Resources – segregating, packing and moving goods on and off the loading vehicle. </li>
+										</ul>
+									</li>
+								</ul>
+								<p>For business enquiries, you can write to us at sales@heyycab.com. Our team will get in touch with you and help you grow your business</p>
+							</div>
                         </div>
-                        
-                        
                     </div>
                 </div>
-            
-                
             </div>
         </div>
          <?php $this->load->view($this->theme . 'frontend_footer'); ?>

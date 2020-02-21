@@ -44,7 +44,7 @@
 
 					<h3 class="text-left">Privacy Policy</h3>
 
-					<p>Your privacy matters to Eximius Overseas Ventures Pvt. Ltd. (the “Company”, “we”, “Heyy CAB”, or “us”).</p>
+					<p>Your privacy matters to Eximius Overseas Ventures Pvt. Ltd. (the “Company”, “we”, “VPick”, or “us”).</p>
 
 					<p>This Privacy Policy explains how we collect, process, use, share and protect information about
 
@@ -54,7 +54,7 @@ about how your information is used.</p>
 
 					<p>The Privacy Policy covers both “online” (e.g., web and mobile services, including any websites
 
-operated by us such as https://www.heyycab.com/ or Mobile Application, however accessed and/or
+operated by us such as https://www.VPick.com/ or Mobile Application, however accessed and/or
 
 used, whether via personal computers, mobile devices or otherwise) and “offline” (e.g., collection
 
@@ -174,7 +174,7 @@ your Device by its Device Identifier.
 
 </li>
 
-				<li>In case of booking via call centre, Heyy CAB may record calls for quality and training purposes.</li>
+				<li>In case of booking via call centre, VPick may record calls for quality and training purposes.</li>
 
 				<li>In addition, tracking information is collected as you navigate through our Services, including, but
 
@@ -616,7 +616,7 @@ products or Services or to make any other benefits/products/ services available 
 
 </p>
 
-			<p>(i) WITH THE OWNER OF HEYY CAB ACCOUNTS THAT YOU MAY USE</p>
+			<p>(i) WITH THE OWNER OF VPick ACCOUNTS THAT YOU MAY USE</p>
 
 			<p>If you use an account or profile associated with another party we may share the details of the trip
 
@@ -762,11 +762,11 @@ disclose your password to anyone.
 
 			<p><b>10. GRIEVANCE OFFICER</b></p>
 
-			<p>Heyy CAB hereby appoints Heyy CAB Support Manager as the grievance officer for the purposes of the rules
+			<p>VPick hereby appoints VPick Support Manager as the grievance officer for the purposes of the rules
 
 drafted under the Information Technology Act, 2000, who may be contacted
 
-at support@heyycab.com. You may address any grievances you may have in respect of this privacy
+at support@VPick.com. You may address any grievances you may have in respect of this privacy
 
 policy or usage of your Protected Information or other data to him.
 
