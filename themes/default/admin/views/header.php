@@ -5,7 +5,7 @@
     <base href="<?=admin_url()?>"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
    <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
-    <title> <?= lang('heyy_cab') ?></title>
+    <title> <?= lang('Vpick') ?></title>
     <!--<link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">-->
     <link rel="shortcut icon" href="<?=$assets?>images/favicon.ico"/>
     <link href="<?=$assets?>styles/jquery.mCustomScrollbar.css" rel="stylesheet"/>
