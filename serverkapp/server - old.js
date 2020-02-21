@@ -22,6 +22,8 @@ io.sockets.on('connection', function (socket){
 	console.log('Socket Connect');
 	console.log(socket.id);
 	
+	
+		
 	socket.on('server_other_login', function(data){
 		console.log('other login');
 		//console.log('Server Reached Destination');
@@ -38,8 +40,8 @@ io.sockets.on('connection', function (socket){
 		var device_token = data.device_token;
 		var socket_id = socket.id;	
 		var table_name = 'kapp_users';
-		var modestatus = 'off';
-		console.log('User Socket Connected '+user_id);
+		
+		console.log(user_type);
 		if(user_id == '' || device_token == '' || user_type == ''){
 			console.log('Mandotory fields missing');
 			return;
@@ -49,41 +51,25 @@ io.sockets.on('connection', function (socket){
 				pool.query("UPDATE kapp_driver_current_status SET is_connected = 1 WHERE  driver_id="+user_id+" ORDER BY id DESC LIMIT 1  ");
 				console.log("Driver mode update ");	
 			}
-			
+			//console.log("SELECT u.id, u.oauth_token, u.devices_imei, u.mode, us.socket_id, us.user_type as socket_type FROM "+table_name+" AS u LEFT JOIN kapp_user_socket AS us ON us.user_id = u.id AND user_type = "+user_type+" WHERE u.oauth_token = '"+device_token+"' ");
 			 pool.query("SELECT u.id, u.oauth_token, u.devices_imei, u.mode, us.socket_id, us.user_type as socket_type FROM "+table_name+" AS u LEFT JOIN kapp_user_socket AS us ON us.user_id = u.id AND user_type = "+user_type+" WHERE u.oauth_token = '"+device_token+"' ", function (error, results, fields){
 				
 				if(error){
-					console.log('Data is empty user_truncate'+error);
-					var responseData_error = 'user_truncate';
-					return callback(responseData_error);
-					
+					console.log('Data is empty');
+					return;
 				}
 				console.log('user data socket: '+results);
 				
-				if(results.length == 0 || results == ''){
-					console.log('empty user user_truncate');
-					var responseData = 'user_truncate';
+				if(results.length == 0){
+					console.log('empty user');
+					var responseData = 'user_truncate1';
 					return callback(responseData);
 				}else{
-					
-					 pool.query("SELECT mode FROM kapp_driver_current_status WHERE driver_id = "+user_id+" ORDER BY id DESC ", function (error, res, fields){
-						 if(res.length == 0 || results == ''){
-							 modestatus = 'off';
-						 }else{
-							 if(results[0].mode == 0){
-								 modestatus = 'off';
-							 }else{
-								  modestatus = 'on';
-							 }
-						 }
-					 });
-					console.log('not empty user'+modestatus);
+					//console.log('not empty user');
 					if(results[0].socket_id != null && results[0].socket_type != ''){
 						
-						console.log(results[0].devices_imei+' old ');
-						console.log(device_imei+ 'new');
 						if(results[0].devices_imei != device_imei){
-							console.log('Not Updated user_truncate');
+							console.log('Not Updated');
 							var responseData_notmatch = 'user_truncate';
 							return callback(responseData_notmatch);
 							
@@ -94,11 +80,7 @@ io.sockets.on('connection', function (socket){
 									//console.log('Not Updated');
 									return;
 								}
-								
-								
-								console.log('Updated'+modestatus);
-								
-								return callback(modestatus);
+								console.log('Updated');
 							});
 						}
 					}else if(results[0].socket_id == null && results[0].socket_type != null){
@@ -108,9 +90,7 @@ io.sockets.on('connection', function (socket){
 									//console.log('Not Updated');
 									return;
 								}
-								console.log('Updated1'+modestatus);
-								
-								return callback(modestatus);
+								console.log('Updated1');
 							});
 					}else{
 						pool.query("UPDATE kapp_users SET device_imei = '"+device_imei+"' WHERE  id="+user_id+"  ");
@@ -119,9 +99,7 @@ io.sockets.on('connection', function (socket){
 								//console.log('Not Insert');
 								return;
 							}
-							console.log('Inserted'+modestatus);
-							
-							return callback(modestatus);
+							console.log('Inserted');
 						});
 					}
 					console.log('f');
@@ -163,7 +141,6 @@ io.sockets.on('connection', function (socket){
 		console.log(data.socket_id);
 		console.log(data);
 		socket.to(data.socket_id).emit('driver_reached_destination', data);
-		io.sockets.emit('admin_drivers_reached', data);
 	});
 	
 	socket.on('server_ride_complete', function(data){
@@ -171,7 +148,6 @@ io.sockets.on('connection', function (socket){
 		//console.log('Server Ride Complete');
 		console.log(data);
 		socket.to(data.socket_id).emit('driver_ride_complete', data);
-		io.sockets.emit('admin_drivers_complete', data);
 	});
 	
 	socket.on('server_ride_cancel', function(data){
@@ -179,7 +155,6 @@ io.sockets.on('connection', function (socket){
 		//console.log('Server Ride Cancel');
 		console.log(data);
 		socket.to(data.socket_id).emit('driver_ride_cancel', data );
-		io.sockets.emit('admin_drivers_cancel', data);
 	});
 	
 	socket.on('server_booking_accept', function(data){
@@ -188,8 +163,6 @@ io.sockets.on('connection', function (socket){
 		console.log(data.socket_id);
 		console.log(data);
 		socket.to(data.socket_id).emit('driver_accept_ride', data );
-		io.sockets.emit('admin_drivers_accept', data);
-		
 	});
 	
 	socket.on('server_not_accept_driver', function(data){
@@ -217,50 +190,18 @@ io.sockets.on('connection', function (socket){
 	
 	socket.on('driver_location', function(data){
 		console.log('Socket Driver Location');
-		console.log('lat:'+data.latitude+', lng:'+data.longitude+', user_id:'+data.user_id+', user_type:'+data.user_type+', devices:'+data.device_imei);
+		//console.log(data);
 		//console.log('driver_location');
 		var oauth_token = data.oauth_token;
 		var latitude = data.latitude;
 		var longitude = data.longitude;
-		//console.log(latitude);
-		//console.log(longitude);
+		console.log(latitude);
+		console.log(longitude);
 		
-		var user_id = data.user_id;
-		var user_type = data.user_type;
-		var device_imei = data.device_imei;
-		
-		//if(oauth_token == '' || latitude == '' || longitude == '' || user_id == '' || user_id == 'undefined' || user_type == '' || device_imei == ''){
-		if(typeof oauth_token === "undefined" || typeof latitude === "undefined" || typeof longitude === "undefined" || typeof user_id === "undefined" || typeof user_type === "undefined" || typeof device_imei === "undefined"){
+		if(oauth_token == '' || latitude == '' || longitude == ''){
 			console.log('Mandotory fields missing');
-			return false;
+			return;
 		}else{
-			console.log('Mandotory fields not missing');
-			if(user_type == 2){
-				var socket_id = socket.id;		
-				pool.query("SELECT socket_id FROM kapp_user_socket WHERE user_id = '"+user_id+"' AND user_type = '"+user_type+"' ", function (error, users, fields){
-					if(error){
-						console.log('Data is error');
-						return;
-					}else{
-						if(users.length == 0){
-							pool.query("UPDATE kapp_users SET device_imei = '"+device_imei+"' WHERE  id="+user_id+"  ");
-							pool.query("INSERT INTO kapp_user_socket  (user_id, user_type, socket_id, device_imei, device_token) VALUES ('"+user_id+"', '"+user_type+"', '"+socket_id+"', '"+device_imei+"', '"+device_token+"')");
-							console.log('Driver Frequency Emit Insert');
-						}else{
-							if(users[0].socket_id != null){
-								pool.query("UPDATE kapp_users SET device_imei = '"+device_imei+"' WHERE  id="+user_id+"  ");
-								pool.query("UPDATE kapp_user_socket SET socket_id = '"+socket_id+"'  WHERE user_id = '"+user_id+"' AND user_type = '"+user_type+"'  " );
-								console.log('Driver Frequency Emit Update');
-							}else{
-								pool.query("UPDATE kapp_users SET device_imei = '"+device_imei+"' WHERE  id="+user_id+"  ");
-								pool.query("INSERT INTO kapp_user_socket  (user_id, user_type, socket_id, device_imei, device_token) VALUES ('"+user_id+"', '"+user_type+"', '"+socket_id+"', '"+device_imei+"', '"+device_token+"')");
-								console.log('Driver Frequency Emit Insert');
-							}
-						}
-					}
-				});
-			}
-			
 			pool.query("SELECT d.id, dcs.is_connected, dcs.current_latitude as cu_latitude, dcs.current_longitude as cu_longitude,  r.start_lat, r.start_lng, r.end_lat, r.end_lng, r.customer_id, r.id AS ride_id, df.location, df.final_distance, df.final_distance_total, r.status, us.socket_id, us.id AS usid FROM kapp_users AS d LEFT JOIN kapp_driver_current_status dcs ON dcs.driver_id = d.id AND dcs.allocated_status = 1  LEFT  JOIN kapp_rides AS r ON r.driver_id = d.id AND (r.status = 2 OR  r.status = 3 OR r.status = 9 ) LEFT  JOIN kapp_driver_frequency AS df ON df.ride_id = r.id AND df.driver_id = d.id LEFT  JOIN kapp_user_socket AS us ON us.user_id = r.customer_id AND us.user_type = 1 WHERE d.oauth_token = '"+oauth_token+"' ORDER BY d.id DESC LIMIT 1", function (error, results, fields){
 				if(error){
 					console.log('Data is error');
@@ -343,12 +284,6 @@ io.sockets.on('connection', function (socket){
 		//socket.emit('notification', data);
 	});
 	
-	socket.on('admin_drivers_accept', function(data){
-		
-		console.log('admin_drivers_location');
-		console.log(data);
-		//socket.emit('notification', data);
-	});
 	
 	
 	socket.on('disconnect', function(reason) {

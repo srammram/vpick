@@ -361,6 +361,41 @@
                 </fieldset>
                 
                 <fieldset class="scheduler-border">
+                    <legend class="scheduler-border"><?= lang('booking_time') ?></legend>
+                    
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="control-label" for="support_email"><?= lang("driver_time(seconds)"); ?></label>
+                
+                            <div class="controls">
+                                <?= form_input('driver_time', $dataSettings->driver_time, 'class="form-control tip" maxlength="3" id="driver_time"'); ?>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="control-label" for="support_mobile"><?= lang("driver_count"); ?></label>
+                
+                            <div class="controls">
+                                <?= form_input('driver_count', $dataSettings->driver_count, 'class="form-control tip" maxlength="2" id="driver_count"'); ?>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="control-label" for="support_whatsapp"><?= lang("customer_time(seconds)"); ?></label>
+                
+                            <div class="controls">
+                                <?= form_input('customer_time', $dataSettings->customer_time, 'class="form-control tip" readonly id="customer_time"'); ?>
+                            </div>
+                        </div>
+                    </div>
+                  
+                </fieldset>
+                
+                <fieldset class="scheduler-border">
                     <legend class="scheduler-border"><?= lang('account_module') ?></legend>
                     <div class="col-md-3">
                         <div class="form-group">
@@ -934,7 +969,23 @@ $(document).on('change', '#is_country', function(){
 	  window.location.href = site+"admin/masters/index?countryCode="+is_country;
 		
     
-})
+});
+
+$('#driver_time').bind('keyup paste', function(){
+   this.value = this.value.replace(/[^1-9-0]/g, '');
+   var driver_time  = this.value;
+   var driver_count = $('#driver_count').val();
+   var customer_time = driver_time * driver_count;
+   $('#customer_time').val(customer_time);
+   
+});
+$('#driver_count').bind('keyup paste', function(){
+     this.value = this.value.replace(/[^1-9-0]/g, '');
+	 var driver_count  = this.value;
+	   var driver_time = $('#driver_time').val();
+	   var customer_time = driver_time * driver_count;
+	   $('#customer_time').val(customer_time);
+});
 
 /*$('#day_shift_from_time').change(function() {
   var date2 = $('#day_shift_from_time').datepicker('getDate'); 

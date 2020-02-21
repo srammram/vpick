@@ -6224,6 +6224,14 @@ class Drivers extends REST_Controller {
 						$success = 	$this->socketemitter->setEmit($event, $edata);
 						
 						}else{
+							$cancel_location = $this->site->findLocation($this->input->post('from_latitude'), $this->input->post('from_longitude'), $countryCode);
+							$cancel['driver_id'] = $user_data->id;
+							$cancel['booking_id'] = $this->input->post('ride_id');
+							$cancel['cancel_msg'] = 'Any one of the driver not accept ride. Please try again.';
+							$cancel['cancel_location'] = $cancel_location ? $cancel_location : '';
+							$res = $this->drivers_api->nodriverCancel($cancel, $countryCode);
+							if($res == TRUE){
+								
 							$event = 'server_not_accept_driver';
 							$socket_id = $this->site->getSocketID($ride_data->customer_id, 1, $countryCode);
 							$edata = array(
@@ -6258,6 +6266,9 @@ class Drivers extends REST_Controller {
 								
 							);
 							$success = 	$this->socketemitter->setEmit($event, $edata);	
+							
+							}
+							
 						}
 					}
 					$result = array( 'status'=> 1 , 'message'=> 'not accept or timeout driver has been insert');

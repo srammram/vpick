@@ -1113,6 +1113,21 @@ class Customers extends REST_Controller {
 			if($res->check_status == 1){
 				$result = array( 'status'=> 1 , 'message'=> 'Success', 'data' => $data);
 			}elseif($res->check_status == 3){
+				
+				if($res->devices_imei != $this->input->post('devices_imei')){
+					$socket_id = $this->site->getSocketID($res->id, 1, $countryCode);
+					
+					$event = 'server_other_login';
+					
+					$edata = array(
+						'socket_id' => $socket_id,
+						'devices_imei' => $res->devices_imei,
+						'msg' => 'Truncate'
+					);
+					$emit_login = $this->socketemitter->setEmit($event, $edata);
+				
+				}
+				
 				$sms_phone_otp = $otp;
 				$sms_phone = $res->country_code.$res->mobile;
 				$sms_country_code = $res->country_code;
@@ -1124,6 +1139,20 @@ class Customers extends REST_Controller {
 					$result = array( 'status'=> 3 , 'message'=> 'Unable to Send Mobile Verification Code', 'data' => array('oauth_token' => $res->oauth_token));
 				}
 			}elseif($res->check_status == 4){
+				if($res->devices_imei != $this->input->post('devices_imei')){
+					$socket_id = $this->site->getSocketID($res->id, 1, $countryCode);
+					
+					$event = 'server_other_login';
+					
+					$edata = array(
+						'socket_id' => $socket_id,
+						'devices_imei' => $res->devices_imei,
+						'msg' => 'Truncate'
+					);
+					$emit_login = $this->socketemitter->setEmit($event, $edata);
+				
+				}
+				
 				$result = array( 'status'=> 1 , 'message'=> 'Success', 'data' => $data);
 			}elseif($res->check_status == 2){
 				$result = array( 'status'=> 0 , 'message'=> 'Your account has been deactive. please contact admin.');
@@ -2487,6 +2516,8 @@ class Customers extends REST_Controller {
 			$this->form_validation->set_rules('to_longitude', $this->lang->line("to_longitude"), 'required');
 		}
 		$this->form_validation->set_rules('cab_type_id', $this->lang->line("cab_type_id"), 'required');
+		$this->form_validation->set_rules('tons', $this->lang->line("tons"), 'required');
+		
 		//$this->form_validation->set_rules('ride_type', $this->lang->line("ride_type"), 'required');
 		$this->form_validation->set_rules('booked_type', $this->lang->line("booked_type"), 'required');
 		
@@ -2603,6 +2634,7 @@ class Customers extends REST_Controller {
 							'driver_id' => 0,
 							'payment_id' => $this->input->post('payment_id'),
 							'cab_type_id' => $this->input->post('cab_type_id'),
+							'tons' => $this->input->post('tons'),
 							'distance_km' => $this->input->post('distance_km') ? $this->input->post('distance_km') : '0',
 							'distance_price' => $this->input->post('distance_price') ? $this->input->post('distance_price') : '0',
 							'payment_name' => $payment_name,
@@ -3032,11 +3064,16 @@ class Customers extends REST_Controller {
 		if ($this->form_validation->run() == true) {
 			$this->site->users_logs($countryCode, $user_data->id, $this->getUserIpAddr, json_encode($_POST), $_SERVER['REQUEST_URI']);
 			$settings = $this->customer_api->getSettings($countryCode);
-			$data = array(
-				'min_range' => $settings->min_range,
-				'max_range' => $settings->max_range
-			);
-			$result = array( 'status'=> 1 , 'message'=> 'Success', 'data' => $data);
+			if(!empty($settings)){
+				$data = array(
+					'min_range' => $settings->min_range,
+					'max_range' => $settings->max_range
+				);
+				$result = array( 'status'=> 1 , 'message'=> 'Success', 'data' => $data);
+			}else{
+				 $result = array( 'status'=> 0 , 'message' => 'No Data');
+			}
+			
 				
 		}else{
 			$error = $this->form_validation->error_array();

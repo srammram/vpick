@@ -205,7 +205,7 @@ var booking_driver_id = '<?= $rides->driver_id ?>';
 var booking_customer_id = '<?= $rides->customer_id ?>';
 var booking_id = '<?= $rides->id ?>';
 
-var socket = io.connect('http://'+window.location.hostname+':9000');
+var socket = io.connect('http://'+window.location.hostname+':5000');
 socket.on('connect', function(){
 	 console.log('S Connect');	 
 });

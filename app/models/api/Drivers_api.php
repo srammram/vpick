@@ -4258,5 +4258,16 @@ ORDER BY distance ASC";
 		}
 		return 0;
 	}	
+	
+	function nodriverCancel($data, $countryCode){
+		
+		$this->db->where('id', $data['booking_id']);
+		$q = $this->db->update('rides', array('cancel_status' => 1, 'cancel_msg' => $data['cancel_msg'], 'cancelled_by' => $data['driver_id'], 'cancelled_type' => 2, 'status' => 8));
+		//print_r($this->db->last_query());exit;
+		if($q){
+			return true;	
+		}
+		return false;	
+	}
     
 }
