@@ -90,7 +90,7 @@
 
 					<div class="col-sm-12 inner_se sec_inner">
 
-						<span><img src="<?= $assets ?>frontend/images/cab/outstation_icon.jpg" class="center-block"></span>
+						<span><img src="<?= $assets ?>frontend/images/cab/outstation_icon.png" class="center-block"></span>
 
 						<h3 class="text-center">OUTSTATION</h3>
 
@@ -120,7 +120,7 @@
 
 					<div class="col-sm-12 inner_se thi_inner">
 
-						<span><img src="<?= $assets ?>frontend/images/cab/rental_icon.jpg" class="center-block"></span>
+						<span><img src="<?= $assets ?>frontend/images/cab/rental_icon.png" class="center-block"></span>
 
 						<h3 class="text-center">RENTALS</h3>
 
