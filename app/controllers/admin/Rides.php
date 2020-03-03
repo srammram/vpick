@@ -96,7 +96,7 @@ class Rides extends MY_Controller
         
         $this->load->library('datatables');
         $this->datatables
-            ->select("{$this->db->dbprefix('rides')}.id as id, {$this->db->dbprefix('rides')}.booking_timing, {$this->db->dbprefix('rides')}.booking_no as booking_no,   t.number, cu.first_name as customer_name,  cu.mobile as customer_mobile, u.first_name as driver_name,  u.mobile as driver_mobile,  {$this->db->dbprefix('rides')}.start, {$this->db->dbprefix('rides')}.ride_timing, {$this->db->dbprefix('rides')}.end, {$this->db->dbprefix('rides')}.ride_timing_end, {$this->db->dbprefix('rides')}.status, country.name as instance_country ")
+            ->select("{$this->db->dbprefix('rides')}.id as id, {$this->db->dbprefix('rides')}.process_type, {$this->db->dbprefix('rides')}.booking_timing, {$this->db->dbprefix('rides')}.booking_no as booking_no,   t.number, cu.first_name as customer_name,  cu.mobile as customer_mobile, u.first_name as driver_name,  u.mobile as driver_mobile,  {$this->db->dbprefix('rides')}.start, {$this->db->dbprefix('rides')}.ride_timing, {$this->db->dbprefix('rides')}.end, {$this->db->dbprefix('rides')}.ride_timing_end, {$this->db->dbprefix('rides')}.status, country.name as instance_country ")
             ->from("rides")
 			->join("countries country", " country.iso = rides.is_country", "left")
             ->join('user_profile d','d.user_id=rides.driver_id AND d.is_edit=1 ', 'left')

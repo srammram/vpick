@@ -700,12 +700,13 @@ class Customers extends REST_Controller {
 		$this->form_validation->set_rules('from_lat', $this->lang->line("from_lat"), 'required');
 		$this->form_validation->set_rules('from_lng', $this->lang->line("from_lng"), 'required');
 		$this->form_validation->set_rules('cab_type_id', $this->lang->line("cab_type"), 'required');
+		$this->form_validation->set_rules('tons', $this->lang->line("tons"), 'required');
 
 		if ($this->form_validation->run() == true) {
 			
 			$city = $this->site->getCityFare($this->input->post('from_lat'), $this->input->post('from_lng'));
 			
-			$data = $this->customer_api->getTruckRental($city, $this->input->post('cab_type_id'), $countryCode);
+			$data = $this->customer_api->getTruckRental($city, $this->input->post('cab_type_id'), $this->input->post('cab_type_id'), $countryCode);
 			
 			if(!empty($data)){
 				$result = array( 'status'=> 1 , 'message'=> 'Success', 'data' => $data);
@@ -3201,6 +3202,7 @@ class Customers extends REST_Controller {
 			$distance = 20;
 			
 			$types = $this->customer_api->trucktons($countryCode, $this->input->post('type_id'), $distance, $this->input->post('latitude'), $this->input->post('longitude'), $this->input->post('range_min'), $this->input->post('range_max'));
+			
 			$settings = $this->customer_api->getSettings($countryCode);
 			$user_data = $this->customer_api->getCustomer($this->input->post('oauth_token'), $countryCode);
 			$this->site->users_logs($countryCode, $user_data->id, $this->getUserIpAddr, json_encode($_POST), $_SERVER['REQUEST_URI']);

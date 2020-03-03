@@ -212,7 +212,7 @@ function getUnique(array){
 
 <script>
 //alert('http://'+window.location.hostname+':9000');
-var socket = io.connect('http://'+window.location.hostname+':7000');
+var socket = io.connect('http://'+window.location.hostname+':5000');
 socket.on('connect', function(){
 	 console.log('S Connect');	 
 });

@@ -397,8 +397,8 @@ $this->db->where('is_country', $countryCode);
 	}
 	
 	function get_driver_location($user_id, $countryCode){
-		$myQuery = "SELECT d.id, IFNULL(dcs.current_latitude, 0) as lat, IFNULL(dcs.current_longitude, 0) as lng,  r.start_lat as pickup_lat, r.start_lng as pickup_lng, r.end_lat as drop_lat, r.end_lng as drop_lng, r.customer_id, r.id AS ride_id, IFNULL(df.location, 0) as location, IFNULL(df.final_distance, 0) as final_distance, IFNULL(df.final_distance_total, 0) as final_distance_total, r.status, us.socket_id, us.id AS usid FROM kapp_users AS d  LEFT  JOIN kapp_rides AS r ON r.customer_id = d.id AND (r.status = 2 OR  r.status = 3) LEFT  JOIN kapp_driver_frequency AS df ON df.ride_id = r.id AND df.driver_id = d.id LEFT  JOIN kapp_user_socket AS us ON us.user_id = r.customer_id AND us.user_type = 1 LEFT JOIN kapp_driver_current_status dcs ON dcs.driver_id = r.driver_id AND dcs.is_connected = 1 AND dcs.mode = 3 AND dcs.allocated_status = 1
-		WHERE d.id = ".$user_id." AND d.is_country = '".$countryCode."' ORDER BY d.id DESC LIMIT 1";
+		$myQuery = "SELECT d.id, IFNULL(dcs.current_latitude, 0) as lat, IFNULL(dcs.current_longitude, 0) as lng,  r.start_lat as pickup_lat, r.start_lng as pickup_lng, r.end_lat as drop_lat, r.end_lng as drop_lng, r.customer_id, r.id AS ride_id, IFNULL(df.location, 0) as location, IFNULL(df.final_distance, 0) as final_distance, IFNULL(df.final_distance_total, 0) as final_distance_total, r.status, us.socket_id, us.id AS usid FROM kapp_users AS d  LEFT  JOIN kapp_rides AS r ON r.customer_id = d.id AND (r.status = 2 OR  r.status = 3) AND r.is_country = '".$countryCode."' LEFT  JOIN kapp_driver_frequency AS df ON df.ride_id = r.id AND df.driver_id = d.id LEFT  JOIN kapp_user_socket AS us ON us.user_id = r.customer_id AND us.user_type = 1 LEFT JOIN kapp_driver_current_status dcs ON dcs.driver_id = r.driver_id AND dcs.is_connected = 1 AND (dcs.mode = 2 OR dcs.mode = 3) AND dcs.allocated_status = 1
+		WHERE d.id = ".$user_id."  ORDER BY d.id DESC LIMIT 1";
 		
 		$q = $this->db->query($myQuery);
 		//print_r($this->db->last_query());die;
@@ -664,10 +664,10 @@ $this->db->where('is_country', $countryCode);
         return FALSE;
 	}
 		
-	function getTruckRental($city_id, $cab_type_id, $countryCode){
+	function getTruckRental($city_id, $cab_type_id, $tons, $countryCode){
 		$image_path = base_url('assets/uploads/');
 		
-		$myQuery = "SELECT R.id, R.city_id, R.package_distance, R.package_time, R.taxi_type, R.per_distance, R.per_distance_price, R.per_time, R.per_time_price, R.option_type, R.option_price, R.package_name, R.package_price, R.time_type, TT.name as taxi_type_name, TI.image, TI.image_hover, TI.mapcar, TI.outstation_image FROM {$this->db->dbprefix('rental_fare')} AS R JOIN {$this->db->dbprefix('taxi_type')} AS TT ON TT.id = R.taxi_type JOIN {$this->db->dbprefix('taxi_image')} AS TI ON TI.id = TT.taxi_image_id  WHERE R.taxi_type = '".$cab_type_id."' AND R.is_country = '".$countryCode."'  ";
+		$myQuery = "SELECT R.id, R.city_id, R.package_distance, R.package_time, R.taxi_type, R.per_distance, R.per_distance_price, R.per_time, R.per_time_price, R.option_type, R.option_price, R.package_name, R.package_price, R.time_type, TT.name as taxi_type_name, TI.image, TI.image_hover, TI.mapcar, TI.outstation_image FROM {$this->db->dbprefix('rental_fare')} AS R JOIN {$this->db->dbprefix('taxi_type')} AS TT ON TT.id = R.taxi_type JOIN {$this->db->dbprefix('taxi_image')} AS TI ON TI.id = TT.taxi_image_id  WHERE R.taxi_type = '".$cab_type_id."' AND R.tons = '".$tons."' AND R.is_country = '".$countryCode."'  ";
 		$q = $this->db->query($myQuery);
 		
 		//print_r($this->db->last_query());
@@ -1561,13 +1561,14 @@ ORDER BY distance ASC LIMIT 1";
 		$current_date = date('Y-m-d');
 		$image_path = base_url('assets/uploads/');
 		
-		$this->db->select('r.id as ride_id, r.cab_type_id,  r.status, r.ride_timing as ride_start_time, r.estimated_distance, r.estimated_fare, r.actual_distance, r.actual_fare, r.rating, r.start as pick_up, r.end as drop_off, r.start_lat, r.start_lng, r.end_lat, r.end_lng,  IFNULL(p.total_fare, 0) as cost, IFNULL(p.total_distance, 0) as total_kms, t.name taxi_name, t.number,  tt.name types,  dp.first_name driver_name');		
+		$this->db->select('r.id as ride_id, r.cab_type_id, r.ride_otp,  r.status, r.ride_timing as ride_start_time, r.estimated_distance, r.estimated_fare, r.actual_distance, r.actual_fare, r.rating, r.start as pick_up, r.end as drop_off, r.start_lat, r.start_lng, r.end_lat, r.end_lng,  IFNULL(p.total_fare, 0) as cost, IFNULL(p.total_distance, 0) as total_kms, t.name taxi_name, t.number,  tt.name types,  d.first_name driver_name, d.id as driver_id, d.photo as driver_photo, d.mobile as dmobile, d.country_code as dcc, td.reg_image as taxi_image');		
 		$this->db->from('rides r');
 		$this->db->join('users d', 'd.id = r.driver_id', 'left');
 		$this->db->join('user_profile dp', 'dp.id = r.driver_id', 'left');
 		$this->db->join('users c', 'c.id = '.$customer_id.'', 'left');
 		$this->db->join('user_profile cp', 'cp.id = '.$customer_id.'', 'left');
 		$this->db->join('taxi t', 't.id = r.taxi_id', 'left');
+		$this->db->join('taxi_document td', 'td.taxi_id = t.id AND td.is_edit = 1', 'left');
 		$this->db->join('taxi_type tt', 'tt.id = r.cab_type_id', 'left');
 		$this->db->join('ride_payment p', 'p.ride_id = r.id', 'left');
 		$this->db->where('r.customer_id', $customer_id);
@@ -1587,6 +1588,23 @@ ORDER BY distance ASC LIMIT 1";
 			
 			foreach (($q->result()) as $row) {
 				
+				$get_current = $this->db->select('current_latitude, current_longitude')->from('driver_current_status')->where('driver_id', $row->driver_id)->order_by('id', 'DESC')->limit(1)->get();
+				if($get_current->num_rows()>0){
+					if($get_current->row('current_latitude') ==''){
+						$row->driver_latitude =  '0';
+					}else{
+						$row->driver_latitude =  $get_current->row('current_latitude');
+					}
+					if($get_current->row('current_longitude') ==''){
+						$row->driver_longitude =  '0';
+					}else{
+						$row->driver_longitude =  $get_current->row('current_longitude');
+					}
+				}else{
+					$row->driver_latitude =  '0';
+					$row->driver_longitude =  '0';
+				}
+				
 				$ride_status_array = array('1' => 'Request', '2' => 'Booked', '3' => 'Onride', '4' => 'Waiting', '5' => 'Completed', '6' => 'Cancelled', '7' => 'Ride Later', '8' => 'Rejected');
 				
 				if($row->end_lat != 0 && $row->end_lng != 0){
@@ -1599,6 +1617,19 @@ ORDER BY distance ASC LIMIT 1";
 					
 					$row->ride_status = $ride_status_array[$row->status];
 				}
+				
+				if($row->driver_photo !=''){
+					$row->driver_photo = $image_path.$row->driver_photo;
+				}else{
+					$row->driver_photo = $image_path.'no_image.png';
+				}
+				
+				if($row->taxi_image !=''){
+					$row->taxi_image = $image_path.$row->taxi_image;
+				}else{
+					$row->taxi_image = $image_path.'no_image.png';
+				}
+				$row->driver_mobile = $row->dcc.$row->dmobile;
 				
 				if($row->taxi_name ==''){
 					$row->taxi_name =  '0';
@@ -1653,13 +1684,14 @@ ORDER BY distance ASC LIMIT 1";
 		$current_date = date('Y-m-d');
 		$image_path = base_url('assets/uploads/');
 		
-		$this->db->select('r.id as ride_id, r.cab_type_id, r.status, r.ride_timing as ride_start_time, r.estimated_distance, r.estimated_fare, r.actual_distance, r.actual_fare, r.rating, r.start as pick_up, r.end as drop_off, r.start_lat, r.start_lng, r.end_lat, r.end_lng,  IFNULL(p.total_fare, 0) as cost, IFNULL(p.total_distance, 0) as total_kms, t.name taxi_name, t.number,  tt.name types,  dp.first_name driver_name');		
+		$this->db->select('r.id as ride_id, r.cab_type_id, r.status, r.ride_otp, r.ride_timing as ride_start_time, r.estimated_distance, r.estimated_fare, r.actual_distance, r.actual_fare, r.rating, r.start as pick_up, r.end as drop_off, r.start_lat, r.start_lng, r.end_lat, r.end_lng,  IFNULL(p.total_fare, 0) as cost, IFNULL(p.total_distance, 0) as total_kms, t.name taxi_name, t.number,  tt.name types,  d.first_name driver_name, d.id as driver_id, d.photo as driver_photo, d.mobile as dmobile, d.country_code as dcc, td.reg_image as taxi_image');		
 		$this->db->from('rides r');
 		$this->db->join('users d', 'd.id = r.driver_id', 'left');
 		$this->db->join('user_profile dp', 'dp.id = r.driver_id', 'left');
 		$this->db->join('users c', 'c.id = '.$customer_id.'', 'left');
 		$this->db->join('user_profile cp', 'cp.id = '.$customer_id.'', 'left');
 		$this->db->join('taxi t', 't.id = r.taxi_id', 'left');
+		$this->db->join('taxi_document td', 'td.taxi_id = t.id AND td.is_edit = 1', 'left');
 		$this->db->join('taxi_type tt', 'tt.id = r.cab_type_id', 'left');
 		$this->db->join('ride_payment p', 'p.ride_id = r.id', 'left');
 		$this->db->where('r.customer_id', $customer_id);
@@ -1685,6 +1717,22 @@ ORDER BY distance ASC LIMIT 1";
 					$loc[$row->ride_id] = '0';
 				}
 				
+				$get_current = $this->db->select('current_latitude, current_longitude')->from('driver_current_status')->where('driver_id', $row->driver_id)->order_by('id', 'DESC')->limit(1)->get();
+				if($get_current->num_rows()>0){
+					if($get_current->row('current_latitude') ==''){
+						$row->driver_latitude =  '0';
+					}else{
+						$row->driver_latitude =  $get_current->row('current_latitude');
+					}
+					if($get_current->row('current_longitude') ==''){
+						$row->driver_longitude =  '0';
+					}else{
+						$row->driver_longitude =  $get_current->row('current_longitude');
+					}
+				}else{
+					$row->driver_latitude =  '0';
+					$row->driver_longitude =  '0';
+				}
 				
 				$ride_status_array = array('1' => 'Request', '2' => 'Booked', '3' => 'Onride', '4' => 'Waiting', '5' => 'Completed', '6' => 'Cancelled', '7' => 'Ride Later', '8' => 'Rejected');
 				
@@ -1692,6 +1740,20 @@ ORDER BY distance ASC LIMIT 1";
 					
 					$row->ride_status = $ride_status_array[$row->status];
 				}
+				
+				if($row->driver_photo !=''){
+					$row->driver_photo = $image_path.$row->driver_photo;
+				}else{
+					$row->driver_photo = $image_path.'no_image.png';
+				}
+				
+				if($row->taxi_image !=''){
+					$row->taxi_image = $image_path.$row->taxi_image;
+				}else{
+					$row->taxi_image = $image_path.'no_image.png';
+				}
+				$row->driver_mobile = $row->dcc.$row->dmobile;
+				
 				
 				if($row->taxi_name ==''){
 					$row->taxi_name =  '0';
@@ -1746,13 +1808,14 @@ ORDER BY distance ASC LIMIT 1";
 		$current_date = date('Y-m-d');
 		$image_path = base_url('assets/uploads/');
 		
-		$this->db->select('r.id as ride_id, r.cab_type_id,  r.status, r.ride_timing as ride_start_time, r.estimated_distance, r.estimated_fare, r.actual_distance, r.actual_fare, r.rating, r.start as pick_up, r.end as drop_off, t.name taxi_name, t.number, r.start_lat, r.start_lng, r.end_lat, r.end_lng,  IFNULL(p.total_fare, 0) as cost, IFNULL(p.total_distance, 0) as total_kms, tt.name types,  dp.first_name driver_name');		
+		$this->db->select('r.id as ride_id, r.cab_type_id, r.ride_otp,   r.status, r.ride_timing as ride_start_time, r.estimated_distance, r.estimated_fare, r.actual_distance, r.actual_fare, r.rating, r.start as pick_up, r.end as drop_off, t.name taxi_name, t.number, r.start_lat, r.start_lng, r.end_lat, r.end_lng,  IFNULL(p.total_fare, 0) as cost, IFNULL(p.total_distance, 0) as total_kms, tt.name types,  d.first_name driver_name, d.id as driver_id, d.photo as driver_photo, d.mobile as dmobile, d.country_code as dcc, td.reg_image as taxi_image');		
 		$this->db->from('rides r');
 		$this->db->join('users d', 'd.id = r.driver_id', 'left');
 		$this->db->join('user_profile dp', 'dp.id = r.driver_id', 'left');
 		$this->db->join('users c', 'c.id = '.$customer_id.'', 'left');
 		$this->db->join('user_profile cp', 'cp.id = '.$customer_id.'', 'left');
 		$this->db->join('taxi t', 't.id = r.taxi_id', 'left');
+		$this->db->join('taxi_document td', 'td.taxi_id = t.id AND td.is_edit = 1', 'left');
 		$this->db->join('taxi_type tt', 'tt.id = r.cab_type_id', 'left');
 		$this->db->join('ride_payment p', 'p.ride_id = r.id', 'left');
 		$this->db->where('r.customer_id', $customer_id);
@@ -1769,6 +1832,23 @@ ORDER BY distance ASC LIMIT 1";
 			
 			foreach (($q->result()) as $row) {
 				
+				$get_current = $this->db->select('current_latitude, current_longitude')->from('driver_current_status')->where('driver_id', $row->driver_id)->order_by('id', 'DESC')->limit(1)->get();
+				if($get_current->num_rows()>0){
+					if($get_current->row('current_latitude') ==''){
+						$row->driver_latitude =  '0';
+					}else{
+						$row->driver_latitude =  $get_current->row('current_latitude');
+					}
+					if($get_current->row('current_longitude') ==''){
+						$row->driver_longitude =  '0';
+					}else{
+						$row->driver_longitude =  $get_current->row('current_longitude');
+					}
+				}else{
+					$row->driver_latitude =  '0';
+					$row->driver_longitude =  '0';
+				}
+				
 				$ride_status_array = array('1' => 'Request', '2' => 'Booked', '3' => 'Onride', '4' => 'Waiting', '5' => 'Completed', '6' => 'Cancelled', '7' => 'Ride Later', '8' => 'Rejected');
 				
 				if($row->end_lat != 0 && $row->end_lng != 0){
@@ -1781,6 +1861,21 @@ ORDER BY distance ASC LIMIT 1";
 					
 					$row->ride_status = $ride_status_array[$row->status];
 				}
+				
+				if($row->driver_photo !=''){
+					$row->driver_photo = $image_path.$row->driver_photo;
+				}else{
+					$row->driver_photo = $image_path.'no_image.png';
+				}
+				
+				if($row->taxi_image !=''){
+					$row->taxi_image = $image_path.$row->taxi_image;
+				}else{
+					$row->taxi_image = $image_path.'no_image.png';
+				}
+				$row->driver_mobile = $row->dcc.$row->dmobile;
+				
+				
 				if($row->taxi_name ==''){
 					$row->taxi_name =  '0';
 				}
@@ -2297,7 +2392,8 @@ ORDER BY distance ASC LIMIT 1";
 	
 	function getCustomer($oauth_token, $countryCode){
 		$this->db->select('*');
-		$this->db->where('oauth_token', $oauth_token)->where('is_country', $countryCode);
+		//$this->db->where('oauth_token', $oauth_token)->where('is_country', $countryCode);
+		$this->db->where('oauth_token', $oauth_token);
 		$q = $this->db->get('users');
 		
 		if($q->num_rows()>0){
@@ -2658,6 +2754,7 @@ ORDER BY distance ASC";
 		$this->db->where("tt.tons <=", $range_max);
 		//$this->db->where('tt.is_country', $is_country);
 		$q = $this->db->get();
+		
 		if($q->num_rows()>0){
 		   	foreach($q->result() as $row){
 				
@@ -2669,10 +2766,11 @@ ORDER BY distance ASC";
 	JOIN {$this->db->dbprefix('taxi_type')} AS tt ON tt.id = t.type 
 	LEFT JOIN {$this->db->dbprefix('groups')} AS g ON g.id = d.group_id 
 	LEFT JOIN {$this->db->dbprefix('user_setting')} AS us ON us.user_id = d.id  AND us.ride_stop = 0
-	WHERE tt.id = ".$row->taxi_type_id." AND t.max_weight = ".$row->tons."  AND  dcs.mode = 1  AND dcs.is_connected = 1 AND dcs.allocated_status = 1 GROUP BY d.id   HAVING distance <= {$distance}  
+	WHERE tt.id = ".$row->taxi_type_id." AND t.weight = ".$row->tons."  AND  dcs.mode = 1  AND dcs.is_connected = 1 AND dcs.allocated_status = 1 GROUP BY d.id   HAVING distance <= {$distance}  
 ORDER BY distance ASC LIMIT 1";
 				
 				$t = $this->db->query($query1);
+				//print_r($this->db->last_query());die;
 				if ($t->num_rows() > 0) {
 					 $row->available = $t->row('available');					
 					 $data[] = $row;
