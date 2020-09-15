@@ -1,6 +1,0 @@
-<?php
-
-/*
- * English language
- */
-
