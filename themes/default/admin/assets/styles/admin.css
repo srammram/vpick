@@ -1,0 +1,43 @@
+@charset "utf-8";
+/* CSS Document */
+
+.navbar{background-color: #292623;min-height: 50px;line-height: 50px;}
+.nav.main-menu li a{ border-left: 3px solid transparent;
+    margin-right: 1px;}
+.sidebar-nav ul li ul{    background-color: #2c3b41;}
+.nav.main-menu li ul li a{color: #8aa4af;}
+.nav.main-menu  li ul li  a:hover{color: #fff;}
+.sidebar-nav .main-menu ul li,.sidebar-nav .main-menu ul li a .text::after{    background: #8aa4af;}
+.sidebar-nav .main-menu ul li a .text::after{border-radius: 50px;}
+footer{background-color: #222d32;}
+.nav.main-menu li a:hover,.nav.main-menu  li a:focus{color: #fff;background: #1e282c;border-left-color: #ffcd02;}
+a.navbar-brand{padding: 0px 10px!important;line-height: 50px;}
+.lt td.sidebar-con{background-color: #222d32;}
+.breadcrumb li a{color: #222d32;}
+.blue {color: #222d32 !important;}
+.table > thead:first-child > tr:first-child > th, .table > thead:first-child > tr:first-child > td, .table-striped thead tr.primary:nth-child(odd) th{    background-color: #222d32;}
+.table thead tr th {
+    text-transform: capitalize;
+    font-size: 14px;
+    font-weight: normal;
+}
+.pagination>.active>a, .pagination>.active>span, .pagination>.active>a:hover, .pagination>.active>span:hover, .pagination>.active>a:focus, .pagination>.active>span:focus{background-color: #222d32;border-color: #222d32;}
+#sidebar-left {background-color: #222d32;}
+.nav.main-menu > li.active > a, #sidebar-left.minified .sidebar-nav > ul > li.active > a .text {
+    background: #565a5d;
+    color: white;
+   	border-left-color: #ffcd02;
+}
+.nav.main-menu > li > a, .nav.main-menu > li > ul > li > a, .nav.main-menu > li > ul > li > ul > li > a, .nav.main-menu > li > ul > li > ul > li > ul > li > a{border-bottom: 1px solid #364248;}
+.nav.main-menu > li.active > a:hover {
+    background:#565a5d;
+    color: white;
+    border-left-color: #ffcd02;
+    cursor: default;
+}
+.header-nav a.btn{background: #222d32;}
+.header-nav a.btn:hover {
+    background: #222d32;
+}
+a#main-menu-act i{background: #5f5f5f !important;}
+a#main-menu-act{border-bottom: 1px solid #5f5f5f !important;}
