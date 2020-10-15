@@ -600,7 +600,7 @@
                 </fieldset>
                 
                 <fieldset class="scheduler-border">
-                    <legend class="scheduler-border"><?= lang('truck_shift') ?></legend>
+                    <legend class="scheduler-border"><?= lang('cab_shift') ?></legend>
                     
                     
                     

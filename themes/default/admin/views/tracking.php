@@ -112,7 +112,7 @@ function initialize(zoom) {
         var flightPath = new google.maps.Polyline({
           path: flightPlanCoordinates,
           geodesic: true,
-          strokeColor: '#f2b818',
+          strokeColor: '#006635',
           strokeOpacity: 2,
           strokeWeight: 4
         });

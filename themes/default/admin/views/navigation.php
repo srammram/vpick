@@ -3,7 +3,7 @@
 .navbar-collapse,#sidebar-left{padding: 0px;}
 .mainmenu li{padding: 6px 0px;color: #fff;}
 .mainmenu li span{padding-left: 15px;}
-	.mainmenu li strong{position: absolute;margin-left: 10px;color: #f2b818; font-weight: 600;}
+	.mainmenu li strong{position: absolute;margin-left: 10px;color: #006635; font-weight: 600;}
 .mainmenu li a {
   display: block;
   background-color: transparent;
@@ -11,14 +11,14 @@
   padding: 6px 0px 6px 30%;
   color: #fff;
 }
-	.mainmenu li a::before{position: absolute;content:'';width: 10px;height: 10px;background-color: #f2b818;left: 21.7%;margin-top: 6px; }
+	.mainmenu li a::before{position: absolute;content:'';width: 10px;height: 10px;background-color: #006635;left: 21.7%;margin-top: 6px; }
 	.mainmenu li a:hover:before{background-color: #000;}
 .mainmenu a:hover {
-    background-color: #f2b818;
+    background-color: #006635;
 	color: #000;transition: all 0.25s ease;
 }
 .mainmenu .active {
-    background-color: #f2b818;
+    background-color: #006635;
     color: #000;
 }
 .mainmenu li .active:before{background-color: #000;}
@@ -68,7 +68,7 @@
             
     		<li><a class="<?= $this->uri->segment(2) == 'people' && ($this->uri->segment(3) == 'driver' || $this->uri->segment(3) == 'add_driver' || $this->uri->segment(3) == 'driver_edit' || $this->uri->segment(3) == 'driver_role_setting') ? 'active' : '' ?>" href="<?=admin_url('people/driver')?>"><?= lang('driver') ?></a></li>
             
-    		<li><a class="<?= $this->uri->segment(2) == 'taxi'  ? 'active' : '' ?>" href="<?=admin_url('taxi')?>"><?= lang('truck') ?></a></li>
+    		<li><a class="<?= $this->uri->segment(2) == 'taxi'  ? 'active' : '' ?>" href="<?=admin_url('taxi')?>"><?= lang('cab') ?></a></li>
             
     		<li><a class="<?= $this->uri->segment(2) == 'people' && ($this->uri->segment(3) == 'customer' || $this->uri->segment(3) == 'customer_view' || $this->uri->segment(3) == 'add_customer') ? 'active' : '' ?>" href="<?=admin_url('people/customer')?>"><?= lang('customer') ?></a></li>
             
@@ -110,11 +110,11 @@
             
     		<li><a class="<?= $this->uri->segment(2) == 'masters' && ($this->uri->segment(3) == 'tax' || $this->uri->segment(3) == 'add_tax' || $this->uri->segment(3) == 'edit_tax') ? 'active' : '' ?>"  href="<?=admin_url('masters/tax')?>"><?= lang('tax') ?></a></li>
             <!--<li><a href="<?=admin_url('masters/taxi_category')?>">Taxi Category</a></li>-->
-            <li><a class="<?= $this->uri->segment(2) == 'masters' && $this->uri->segment(3) == 'taxi_category' ? 'active' : '' ?>"  href="<?=admin_url('masters/taxi_category')?>"><?= lang('truck_category') ?></a></li>
-    		<li><a class="<?= $this->uri->segment(2) == 'masters' && $this->uri->segment(3) == 'taxi_type' ? 'active' : '' ?>"  href="<?=admin_url('masters/taxi_type')?>"><?= lang('truck_type') ?></a></li>
-            <li><a class="<?= $this->uri->segment(2) == 'masters' && $this->uri->segment(3) == 'taxi_make' ? 'active' : '' ?>"  href="<?=admin_url('masters/taxi_make')?>"><?= lang('truck_make') ?></a></li>
-            <li><a class="<?= $this->uri->segment(2) == 'masters' && $this->uri->segment(3) == 'taxi_model' ? 'active' : '' ?>"  href="<?=admin_url('masters/taxi_model')?>"><?= lang('truck_model') ?></a></li>
-            <li><a class="<?= $this->uri->segment(2) == 'masters' && $this->uri->segment(3) == 'taxi_fuel' ? 'active' : '' ?>"  href="<?=admin_url('masters/taxi_fuel')?>"><?= lang('truck_fuel') ?></a></li>
+            <li><a class="<?= $this->uri->segment(2) == 'masters' && $this->uri->segment(3) == 'taxi_category' ? 'active' : '' ?>"  href="<?=admin_url('masters/taxi_category')?>"><?= lang('cab_category') ?></a></li>
+    		<li><a class="<?= $this->uri->segment(2) == 'masters' && $this->uri->segment(3) == 'taxi_type' ? 'active' : '' ?>"  href="<?=admin_url('masters/taxi_type')?>"><?= lang('cab_type') ?></a></li>
+            <li><a class="<?= $this->uri->segment(2) == 'masters' && $this->uri->segment(3) == 'taxi_make' ? 'active' : '' ?>"  href="<?=admin_url('masters/taxi_make')?>"><?= lang('cab_make') ?></a></li>
+            <li><a class="<?= $this->uri->segment(2) == 'masters' && $this->uri->segment(3) == 'taxi_model' ? 'active' : '' ?>"  href="<?=admin_url('masters/taxi_model')?>"><?= lang('cab_model') ?></a></li>
+            <li><a class="<?= $this->uri->segment(2) == 'masters' && $this->uri->segment(3) == 'taxi_fuel' ? 'active' : '' ?>"  href="<?=admin_url('masters/taxi_fuel')?>"><?= lang('cab_fuel') ?></a></li>
             <li><a class="<?= $this->uri->segment(2) == 'masters' && $this->uri->segment(3) == 'shifting' ? 'active' : '' ?>"  href="<?=admin_url('masters/shifting')?>"><?= lang('shifting') ?></a></li>
             
             <?php if($this->session->userdata('group_id') == 1){ ?>

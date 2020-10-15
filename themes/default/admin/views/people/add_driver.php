@@ -349,7 +349,7 @@
                         </div>
                         
                         <div class="col-md-12">  
-                        	<h2 class="box_he_de">Taxi details</h2>  
+                        	<h2 class="box_he_de">Cab details</h2>  
                           
                             <div class="form-group col-sm-3 col-xs-12">
                                 <?php echo lang('cab_name', 'cab_name'); ?>
@@ -563,7 +563,7 @@
                             </div>
                             
                             <div class="form-group all col-sm-3 col-xs-12">
-								<?= lang("taxi_photo", "taxi_photo") ?>
+								<?= lang("cab_photo", "taxi_photo") ?>
                                 <input id="taxi_photo" type="file" data-browse-label="<?= lang('browse'); ?>" name="taxi_photo" data-show-upload="false"
                                        data-show-preview="false" class="form-control file" accept="im/*">
                             </div>

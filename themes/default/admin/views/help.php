@@ -127,7 +127,7 @@ input[readonly] {
     width: 12px;
     height: 12px;
     border-radius: 50%;
-    background:#f2b818;
+    background:#006635;
     
  
 }
@@ -169,7 +169,7 @@ input[readonly] {
 }
 /* When the checkbox is checked, add a blue background */
 .check input:checked ~ .checkmark_s {
-    background-color: #f2b818  ;border-color: #f2b818;
+    background-color: #006635  ;border-color: #006635;
 }
 
 /* Create the checkmark_s/indicator (hidden when not checked) */
@@ -200,16 +200,16 @@ input[readonly] {
 
 .cust-btn{
 	margin-bottom: 10px;
-	background-color: #f2b818;
+	background-color: #006635;
 	border-width: 2px;
-	border-color: #f2b818;
+	border-color: #006635;
 	color: #fff;
 }
 .cust-btn:hover{
 	
-	border-color: #f2b818;
+	border-color: #006635;
 	background-color: #fff;
-	color: #f2b818;
+	color: #006635;
 	border-radius: 20px;
 	transform-style: 2s;
 

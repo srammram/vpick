@@ -30,8 +30,8 @@ $dateDiff = intval((strtotime('2019-08-26 18:00:00')-strtotime('2019-08-26 16:00
 
 //echo $minutes = round(abs(strtotime('2019-08-26 18:00:00') - strtotime('2019-08-26 16:00:52')) / 60);
 
-echo $minutes = round(abs(strtotime('2019-08-26 18:00:00') - strtotime('2019-08-26 16:00:52')) / 60);
-echo $time    = h2m('04:10:00');
+$minutes = round(abs(strtotime('2019-08-26 18:00:00') - strtotime('2019-08-26 16:00:52')) / 60);
+$time    = h2m('04:10:00');
 
 //echo $hours = intval($dateDiff/60).'hour';
 //echo $minutes = ($dateDiff%60).'min';
