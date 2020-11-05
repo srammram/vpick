@@ -1,1 +1,0 @@
-var socket_port=6447;var socket_host="http://192.168.2.5";var socket_enable="1";
