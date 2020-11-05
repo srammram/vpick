@@ -1,0 +1,1 @@
+ALTER TABLE `kapp_rides` ADD `shifting_id` INT NOT NULL AFTER `rental_id`;

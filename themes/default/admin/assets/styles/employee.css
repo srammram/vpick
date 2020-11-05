@@ -1,0 +1,42 @@
+@charset "utf-8";
+/* CSS Document */
+.navbar{background-color: #001948;min-height: 50px;line-height: 50px;}
+.nav.main-menu li a{ border-left: 3px solid transparent;
+    margin-right: 1px;}
+.sidebar-nav ul li ul{    background-color: #001948;}
+.nav.main-menu li ul li a{color: #8aa4af;}
+.nav.main-menu  li ul li  a:hover{color: #fff;}
+.sidebar-nav .main-menu ul li,.sidebar-nav .main-menu ul li a .text::after{    background: #8aa4af;}
+.sidebar-nav .main-menu ul li a .text::after{border-radius: 50px;}
+footer{background-color: #012E81;}
+.nav.main-menu li a:hover,.nav.main-menu  li a:focus{color: #fff;background: #0088cc;border-left-color: #fff;}
+a.navbar-brand{padding: 0px 10px!important;line-height: 50px;}
+.lt td.sidebar-con{background-color: #012E81;}
+.breadcrumb li a{color: #012E81;}
+.blue {color: #012E81 !important;}
+.table > thead:first-child > tr:first-child > th, .table > thead:first-child > tr:first-child > td, .table-striped thead tr.primary:nth-child(odd) th{    background-color: #012E81;}
+.table thead tr th {
+    text-transform: capitalize;
+    font-size: 14px;
+    font-weight: normal;
+}
+.pagination>.active>a, .pagination>.active>span, .pagination>.active>a:hover, .pagination>.active>span:hover, .pagination>.active>a:focus, .pagination>.active>span:focus{background-color: #012E81;border-color: #012E81;}
+#sidebar-left {background-color: #012e81;}
+.nav.main-menu > li.active > a, #sidebar-left.minified .sidebar-nav > ul > li.active > a .text {
+    background: #0088cc;
+    color: white;
+   	border-left-color: #fff;
+}
+.nav.main-menu > li > a, .nav.main-menu > li > ul > li > a, .nav.main-menu > li > ul > li > ul > li > a, .nav.main-menu > li > ul > li > ul > li > ul > li > a{border-bottom: 1px solid #3a4d73;}
+.nav.main-menu > li.active > a:hover {
+    background: #0088cc;
+    color: white;
+    border-left-color: #fff;
+    cursor: default;
+}
+.header-nav a.btn{background: #013502;}
+.header-nav a.btn:hover {
+    background: #013502;
+}
+a#main-menu-act i{background: #001948 !important;}
+a#main-menu-act{border-bottom: 1px solid #001948 !important;}

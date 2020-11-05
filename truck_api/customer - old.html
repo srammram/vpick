@@ -1,0 +1,1391 @@
+<!DOCTYPE html>
+<html>
+    
+ 
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>VPIOK API Documents</title>
+	
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <!-- Bootstrap 3.3.5 -->
+     <link rel="stylesheet" href="http://demo.callmycab.in/assets/adminlte/bootstrap/css/bootstrap.min.css">
+    
+	</head>
+   
+  <body>
+		<h2 class="text-center">VPIOK API Documents</h2>
+        <h3>Customers API's</h3>
+<div class="well">
+<table width="100%">
+	<tbody>
+        <tr>
+        <td width="100px">Name</td><td width="50px">:</td><td>Common Setting</td>
+        </tr>
+        <tr> 
+        <td>Method</td><td>:</td><td>POST</td> 
+        </tr>
+        <tr>
+        <td>Url</td><td>:</td><td>http://13.233.9.134/api/v1/customers/commonsetting</td> 
+        </tr>
+        <tr>
+        <td>Parameter</td><td>:</td><td>lang, is_country, oauth_token</td> 
+        </tr>
+        <tr>
+        <td>Mandatory</td><td>:</td><td>is_country, oauth_token</td> 
+        </tr>
+        <tr>
+        <td>Notes</td><td>:</td><td></td> 
+        </tr>
+	</tbody>
+</table>
+</div>
+<div class="well">
+<table width="100%">
+	<tbody>
+        <tr>
+        <td width="100px">Name</td><td width="50px">:</td><td>Offers Check</td>
+        </tr>
+        <tr> 
+        <td>Method</td><td>:</td><td>POST</td> 
+        </tr>
+        <tr>
+        <td>Url</td><td>:</td><td>http://13.233.9.134/api/v1/customers/offerscheck</td> 
+        </tr>
+        <tr>
+        <td>Parameter</td><td>:</td><td>lang, is_country, oauth_token, offer_code, estimate_fare</td> 
+        </tr>
+        <tr>
+        <td>Mandatory</td><td>:</td><td>is_country, oauth_token, offer_code, estimate_fare</td> 
+        </tr>
+        <tr>
+        <td>Notes</td><td>:</td><td></td> 
+        </tr>
+	</tbody>
+</table>
+</div>
+<div class="well">
+<table width="100%">
+	<tbody>
+        <tr>
+        <td width="100px">Name</td><td width="50px">:</td><td>Offers</td>
+        </tr>
+        <tr> 
+        <td>Method</td><td>:</td><td>POST</td> 
+        </tr>
+        <tr>
+        <td>Url</td><td>:</td><td>http://13.233.9.134/api/v1/customers/offers</td> 
+        </tr>
+        <tr>
+        <td>Parameter</td><td>:</td><td>lang, is_country, oauth_token</td> 
+        </tr>
+        <tr>
+        <td>Mandatory</td><td>:</td><td>is_country, oauth_token</td> 
+        </tr>
+        <tr>
+        <td>Notes</td><td>:</td><td></td> 
+        </tr>
+	</tbody>
+</table>
+</div>
+<div class="well">
+<table width="100%">
+	<tbody>
+        <tr>
+        <td width="100px">Name</td><td width="50px">:</td><td>Add Money Cash Wallet</td>
+        </tr>
+        <tr> 
+        <td>Method</td><td>:</td><td>POST</td> 
+        </tr>
+        <tr>
+        <td>Url</td><td>:</td><td>http://13.233.9.134/api/v1/customers/addmoney_cashwallet</td> 
+        </tr>
+        <tr>
+        <td>Parameter</td><td>:</td><td>lang, is_country, oauth_token, paid_amount, razorpay_payment_id, payment_gateway_id, transaction_status</td> 
+        </tr>
+        <tr>
+        <td>Mandatory</td><td>:</td><td>is_country, oauth_token, paid_amount</td> 
+        </tr>
+        <tr>
+        <td>Notes</td><td>:</td><td></td> 
+        </tr>
+	</tbody>
+</table>
+</div>
+<div class="well">
+<table width="100%">
+	<tbody>
+        <tr>
+        <td width="100px">Name</td><td width="50px">:</td><td>Wallet</td>
+        </tr>
+        <tr> 
+        <td>Method</td><td>:</td><td>POST</td> 
+        </tr>
+        <tr>
+        <td>Url</td><td>:</td><td>http://13.233.9.134/api/v1/customers/wallet</td> 
+        </tr>
+        <tr>
+        <td>Parameter</td><td>:</td><td>lang, is_country, oauth_token</td> 
+        </tr>
+        <tr>
+        <td>Mandatory</td><td>:</td><td>is_country, oauth_token</td> 
+        </tr>
+        <tr>
+        <td>Notes</td><td>:</td><td></td> 
+        </tr>
+	</tbody>
+</table>
+</div>
+<div class="well">
+<table width="100%">
+	<tbody>
+        <tr>
+        <td width="100px">Name</td><td width="50px">:</td><td>Enquiry List</td>
+        </tr>
+        <tr> 
+        <td>Method</td><td>:</td><td>POST</td> 
+        </tr>
+        <tr>
+        <td>Url</td><td>:</td><td>http://13.233.9.134/api/v1/customers/enquirylist</td> 
+        </tr>
+        <tr>
+        <td>Parameter</td><td>:</td><td>lang, is_country, oauth_token</td> 
+        </tr>
+        <tr>
+        <td>Mandatory</td><td>:</td><td>is_country, oauth_token</td> 
+        </tr>
+        <tr>
+        <td>Notes</td><td>:</td><td></td> 
+        </tr>
+	</tbody>
+</table>
+</div>
+<div class="well">
+<table width="100%">
+	<tbody>
+        <tr>
+        <td width="100px">Name</td><td width="50px">:</td><td>Enquiry View</td>
+        </tr>
+        <tr> 
+        <td>Method</td><td>:</td><td>POST</td> 
+        </tr>
+        <tr>
+        <td>Url</td><td>:</td><td>http://13.233.9.134/api/v1/customers/enquiryview</td> 
+        </tr>
+        <tr>
+        <td>Parameter</td><td>:</td><td>lang, is_country, oauth_token, enquiry_id</td> 
+        </tr>
+        <tr>
+        <td>Mandatory</td><td>:</td><td>is_country, oauth_token, enquiry_id</td> 
+        </tr>
+        <tr>
+        <td>Notes</td><td>:</td><td></td> 
+        </tr>
+	</tbody>
+</table>
+</div>
+<div class="well">
+<table width="100%">
+	<tbody>
+        <tr>
+        <td width="100px">Name</td><td width="50px">:</td><td>Enquiry Feedback</td>
+        </tr>
+        <tr> 
+        <td>Method</td><td>:</td><td>POST</td> 
+        </tr>
+        <tr>
+        <td>Url</td><td>:</td><td>http://13.233.9.134/api/v1/customers/enquiryfeedback</td> 
+        </tr>
+        <tr>
+        <td>Parameter</td><td>:</td><td>lang, is_country, oauth_token, enquiry_id, feedback_rating, feedback_msg</td> 
+        </tr>
+        <tr>
+        <td>Mandatory</td><td>:</td><td>is_country, oauth_token</td> 
+        </tr>
+        <tr>
+        <td>Notes</td><td>:</td><td></td> 
+        </tr>
+	</tbody>
+</table>
+</div>
+<div class="well">
+<table width="100%">
+	<tbody>
+        <tr>
+        <td width="100px">Name</td><td width="50px">:</td><td>Ride Help</td>
+        </tr>
+        <tr> 
+        <td>Method</td><td>:</td><td>POST</td> 
+        </tr>
+        <tr>
+        <td>Url</td><td>:</td><td>http://13.233.9.134/api/v1/customers/ridebase_main</td> 
+        </tr>
+        <tr>
+        <td>Parameter</td><td>:</td><td>lang, is_country, oauth_token</td> 
+        </tr>
+        <tr>
+        <td>Mandatory</td><td>:</td><td>is_country, oauth_token</td> 
+        </tr>
+        <tr>
+        <td>Notes</td><td>:</td><td></td> 
+        </tr>
+	</tbody>
+</table>
+</div>
+<div class="well">
+<table width="100%">
+	<tbody>
+        <tr>
+        <td width="100px">Name</td><td width="50px">:</td><td>General Help</td>
+        </tr>
+        <tr> 
+        <td>Method</td><td>:</td><td>POST</td> 
+        </tr>
+        <tr>
+        <td>Url</td><td>:</td><td>http://13.233.9.134/api/v1/customers/general_main</td> 
+        </tr>
+        <tr>
+        <td>Parameter</td><td>:</td><td>lang, is_country, oauth_token</td> 
+        </tr>
+        <tr>
+        <td>Mandatory</td><td>:</td><td>is_country, oauth_token</td> 
+        </tr>
+        <tr>
+        <td>Notes</td><td>:</td><td></td> 
+        </tr>
+	</tbody>
+</table>
+</div>
+<div class="well">
+<table width="100%">
+	<tbody>
+        <tr>
+        <td width="100px">Name</td><td width="50px">:</td><td>Sub Help</td>
+        </tr>
+        <tr> 
+        <td>Method</td><td>:</td><td>POST</td> 
+        </tr>
+        <tr>
+        <td>Url</td><td>:</td><td>http://13.233.9.134/api/v1/customers/helpsub</td> 
+        </tr>
+        <tr>
+        <td>Parameter</td><td>:</td><td>lang, is_country, oauth_token, parent_id</td> 
+        </tr>
+        <tr>
+        <td>Mandatory</td><td>:</td><td>is_country, oauth_token, parent_id</td> 
+        </tr>
+        <tr>
+        <td>Notes</td><td>:</td><td></td> 
+        </tr>
+	</tbody>
+</table>
+</div>
+<div class="well">
+<table width="100%">
+	<tbody>
+        <tr>
+        <td width="100px">Name</td><td width="50px">:</td><td>Get Driver Location</td>
+        </tr>
+        <tr> 
+        <td>Method</td><td>:</td><td>POST</td> 
+        </tr>
+        <tr>
+        <td>Url</td><td>:</td><td>http://13.233.9.134/api/v1/customers/get_driver_location</td> 
+        </tr>
+        <tr>
+        <td>Parameter</td><td>:</td><td>lang, is_country, oauth_token</td> 
+        </tr>
+        <tr>
+        <td>Mandatory</td><td>:</td><td>is_country, oauth_token</td> 
+        </tr>
+        <tr>
+        <td>Notes</td><td>:</td><td></td> 
+        </tr>
+	</tbody>
+</table>
+</div>
+<div class="well">
+<table width="100%">
+	<tbody>
+        <tr>
+        <td width="100px">Name</td><td width="50px">:</td><td>Toll Parking</td>
+        </tr>
+        <tr> 
+        <td>Method</td><td>:</td><td>POST</td> 
+        </tr>
+        <tr>
+        <td>Url</td><td>:</td><td>http://13.233.9.134/api/v1/customers/toll_parking</td> 
+        </tr>
+        <tr>
+        <td>Parameter</td><td>:</td><td>lang, is_country, oauth_token, ride_id, type, status</td> 
+        </tr>
+        <tr>
+        <td>Mandatory</td><td>:</td><td>is_country, oauth_token, ride_id, type, status</td> 
+        </tr>
+        <tr>
+        <td>Notes</td><td>:</td><td></td> 
+        </tr>
+	</tbody>
+</table>
+</div>
+<div class="well">
+<table width="100%">
+	<tbody>
+        <tr>
+        <td width="100px">Name</td><td width="50px">:</td><td>Ride Details</td>
+        </tr>
+        <tr> 
+        <td>Method</td><td>:</td><td>POST</td> 
+        </tr>
+        <tr>
+        <td>Url</td><td>:</td><td>http://13.233.9.134/api/v1/customers/ridedetails</td> 
+        </tr>
+        <tr>
+        <td>Parameter</td><td>:</td><td>lang, is_country, oauth_token, ride_id</td> 
+        </tr>
+        <tr>
+        <td>Mandatory</td><td>:</td><td>is_country, oauth_token, ride_id</td> 
+        </tr>
+        <tr>
+        <td>Notes</td><td>:</td><td></td> 
+        </tr>
+	</tbody>
+</table>
+</div>
+<div class="well">
+<table width="100%">
+	<tbody>
+        <tr>
+        <td width="100px">Name</td><td width="50px">:</td><td>Outstation Package Type</td>
+        </tr>
+        <tr> 
+        <td>Method</td><td>:</td><td>POST</td> 
+        </tr>
+        <tr>
+        <td>Url</td><td>:</td><td>http://13.233.9.134/api/v1/customers/outstationpackagetype</td> 
+        </tr>
+        <tr>
+        <td>Parameter</td><td>:</td><td>lang, is_country, oauth_token, from_lat, from_lng, to_lat, to_lng</td> 
+        </tr>
+        <tr>
+        <td>Mandatory</td><td>:</td><td>is_country, oauth_token, from_lat, from_lng, to_lat, to_lng	</td> 
+        </tr>
+        <tr>
+        <td>Notes</td><td>:</td><td></td> 
+        </tr>
+	</tbody>
+</table>
+</div>
+<div class="well">
+<table width="100%">
+	<tbody>
+        <tr>
+        <td width="100px">Name</td><td width="50px">:</td><td>Rental Package</td>
+        </tr>
+        <tr> 
+        <td>Method</td><td>:</td><td>POST</td> 
+        </tr>
+        <tr>
+        <td>Url</td><td>:</td><td>http://13.233.9.134/api/v1/customers/rentalpackage</td> 
+        </tr>
+        <tr>
+        <td>Parameter</td><td>:</td><td>lang, is_country, oauth_token, from_lat, from_lng</td> 
+        </tr>
+        <tr>
+        <td>Mandatory</td><td>:</td><td>is_country, oauth_token, from_lat, from_lng</td> 
+        </tr>
+        <tr>
+        <td>Notes</td><td>:</td><td></td> 
+        </tr>
+	</tbody>
+</table>
+</div>
+<div class="well">
+<table width="100%">
+	<tbody>
+        <tr>
+        <td width="100px">Name</td><td width="50px">:</td><td>Rental Package Type</td>
+        </tr>
+        <tr> 
+        <td>Method</td><td>:</td><td>POST</td> 
+        </tr>
+        <tr>
+        <td>Url</td><td>:</td><td>http://13.233.9.134/api/v1/customers/rentalpackagetype</td> 
+        </tr>
+        <tr>
+        <td>Parameter</td><td>:</td><td>lang, is_country, oauth_token, from_lat, from_lng, package_name</td> 
+        </tr>
+        <tr>
+        <td>Mandatory</td><td>:</td><td>is_country, oauth_token, from_lat, from_lng, package_name</td> 
+        </tr>
+        <tr>
+        <td>Notes</td><td>:</td><td></td> 
+        </tr>
+	</tbody>
+</table>
+</div>
+<div class="well">
+<table width="100%">
+	<tbody>
+        <tr>
+        <td width="100px">Name</td><td width="50px">:</td><td>Setting</td>
+        </tr>
+        <tr> 
+        <td>Method</td><td>:</td><td>GET</td> 
+        </tr>
+        <tr>
+        <td>Url</td><td>:</td><td>http://13.233.9.134/api/v1/customers/setting</td> 
+        </tr>
+        <tr>
+        <td>Parameter</td><td>:</td><td>lang, is_country</td> 
+        </tr>
+        <tr>
+        <td>Mandatory</td><td>:</td><td>is_country, oauth_token</td> 
+        </tr>
+        <tr>
+        <td>Notes</td><td>:</td><td></td> 
+        </tr>
+	</tbody>
+</table>
+</div>
+<div class="well">
+<table width="100%">
+	<tbody>
+        <tr>
+        <td width="100px">Name</td><td width="50px">:</td><td>My Credit</td>
+        </tr>
+        <tr> 
+        <td>Method</td><td>:</td><td>POST</td> 
+        </tr>
+        <tr>
+        <td>Url</td><td>:</td><td>http://13.233.9.134/api/v1/customers/my_credit</td> 
+        </tr>
+        <tr>
+        <td>Parameter</td><td>:</td><td>lang, is_country, oauth_token</td> 
+        </tr>
+        <tr>
+        <td>Mandatory</td><td>:</td><td>is_country, oauth_token</td> 
+        </tr>
+        <tr>
+        <td>Notes</td><td>:</td><td></td> 
+        </tr>
+	</tbody>
+</table>
+</div>
+<div class="well">
+<table width="100%">
+	<tbody>
+        <tr>
+        <td width="100px">Name</td><td width="50px">:</td><td>My Debit</td>
+        </tr>
+        <tr> 
+        <td>Method</td><td>:</td><td>POST</td> 
+        </tr>
+        <tr>
+        <td>Url</td><td>:</td><td>http://13.233.9.134/api/v1/customers/my_debit</td> 
+        </tr>
+        <tr>
+        <td>Parameter</td><td>:</td><td>lang, is_country, oauth_token</td> 
+        </tr>
+        <tr>
+        <td>Mandatory</td><td>:</td><td>is_country, oauth_token</td> 
+        </tr>
+        <tr>
+        <td>Notes</td><td>:</td><td></td> 
+        </tr>
+	</tbody>
+</table>
+</div>
+<div class="well">
+<table width="100%">
+	<tbody>
+        <tr>
+        <td width="100px">Name</td><td width="50px">:</td><td>Add Debit</td>
+        </tr>
+        <tr> 
+        <td>Method</td><td>:</td><td>POST</td> 
+        </tr>
+        <tr>
+        <td>Url</td><td>:</td><td>http://13.233.9.134/api/v1/customers/add_debit</td> 
+        </tr>
+        <tr>
+        <td>Parameter</td><td>:</td><td>lang, is_country, oauth_token, debit_name, debit_number, debit_month, debit_year</td> 
+        </tr>
+        <tr>
+        <td>Mandatory</td><td>:</td><td>is_country, oauth_token</td> 
+        </tr>
+        <tr>
+        <td>Notes</td><td>:</td><td></td> 
+        </tr>
+	</tbody>
+</table>
+</div>
+<div class="well">
+<table width="100%">
+	<tbody>
+        <tr>
+        <td width="100px">Name</td><td width="50px">:</td><td>Add Credit</td>
+        </tr>
+        <tr> 
+        <td>Method</td><td>:</td><td>POST</td> 
+        </tr>
+        <tr>
+        <td>Url</td><td>:</td><td>http://13.233.9.134/api/v1/customers/add_credit</td> 
+        </tr>
+        <tr>
+        <td>Parameter</td><td>:</td><td>lang, is_country, oauth_token, credit_name, credit_number, credit_month, credit_year</td> 
+        </tr>
+        <tr>
+        <td>Mandatory</td><td>:</td><td>is_country, oauth_token</td> 
+        </tr>
+        <tr>
+        <td>Notes</td><td>:</td><td></td> 
+        </tr>
+	</tbody>
+</table>
+</div>
+<div class="well">
+<table width="100%">
+	<tbody>
+        <tr>
+        <td width="100px">Name</td><td width="50px">:</td><td>Payment Mode</td>
+        </tr>
+        <tr> 
+        <td>Method</td><td>:</td><td>GET</td> 
+        </tr>
+        <tr>
+        <td>Url</td><td>:</td><td>http://13.233.9.134/api/v1/customers/payment_mode</td> 
+        </tr>
+        <tr>
+        <td>Parameter</td><td>:</td><td>lang, is_country, oauth_token</td> 
+        </tr>
+        <tr>
+        <td>Mandatory</td><td>:</td><td>is_country, oauth_token</td> 
+        </tr>
+        <tr>
+        <td>Notes</td><td>:</td><td></td> 
+        </tr>
+	</tbody>
+</table>
+</div>
+<div class="well">
+<table width="100%">
+	<tbody>
+        <tr>
+        <td width="100px">Name</td><td width="50px">:</td><td>Multiple Rating</td>
+        </tr>
+        <tr> 
+        <td>Method</td><td>:</td><td>POST</td> 
+        </tr>
+        <tr>
+        <td>Url</td><td>:</td><td>http://13.233.9.134/api/v1/customers/multiplerating</td> 
+        </tr>
+        <tr>
+        <td>Parameter</td><td>:</td><td>lang, is_country, oauth_token, booking_id, booking_process_star, cab_cleanliness_star, drive_comfort_star, drive_politeness_star, fare_star, easy_of_payment_star, feedback</td> 
+        </tr>
+        <tr>
+        <td>Mandatory</td><td>:</td><td>is_country, oauth_token, booking_id</td> 
+        </tr>
+        <tr>
+        <td>Notes</td><td>:</td><td></td> 
+        </tr>
+	</tbody>
+</table>
+</div>
+<div class="well">
+<table width="100%">
+	<tbody>
+        <tr>
+        <td width="100px">Name</td><td width="50px">:</td><td>Login</td>
+        </tr>
+        <tr> 
+        <td>Method</td><td>:</td><td>POST</td> 
+        </tr>
+        <tr>
+        <td>Url</td><td>:</td><td>http://13.233.9.134/api/v1/customers/login</td> 
+        </tr>
+        <tr>
+        <td>Parameter</td><td>:</td><td>lang, is_country, country_code, mobile, password, devices_imei</td> 
+        </tr>
+        <tr>
+        <td>Mandatory</td><td>:</td><td>is_country, country_code, mobile, password, devices_imei</td> 
+        </tr>
+        <tr>
+        <td>Notes</td><td>:</td><td></td> 
+        </tr>
+	</tbody>
+</table>
+</div>
+<div class="well">
+<table width="100%">
+	<tbody>
+        <tr>
+        <td width="100px">Name</td><td width="50px">:</td><td>Add Emergency</td>
+        </tr>
+        <tr> 
+        <td>Method</td><td>:</td><td>POST</td> 
+        </tr>
+        <tr>
+        <td>Url</td><td>:</td><td>http://13.233.9.134/api/v1/customers/add_emergency</td> 
+        </tr>
+        <tr>
+        <td>Parameter</td><td>:</td><td>lang, is_country, oauth_token, phone1, phone2, phone3, phone4, phone5, country_code1, country_code2, country_code3, country_code4, country_code5</td> 
+        </tr>
+        <tr>
+        <td>Mandatory</td><td>:</td><td>is_country, oauth_token, phone1</td> 
+        </tr>
+        <tr>
+        <td>Notes</td><td>:</td><td></td> 
+        </tr>
+	</tbody>
+</table>
+</div>
+<div class="well">
+<table width="100%">
+	<tbody>
+        <tr>
+        <td width="100px">Name</td><td width="50px">:</td><td>SOS Details</td>
+        </tr>
+        <tr> 
+        <td>Method</td><td>:</td><td>POST</td> 
+        </tr>
+        <tr>
+        <td>Url</td><td>:</td><td>http://13.233.9.134/api/v1/customers/sosdata</td> 
+        </tr>
+        <tr>
+        <td>Parameter</td><td>:</td><td>lang, is_country, oauth_token</td> 
+        </tr>
+        <tr>
+        <td>Mandatory</td><td>:</td><td>is_country, oauth_token</td> 
+        </tr>
+        <tr>
+        <td>Notes</td><td>:</td><td></td> 
+        </tr>
+	</tbody>
+</table>
+</div>
+<div class="well">
+<table width="100%">
+	<tbody>
+        <tr>
+        <td width="100px">Name</td><td width="50px">:</td><td>Current SOS</td>
+        </tr>
+        <tr> 
+        <td>Method</td><td>:</td><td>POST</td> 
+        </tr>
+        <tr>
+        <td>Url</td><td>:</td><td>http://13.233.9.134/api/v1/customers/sos</td> 
+        </tr>
+        <tr>
+        <td>Parameter</td><td>:</td><td>lang, is_country, oauth_token, booking_id</td> 
+        </tr>
+        <tr>
+        <td>Mandatory</td><td>:</td><td>is_country, oauth_token, booking_id</td> 
+        </tr>
+        <tr>
+        <td>Notes</td><td>:</td><td></td> 
+        </tr>
+	</tbody>
+</table>
+</div>
+<div class="well">
+<table width="100%">
+	<tbody>
+        <tr>
+        <td width="100px">Name</td><td width="50px">:</td><td>Verify Changes OTP</td>
+        </tr>
+        <tr> 
+        <td>Method</td><td>:</td><td>POST</td> 
+        </tr>
+        <tr>
+        <td>Url</td><td>:</td><td>http://13.233.9.134/api/v1/customers/verify_changeotp</td> 
+        </tr>
+        <tr>
+        <td>Parameter</td><td>:</td><td>lang, is_country, oauth_token, devices_imei, otp</td> 
+        </tr>
+        <tr>
+        <td>Mandatory</td><td>:</td><td>is_country, oauth_token, devices_imei, otp</td> 
+        </tr>
+        <tr>
+        <td>Notes</td><td>:</td><td></td> 
+        </tr>
+	</tbody>
+</table>
+</div>
+<div class="well">
+<table width="100%">
+	<tbody>
+        <tr>
+        <td width="100px">Name</td><td width="50px">:</td><td>OTP Verify</td>
+        </tr>
+        <tr> 
+        <td>Method</td><td>:</td><td>POST</td> 
+        </tr>
+        <tr>
+        <td>Url</td><td>:</td><td>http://13.233.9.134/api/v1/customers/verify_otp</td> 
+        </tr>
+        <tr>
+        <td>Parameter</td><td>:</td><td>lang, is_country, oauth_token, otp</td> 
+        </tr>
+        <tr>
+        <td>Mandatory</td><td>:</td><td>is_country, oauth_token, otp</td> 
+        </tr>
+        <tr>
+        <td>Notes</td><td>:</td><td></td> 
+        </tr>
+	</tbody>
+</table>
+</div>
+<div class="well">
+<table width="100%">
+	<tbody>
+        <tr>
+        <td width="100px">Name</td><td width="50px">:</td><td>Register Resent OTP</td>
+        </tr>
+        <tr> 
+        <td>Method</td><td>:</td><td>POST</td> 
+        </tr>
+        <tr>
+        <td>Url</td><td>:</td><td>http://13.233.9.134/api/v1/customers/register_resend_otp</td> 
+        </tr>
+        <tr>
+        <td>Parameter</td><td>:</td><td>lang, is_country, mobile, country_code</td> 
+        </tr>
+        <tr>
+        <td>Mandatory</td><td>:</td><td>is_country, mobile, country_code</td> 
+        </tr>
+        <tr>
+        <td>Notes</td><td>:</td><td></td> 
+        </tr>
+	</tbody>
+</table>
+</div>
+<div class="well">
+<table width="100%">
+	<tbody>
+        <tr>
+        <td width="100px">Name</td><td width="50px">:</td><td>Resend OTP</td>
+        </tr>
+        <tr> 
+        <td>Method</td><td>:</td><td>POST</td> 
+        </tr>
+        <tr>
+        <td>Url</td><td>:</td><td>http://13.233.9.134/api/v1/customers/resend_otp</td> 
+        </tr>
+        <tr>
+        <td>Parameter</td><td>:</td><td>lang, is_country, oauth_token</td> 
+        </tr>
+        <tr>
+        <td>Mandatory</td><td>:</td><td>is_country, oauth_token</td> 
+        </tr>
+        <tr>
+        <td>Notes</td><td>:</td><td></td> 
+        </tr>
+	</tbody>
+</table>
+</div>
+<div class="well">
+<table width="100%">
+	<tbody>
+        <tr>
+        <td width="100px">Name</td><td width="50px">:</td><td>Forgot</td>
+        </tr>
+        <tr> 
+        <td>Method</td><td>:</td><td>POST</td> 
+        </tr>
+        <tr>
+        <td>Url</td><td>:</td><td>http://13.233.9.134/api/v1/customers/forgot</td> 
+        </tr>
+        <tr>
+        <td>Parameter</td><td>:</td><td>lang, is_country, mobile, country_code</td> 
+        </tr>
+        <tr>
+        <td>Mandatory</td><td>:</td><td>is_country, mobile, country_code</td> 
+        </tr>
+        <tr>
+        <td>Notes</td><td>:</td><td></td> 
+        </tr>
+	</tbody>
+</table>
+</div>
+<div class="well">
+<table width="100%">
+	<tbody>
+        <tr>
+        <td width="100px">Name</td><td width="50px">:</td><td>Forgot Verify OTP</td>
+        </tr>
+        <tr> 
+        <td>Method</td><td>:</td><td>POST</td> 
+        </tr>
+        <tr>
+        <td>Url</td><td>:</td><td>http://13.233.9.134/api/v1/customers/forgotverify_otp</td> 
+        </tr>
+        <tr>
+        <td>Parameter</td><td>:</td><td>lang, is_country, customer_id, otp</td> 
+        </tr>
+        <tr>
+        <td>Mandatory</td><td>:</td><td>is_country, customer_id, otp</td> 
+        </tr>
+        <tr>
+        <td>Notes</td><td>:</td><td></td> 
+        </tr>
+	</tbody>
+</table>
+</div>
+<div class="well">
+<table width="100%">
+	<tbody>
+        <tr>
+        <td width="100px">Name</td><td width="50px">:</td><td>Forgot Resend OTP</td>
+        </tr>
+        <tr> 
+        <td>Method</td><td>:</td><td>POST</td> 
+        </tr>
+        <tr>
+        <td>Url</td><td>:</td><td>http://13.233.9.134/api/v1/customers/forgotresend_otp</td> 
+        </tr>
+        <tr>
+        <td>Parameter</td><td>:</td><td>lang, is_country, customer_id</td> 
+        </tr>
+        <tr>
+        <td>Mandatory</td><td>:</td><td>is_country, customer_id</td> 
+        </tr>
+        <tr>
+        <td>Notes</td><td>:</td><td></td> 
+        </tr>
+	</tbody>
+</table>
+</div>
+<div class="well">
+<table width="100%">
+	<tbody>
+        <tr>
+        <td width="100px">Name</td><td width="50px">:</td><td>Reset Password</td>
+        </tr>
+        <tr> 
+        <td>Method</td><td>:</td><td>POST</td> 
+        </tr>
+        <tr>
+        <td>Url</td><td>:</td><td>http://13.233.9.134/api/v1/customers/resetpassword</td> 
+        </tr>
+        <tr>
+        <td>Parameter</td><td>:</td><td>lang, is_country, customer_id, password</td> 
+        </tr>
+        <tr>
+        <td>Mandatory</td><td>:</td><td>is_country, customer_id, password</td> 
+        </tr>
+        <tr>
+        <td>Notes</td><td>:</td><td></td> 
+        </tr>
+	</tbody>
+</table>
+</div>
+<div class="well">
+<table width="100%">
+	<tbody>
+        <tr>
+        <td width="100px">Name</td><td width="50px">:</td><td>Register</td>
+        </tr>
+        <tr> 
+        <td>Method</td><td>:</td><td>POST</td> 
+        </tr>
+        <tr>
+        <td>Url</td><td>:</td><td>http://13.233.9.134/api/v1/customers/register</td> 
+        </tr>
+        <tr>
+        <td>Parameter</td><td>:</td><td>lang, is_country, password, country_code, mobile, devices_imei, first_name, mobile_verify, reference_no, dob, last_name</td> 
+        </tr>
+        <tr>
+        <td>Mandatory</td><td>:</td><td>is_country, password, country_code, mobile, devices_imei, first_name</td> 
+        </tr>
+        <tr>
+        <td>Notes</td><td>:</td><td></td> 
+        </tr>
+	</tbody>
+</table>
+</div>
+<div class="well">
+<table width="100%">
+	<tbody>
+        <tr>
+        <td width="100px">Name</td><td width="50px">:</td><td>Photo Edit</td>
+        </tr>
+        <tr> 
+        <td>Method</td><td>:</td><td>POST</td> 
+        </tr>
+        <tr>
+        <td>Url</td><td>:</td><td>http://13.233.9.134/api/v1/customers/edit_customer_photo</td> 
+        </tr>
+        <tr>
+        <td>Parameter</td><td>:</td><td>lang, is_country, oauth_token, photo</td> 
+        </tr>
+        <tr>
+        <td>Mandatory</td><td>:</td><td>is_country, oauth_token</td> 
+        </tr>
+        <tr>
+        <td>Notes</td><td>:</td><td></td> 
+        </tr>
+	</tbody>
+</table>
+</div>
+<div class="well">
+<table width="100%">
+	<tbody>
+        <tr>
+        <td width="100px">Name</td><td width="50px">:</td><td>Profile Deactive</td>
+        </tr>
+        <tr> 
+        <td>Method</td><td>:</td><td>POST</td> 
+        </tr>
+        <tr>
+        <td>Url</td><td>:</td><td>http://13.233.9.134/api/v1/customers/deactive_profile</td> 
+        </tr>
+        <tr>
+        <td>Parameter</td><td>:</td><td>lang, is_country, oauth_token</td> 
+        </tr>
+        <tr>
+        <td>Mandatory</td><td>:</td><td>is_country, oauth_token</td> 
+        </tr>
+        <tr>
+        <td>Notes</td><td>:</td><td></td> 
+        </tr>
+	</tbody>
+</table>
+</div>
+<div class="well">
+<table width="100%">
+	<tbody>
+        <tr>
+        <td width="100px">Name</td><td width="50px">:</td><td>Profile Edit</td>
+        </tr>
+        <tr> 
+        <td>Method</td><td>:</td><td>POST</td> 
+        </tr>
+        <tr>
+        <td>Url</td><td>:</td><td>http://13.233.9.134/api/v1/customers/edit_profile</td> 
+        </tr>
+        <tr>
+        <td>Parameter</td><td>:</td><td>lang, is_country, oauth_token, email, first_name, last_name	, gender, dob</td> 
+        </tr>
+        <tr>
+        <td>Mandatory</td><td>:</td><td>is_country, oauth_token</td> 
+        </tr>
+        <tr>
+        <td>Notes</td><td>:</td><td></td> 
+        </tr>
+	</tbody>
+</table>
+</div>
+<div class="well">
+<table width="100%">
+	<tbody>
+        <tr>
+        <td width="100px">Name</td><td width="50px">:</td><td>My Account</td>
+        </tr>
+        <tr> 
+        <td>Method</td><td>:</td><td>POST</td> 
+        </tr>
+        <tr>
+        <td>Url</td><td>:</td><td>http://13.233.9.134/api/v1/customers/my_account</td> 
+        </tr>
+        <tr>
+        <td>Parameter</td><td>:</td><td>lang, is_country, oauth_token</td> 
+        </tr>
+        <tr>
+        <td>Mandatory</td><td>:</td><td>is_country, oauth_token</td> 
+        </tr>
+        <tr>
+        <td>Notes</td><td>:</td><td></td> 
+        </tr>
+	</tbody>
+</table>
+</div>
+<div class="well">
+<table width="100%">
+	<tbody>
+        <tr>
+        <td width="100px">Name</td><td width="50px">:</td><td>My Bank</td>
+        </tr>
+        <tr> 
+        <td>Method</td><td>:</td><td>POST</td> 
+        </tr>
+        <tr>
+        <td>Url</td><td>:</td><td>http://13.233.9.134/api/v1/customers/my_bank</td> 
+        </tr>
+        <tr>
+        <td>Parameter</td><td>:</td><td>lang, is_country, oauth_token</td> 
+        </tr>
+        <tr>
+        <td>Mandatory</td><td>:</td><td>is_country, oauth_token</td> 
+        </tr>
+        <tr>
+        <td>Notes</td><td>:</td><td></td> 
+        </tr>
+	</tbody>
+</table>
+</div>
+<div class="well">
+<table width="100%">
+	<tbody>
+        <tr>
+        <td width="100px">Name</td><td width="50px">:</td><td>My Document</td>
+        </tr>
+        <tr> 
+        <td>Method</td><td>:</td><td>POST</td> 
+        </tr>
+        <tr>
+        <td>Url</td><td>:</td><td>http://13.233.9.134/api/v1/customers/my_document</td> 
+        </tr>
+        <tr>
+        <td>Parameter</td><td>:</td><td>lang, is_country, oauth_token</td> 
+        </tr>
+        <tr>
+        <td>Mandatory</td><td>:</td><td>is_country, oauth_token</td> 
+        </tr>
+        <tr>
+        <td>Notes</td><td>:</td><td></td> 
+        </tr>
+	</tbody>
+</table>
+</div>
+<div class="well">
+<table width="100%">
+	<tbody>
+        <tr>
+        <td width="100px">Name</td><td width="50px">:</td><td>My Profile</td>
+        </tr>
+        <tr> 
+        <td>Method</td><td>:</td><td>POST</td> 
+        </tr>
+        <tr>
+        <td>Url</td><td>:</td><td>http://13.233.9.134/api/v1/customers/my_profile</td> 
+        </tr>
+        <tr>
+        <td>Parameter</td><td>:</td><td>lang, is_country, oauth_token</td> 
+        </tr>
+        <tr>
+        <td>Mandatory</td><td>:</td><td>is_country, oauth_token</td> 
+        </tr>
+        <tr>
+        <td>Notes</td><td>:</td><td></td> 
+        </tr>
+	</tbody>
+</table>
+</div>
+<div class="well">
+<table width="100%">
+	<tbody>
+        <tr>
+        <td width="100px">Name</td><td width="50px">:</td><td>Cab Category Type</td>
+        </tr>
+        <tr> 
+        <td>Method</td><td>:</td><td>GET</td> 
+        </tr>
+        <tr>
+        <td>Url</td><td>:</td><td>http://13.233.9.134/api/v1/customers/truck_categorytypes</td> 
+        </tr>
+        <tr>
+        <td>Parameter</td><td>:</td><td>lang, is_country, </td> 
+        </tr>
+        <tr>
+        <td>Mandatory</td><td>:</td><td> </td> 
+        </tr>
+        <tr>
+        <td>Notes</td><td>:</td><td></td> 
+        </tr>
+	</tbody>
+</table>
+</div>
+<div class="well">
+<table width="100%">
+	<tbody>
+        <tr>
+        <td width="100px">Name</td><td width="50px">:</td><td>Cab Type</td>
+        </tr>
+        <tr> 
+        <td>Method</td><td>:</td><td>POST</td> 
+        </tr>
+        <tr>
+        <td>Url</td><td>:</td><td>http://13.233.9.134/api/v1/customers/truck_typesnew</td> 
+        </tr>
+        <tr>
+        <td>Parameter</td><td>:</td><td>lang, is_country, oauth_token, latitude, longitude</td> 
+        </tr>
+        <tr>
+        <td>Mandatory</td><td>:</td><td>is_country, oauth_token, latitude, longitude</td> 
+        </tr>
+        <tr>
+        <td>Notes</td><td>:</td><td></td> 
+        </tr>
+	</tbody>
+</table>
+</div>
+<div class="well">
+<table width="100%">
+	<tbody>
+        <tr>
+        <td width="100px">Name</td><td width="50px">:</td><td>Cab Types Get</td>
+        </tr>
+        <tr> 
+        <td>Method</td><td>:</td><td>GET</td> 
+        </tr>
+        <tr>
+        <td>Url</td><td>:</td><td>http://13.233.9.134/api/v1/customers/truck_types</td> 
+        </tr>
+        <tr>
+        <td>Parameter</td><td>:</td><td>lang, is_country, </td> 
+        </tr>
+        <tr>
+        <td>Mandatory</td><td>:</td><td> </td> 
+        </tr>
+        <tr>
+        <td>Notes</td><td>:</td><td></td> 
+        </tr>
+	</tbody>
+</table>
+</div>
+<div class="well">
+<table width="100%">
+	<tbody>
+        <tr>
+        <td width="100px">Name</td><td width="50px">:</td><td>Country</td>
+        </tr>
+        <tr> 
+        <td>Method</td><td>:</td><td>GET</td> 
+        </tr>
+        <tr>
+        <td>Url</td><td>:</td><td>http://13.233.9.134/api/v1/customers/countries</td> 
+        </tr>
+        <tr>
+        <td>Parameter</td><td>:</td><td>lang, is_country</td> 
+        </tr>
+        <tr>
+        <td>Mandatory</td><td>:</td><td></td> 
+        </tr>
+        <tr>
+        <td>Notes</td><td>:</td><td></td> 
+        </tr>
+	</tbody>
+</table>
+</div>
+<div class="well">
+<table width="100%">
+	<tbody>
+        <tr>
+        <td width="100px">Name</td><td width="50px">:</td><td>Search Cab</td>
+        </tr>
+        <tr> 
+        <td>Method</td><td>:</td><td>POST</td> 
+        </tr>
+        <tr>
+        <td>Url</td><td>:</td><td>http://13.233.9.134/api/v1/customers/searchtrucks_new</td> 
+        </tr>
+        <tr>
+        <td>Parameter</td><td>:</td><td>lang, is_country, oauth_token, latitude, longitude</td> 
+        </tr>
+        <tr>
+        <td>Mandatory</td><td>:</td><td>is_country, oauth_token, latitude, longitude</td> 
+        </tr>
+        <tr>
+        <td>Notes</td><td>:</td><td></td> 
+        </tr>
+	</tbody>
+</table>
+</div>
+<div class="well">
+<table width="100%">
+	<tbody>
+        <tr>
+        <td width="100px">Name</td><td width="50px">:</td><td>Ride Booking</td>
+        </tr>
+        <tr> 
+        <td>Method</td><td>:</td><td>POST</td> 
+        </tr>
+        <tr>
+        <td>Url</td><td>:</td><td>http://13.233.9.134/api/v1/customers/book_ride</td> 
+        </tr>
+        <tr>
+        <td>Parameter</td><td>:</td><td>lang, is_country, oauth_token, from_latitude, from_longitude, booked_type, to_latitude, to_longitude, cab_type_id, ride_type, payment_id, outstation_type, outstation_way, package_id, ride_timing, ride_timing_end, distance_km, distance_price, pick_up, drop_off</td> 
+        </tr>
+        <tr>
+        <td>Mandatory</td><td>:</td><td>is_country, oauth_token, from_latitude, from_longitude, booked_type, cab_type_id, ride_type</td> 
+        </tr>
+        <tr>
+        <td>Notes</td><td>:</td><td></td> 
+        </tr>
+	</tbody>
+</table>
+</div>
+<div class="well">
+<table width="100%">
+	<tbody>
+        <tr>
+        <td width="100px">Name</td><td width="50px">:</td><td>On Ride</td>
+        </tr>
+        <tr> 
+        <td>Method</td><td>:</td><td>POST</td> 
+        </tr>
+        <tr>
+        <td>Url</td><td>:</td><td>http://13.233.9.134/api/v1/customers/my_onride</td> 
+        </tr>
+        <tr>
+        <td>Parameter</td><td>:</td><td>lang, is_country, oauth_token</td> 
+        </tr>
+        <tr>
+        <td>Mandatory</td><td>:</td><td>is_country, oauth_token</td> 
+        </tr>
+        <tr>
+        <td>Notes</td><td>:</td><td></td> 
+        </tr>
+	</tbody>
+</table>
+</div>
+<div class="well">
+<table width="100%">
+	<tbody>
+        <tr>
+        <td width="100px">Name</td><td width="50px">:</td><td>Past Ride</td>
+        </tr>
+        <tr> 
+        <td>Method</td><td>:</td><td>POST</td> 
+        </tr>
+        <tr>
+        <td>Url</td><td>:</td><td>http://13.233.9.134/api/v1/customers/my_pastrides</td> 
+        </tr>
+        <tr>
+        <td>Parameter</td><td>:</td><td>lang, is_country, oauth_token, sdate, edate</td> 
+        </tr>
+        <tr>
+        <td>Mandatory</td><td>:</td><td>is_country, oauth_token</td> 
+        </tr>
+        <tr>
+        <td>Notes</td><td>:</td><td></td> 
+        </tr>
+	</tbody>
+</table>
+</div>
+<div class="well">
+<table width="100%">
+	<tbody>
+        <tr>
+        <td width="100px">Name</td><td width="50px">:</td><td>Upcoming Rides</td>
+        </tr>
+        <tr> 
+        <td>Method</td><td>:</td><td>POST</td> 
+        </tr>
+        <tr>
+        <td>Url</td><td>:</td><td>http://13.233.9.134/api/v1/customers/my_upcomingrides</td> 
+        </tr>
+        <tr>
+        <td>Parameter</td><td>:</td><td>lang, is_country, oauth_token, sdate, edate</td> 
+        </tr>
+        <tr>
+        <td>Mandatory</td><td>:</td><td>is_country, oauth_token</td> 
+        </tr>
+        <tr>
+        <td>Notes</td><td>:</td><td></td> 
+        </tr>
+	</tbody>
+</table>
+</div>
+<div class="well">
+<table width="100%">
+	<tbody>
+        <tr>
+        <td width="100px">Name</td><td width="50px">:</td><td>Current Ride</td>
+        </tr>
+        <tr> 
+        <td>Method</td><td>:</td><td>POST</td> 
+        </tr>
+        <tr>
+        <td>Url</td><td>:</td><td>http://13.233.9.134/api/v1/customers/my_currentrides</td> 
+        </tr>
+        <tr>
+        <td>Parameter</td><td>:</td><td>lang, is_country, oauth_token</td> 
+        </tr>
+        <tr>
+        <td>Mandatory</td><td>:</td><td>is_country, oauth_token</td> 
+        </tr>
+        <tr>
+        <td>Notes</td><td>:</td><td></td> 
+        </tr>
+	</tbody>
+</table>
+</div>
+<div class="well">
+<table width="100%">
+	<tbody>
+        <tr>
+        <td width="100px">Name</td><td width="50px">:</td><td>Driver Rating</td>
+        </tr>
+        <tr> 
+        <td>Method</td><td>:</td><td>POST</td> 
+        </tr>
+        <tr>
+        <td>Url</td><td>:</td><td>http://13.233.9.134/api/v1/customers/rate_driver</td> 
+        </tr>
+        <tr>
+        <td>Parameter</td><td>:</td><td>lang, is_country, oauth_token, booking_id, rating, feedback</td> 
+        </tr>
+        <tr>
+        <td>Mandatory</td><td>:</td><td>is_country, oauth_token, booking_id, rating</td> 
+        </tr>
+        <tr>
+        <td>Notes</td><td>:</td><td></td> 
+        </tr>
+	</tbody>
+</table>
+</div>
+<div class="well">
+<table width="100%">
+	<tbody>
+        <tr>
+        <td width="100px">Name</td><td width="50px">:</td><td>Customer Cancel</td>
+        </tr>
+        <tr> 
+        <td>Method</td><td>:</td><td>POST</td> 
+        </tr>
+        <tr>
+        <td>Url</td><td>:</td><td>http://13.233.9.134/api/v1/customers/customercancel</td> 
+        </tr>
+        <tr>
+        <td>Parameter</td><td>:</td><td>lang, is_country, oauth_token, booking_id, cancel_msg</td> 
+        </tr>
+        <tr>
+        <td>Mandatory</td><td>:</td><td>is_country, oauth_token, booking_id, cancel_msg</td> 
+        </tr>
+        <tr>
+        <td>Notes</td><td>:</td><td></td> 
+        </tr>
+	</tbody>
+</table>
+</div>
+<div class="well">
+<table width="100%">
+	<tbody>
+        <tr>
+        <td width="100px">Name</td><td width="50px">:</td><td>Notification</td>
+        </tr>
+        <tr> 
+        <td>Method</td><td>:</td><td>POST</td> 
+        </tr>
+        <tr>
+        <td>Url</td><td>:</td><td>http://13.233.9.134/api/v1/customers/notifications</td> 
+        </tr>
+        <tr>
+        <td>Parameter</td><td>:</td><td>lang, is_country, oauth_token</td> 
+        </tr>
+        <tr>
+        <td>Mandatory</td><td>:</td><td>is_country, oauth_token</td> 
+        </tr>
+        <tr>
+        <td>Notes</td><td>:</td><td></td> 
+        </tr>
+	</tbody>
+</table>
+</div>
+
+
+  </body>
+</html>
