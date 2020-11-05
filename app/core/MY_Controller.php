@@ -8,9 +8,9 @@ class MY_Controller extends CI_Controller {
 		
         
 		$ip = $_SERVER['REMOTE_ADDR'];
-		$Setting_Country = json_decode(file_get_contents("http://www.geoplugin.net/json.gp?ip={$ip}"));
-		$this->countryCode = $Setting_Country->geoplugin_countryCode;
-		//$this->countryCode = 'IN';
+		//$Setting_Country = json_decode(file_get_contents("http://www.geoplugin.net/json.gp?ip={$ip}"));
+		//$this->countryCode = $Setting_Country->geoplugin_countryCode;
+		$this->countryCode = 'IN';
 		$this->Settings = $this->site->get_setting($this->countryCode);
 		$this->getUserIpAddr = $this->site->getUserIpAddr();
 		

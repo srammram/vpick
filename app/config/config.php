@@ -17,8 +17,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | environments.
 |
 */
-$config['base_url'] = 'http://13.233.109.60/';
-//$config['base_url'] = 'http://localhost/heyycab_truck/';
+//$config['base_url'] = 'http://13.233.109.60/';
+$config['base_url'] = 'http://localhost/vpick/';
 
 /*
 |--------------------------------------------------------------------------
