@@ -27,7 +27,7 @@
 	</style>
 
 <style>
-	.head_sec_h2{font-size: 20px;background-color: #006635;margin: 0px;padding: 15px;color: #fff;margin-bottom: 15px;
+	.head_sec_h2{font-size: 20px;background-color: #F2B818;margin: 0px;padding: 15px;color: #fff;margin-bottom: 15px;
 	}
 	.head_sec_h3{font-size: 18px;margin-bottom: 15px;color: #999;}.head_sec_h3 b{color: #333;}
 	p{color: #999;}
@@ -49,7 +49,7 @@
   cursor: inherit;
   display: block;
 }
-	.login-page .btn{background-color: #006635;border-color: #006635;border-radius: 0px!important;border-bottom: none;}
+	.login-page .btn{background-color: #F2B818;border-color: #F2B818;border-radius: 0px!important;border-bottom: none;}
 .file-input-label {
 	padding: 0px 10px;
 	display: table-cell;
@@ -127,7 +127,7 @@ input[readonly] {
     width: 12px;
     height: 12px;
     border-radius: 50%;
-    background:#006635;
+    background:#f2b818;
     
  
 }
@@ -169,7 +169,7 @@ input[readonly] {
 }
 /* When the checkbox is checked, add a blue background */
 .check input:checked ~ .checkmark_s {
-    background-color: #006635  ;border-color: #006635;
+    background-color: #f2b818  ;border-color: #f2b818;
 }
 
 /* Create the checkmark_s/indicator (hidden when not checked) */
@@ -200,16 +200,16 @@ input[readonly] {
 
 .cust-btn{
 	margin-bottom: 10px;
-	background-color: #006635;
+	background-color: #f2b818;
 	border-width: 2px;
-	border-color: #006635;
+	border-color: #f2b818;
 	color: #fff;
 }
 .cust-btn:hover{
 	
-	border-color: #006635;
+	border-color: #f2b818;
 	background-color: #fff;
-	color: #006635;
+	color: #f2b818;
 	border-radius: 20px;
 	transform-style: 2s;
 

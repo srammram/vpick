@@ -316,7 +316,7 @@ function initialize(zoom) {
 	var flightPath = new google.maps.Polyline({
 	  path: flightPlanCoordinates,
 	  geodesic: true,
-	  strokeColor: '#006635',
+	  strokeColor: '#f2b818',
 	  strokeOpacity: 2,
 	  strokeWeight: 4
 	});

@@ -3,7 +3,7 @@
 .navbar-collapse,#sidebar-left{padding: 0px;}
 .mainmenu li{padding: 6px 0px;color: #fff;}
 .mainmenu li span{padding-left: 15px;}
-	.mainmenu li strong{position: absolute;margin-left: 10px;color: #006635; font-weight: 600;}
+	.mainmenu li strong{position: absolute;margin-left: 10px;color: #f2b818; font-weight: 600;}
 .mainmenu li a {
   display: block;
   background-color: transparent;
@@ -11,14 +11,14 @@
   padding: 6px 0px 6px 30%;
   color: #fff;
 }
-	.mainmenu li a::before{position: absolute;content:'';width: 10px;height: 10px;background-color: #006635;left: 21.7%;margin-top: 6px; }
+	.mainmenu li a::before{position: absolute;content:'';width: 10px;height: 10px;background-color: #f2b818;left: 21.7%;margin-top: 6px; }
 	.mainmenu li a:hover:before{background-color: #000;}
 .mainmenu a:hover {
-    background-color: #006635;
+    background-color: #f2b818;
 	color: #000;transition: all 0.25s ease;
 }
 .mainmenu .active {
-    background-color: #006635;
+    background-color: #f2b818;
     color: #000;
 }
 .mainmenu li .active:before{background-color: #000;}
