@@ -63,7 +63,390 @@ class Users extends MY_Controller
 		
         $this->page_construct('users/profile', $meta, $this->data);
     }
+
+	function permissionlist($action = NULL)
+    {
+		if($this->session->userdata('group_id') == 1){
+			if($this->input->get('is_country') != ''){
+				$countryCode = $this->input->get('is_country');	
+			}else{
+				$countryCode = $this->input->post('is_country');	
+			}	
+		}else{
+			$countryCode = $this->countryCode;	
+		}
+		$this->data['commoncountry'] = $this->site->getcountryCodeID($countryCode);
+		$this->site->users_logs($countryCode,$this->session->userdata('user_id'), $this->getUserIpAddr, json_encode($_POST), $_SERVER['REQUEST_URI']);
+        $this->data['error'] = (validation_errors()) ? validation_errors() : $this->session->flashdata('error');
+        $this->data['action'] = $action;
+        $bc = array(array('link' => base_url(), 'page' => lang('home')), array('link' => '#', 'page' => lang('permissionlist')));
+        $meta = array('page_title' => lang('permissionlist'), 'bc' => $bc);
+        $this->page_construct('users/permissionlist', $meta, $this->data);
+    }
+    function getPermission(){
+		if($this->session->userdata('group_id') == 1){
+			$countryCode = $this->input->get('is_country');	
+		}else{
+			$countryCode = $this->countryCode;	
+		}
+        $this->load->library('datatables');
+        $this->datatables
+            ->select("{$this->db->dbprefix('all_permission')}.id as id, {$this->db->dbprefix('all_permission')}.is_country as is_country, {$this->db->dbprefix('all_permission')}.department_id as department_id, {$this->db->dbprefix('all_permission')}.designation_id as designation_id, g.name as group_name, d.name as department_name, r.position, r.access_area, country.name as instance_country")
+            ->from("all_permission")
+			->join("countries country", " country.iso = all_permission.is_country", "left")
+			->join("groups g", " g.id = all_permission.group_id", "left")
+			->join("user_department d", " d.id = all_permission.department_id", "left")
+			->join("user_roles r", " r.id = all_permission.designation_id", "left");
+			
+			if($this->session->userdata('group_id') == 1 && $countryCode != ''){
+				$this->datatables->where("all_permission.is_country", $countryCode);
+			}elseif($this->session->userdata('group_id') != 1){
+				$this->datatables->where("all_permission.is_country", $countryCode);
+			}
+			
+           
+			
+            //->add_column("Actions", "<div class=\"text-center\"><a href='" . admin_url('masters/edit_bank/$1') . "' class='tip' title='" . lang("edit_bank") . "'><i class=\"fa fa-edit\"></i></a></div>", "id");
+			$edit = "<a href='" . admin_url('users/permission/?is_country=$2&department_id=$3&designation_id=$4&id=$1') . "' data-toggle='tooltip'  data-original-title='' aria-describedby='tooltip' title='".lang('click_here_to_full_details')."'  ><i class='fa fa-pencil-square-o' aria-hidden='true'  style='color:#656464; font-size:18px'></i></a>";
+			$delete = "<a href='" . admin_url('welcome/delete/all_permission/$1') . "' data-toggle='tooltip'  data-original-title='' aria-describedby='tooltip' title='".lang('click_here_to_delete')."'  ><i class='fa fa-trash' style='color:#656464; font-size:18px'></i></a>";
+			
+			$this->datatables->add_column("Actions", "<div>".$edit."</div><div>".$delete."</div>", "id, is_country, department_id, designation_id");
+
+        $this->datatables->unset_column('id');
+		$this->datatables->unset_column('is_country');
+		$this->datatables->unset_column('department_id');
+		$this->datatables->unset_column('designation_id');
+
+        echo $this->datatables->generate();
+    }
+
+	function permission(){
+		if($this->session->userdata('group_id') == 1){
+			if($this->input->get('is_country') != ''){
+				$countryCode = $this->input->get('is_country');	
+			}else{
+				$countryCode = $this->input->post('country');	
+			}	
+		}else{
+			$countryCode = $this->countryCode;	
+		}
+
+		$department_id = $this->input->get('department_id') ? $this->input->get('department_id') : $this->input->post('department');
+		$designation_id = $this->input->get('designation_id') ? $this->input->get('designation_id') : $this->input->post('designation');
+
+		$id = $this->input->get('id');
+
+		$result = $this->users_model->getexitPermission($department_id, $designation_id, $this->Employee, $countryCode, $id);
+		
+		$id = $result->id ? $result->id : $id;
+
+		if($this->input->post('add_permission') == 'Submit'){
+			
+				$insert = array(
+					'group_id' => $this->input->post('group_id'),
+					'department_id' => $department_id,
+					'designation_id' => $designation_id,
+					'statistics-index' => $this->input->post('statistics-index'),
+					'live_tracking-index' => $this->input->post('live_tracking-index'),
+					'search_heat_map-index' => $this->input->post('search_heat_map-index'),
+					'notification-index' => $this->input->post('notification-index'),
+					'staff-index' => $this->input->post('staff-index'),
+					'staff-add' => $this->input->post('staff-add'),
+					'staff-edit' => $this->input->post('staff-edit'),
+					'staff-delete' => $this->input->post('staff-delete'),
+					'staff-approved' => $this->input->post('staff-approved'),
+					'driver-index' => $this->input->post('driver-index'),
+					'driver-add' => $this->input->post('driver-add'),
+					'driver-edit' => $this->input->post('driver-edit'),
+					'driver-delete' => $this->input->post('driver-delete'),
+					'driver-approved' => $this->input->post('driver-approved'),
+					'cab-index' => $this->input->post('cab-index'),
+					'cab-add' => $this->input->post('cab-add'),
+					'cab-edit' => $this->input->post('cab-edit'),
+					'cab-delete' => $this->input->post('cab-delete'),
+					'cab-approved' => $this->input->post('cab-approved'),
+					'customer-index' => $this->input->post('customer-index'),
+					'customer-add' => $this->input->post('customer-add'),
+					'customer-delete' => $this->input->post('customer-delete'),
+					'customer-view' => $this->input->post('customer-view'),
+					'rides-index' => $this->input->post('rides-index'),
+					'rides-delete' => $this->input->post('rides-delete'),
+					'rides-view' => $this->input->post('rides-view'),
+					'city_rides-index' => $this->input->post('city_rides-index'),
+					'city_rides-add' => $this->input->post('city_rides-add'),
+					'city_rides-edit' => $this->input->post('city_rides-edit'),
+					'city_rides-delete' => $this->input->post('city_rides-delete'),
+					'outstation-index' => $this->input->post('outstation-index'),
+					'outstation-add' => $this->input->post('outstation-add'),
+					'outstation-edit' => $this->input->post('outstation-edit'),
+					'outstation-delete' => $this->input->post('outstation-delete'),
+					'rentals-index' => $this->input->post('rentals-index'),
+					'rentals-add' => $this->input->post('rentals-add'),
+					'rentals-edit' => $this->input->post('rentals-edit'),
+					'rentals-delete' => $this->input->post('rentals-delete'),
+					'settings-index' => $this->input->post('settings-index'),
+					'currency-index' => $this->input->post('currency-index'),
+					'currency-add' => $this->input->post('currency-add'),
+					'currency-edit' => $this->input->post('currency-edit'),
+					'currency-delete' => $this->input->post('currency-delete'),
+					'currency-status' => $this->input->post('currency-status'),
+					'cancel_master-index' => $this->input->post('cancel_master-index'),
+					'cancel_master-add' => $this->input->post('cancel_master-add'),
+					'cancel_master-edit' => $this->input->post('cancel_master-edit'),
+					'cancel_master-delete' => $this->input->post('cancel_master-delete'),
+					'cancel_master-status' => $this->input->post('cancel_master-status'),
+					'discount-index' => $this->input->post('discount-index'),
+					'discount-add' => $this->input->post('discount-add'),
+					'discount-edit' => $this->input->post('discount-edit'),
+					'discount-delete' => $this->input->post('discount-delete'),
+					'discount-status' => $this->input->post('discount-status'),
+					'company-index' => $this->input->post('company-index'),
+					'company-add' => $this->input->post('company-add'),
+					'company-delete' => $this->input->post('company-delete'),
+					'company-status' => $this->input->post('company-status'),
+					'wallet_offer-index' => $this->input->post('wallet_offer-index'),
+					'wallet_offer-add' => $this->input->post('wallet_offer-add'),
+					'wallet_offer-edit' => $this->input->post('wallet_offer-edit'),
+					'wallet_offer-delete' => $this->input->post('wallet_offer-delete'),
+					'wallet_offer-status' => $this->input->post('wallet_offer-status'),
+					'bank-index' => $this->input->post('bank-index'),
+					'bank-add' => $this->input->post('bank-add'),
+					'bank-edit' => $this->input->post('bank-edit'),
+					'bank-delete' => $this->input->post('bank-delete'),
+					'bank-status' => $this->input->post('bank-status'),
+					'payment_gateway-index' => $this->input->post('payment_gateway-index'),
+					'payment_gateway-add' => $this->input->post('payment_gateway-add'),
+					'payment_gateway-edit' => $this->input->post('payment_gateway-edit'),
+					'payment_gateway-delete' => $this->input->post('payment_gateway-delete'),
+					'payment_gateway-status' => $this->input->post('payment_gateway-status'),
+					'tax-index' => $this->input->post('tax-index'),
+					'tax-add' => $this->input->post('tax-add'),
+					'tax-edit' => $this->input->post('tax-edit'),
+					'tax-delete' => $this->input->post('tax-delete'),
+					'tax-status' => $this->input->post('tax-status'),
+					'cab_type-index' => $this->input->post('cab_type-index'),
+					'cab_type-add' => $this->input->post('cab_type-add'),
+					'cab_type-edit' => $this->input->post('cab_type-edit'),
+					'cab_type-delete' => $this->input->post('cab_type-delete'),
+					'cab_type-status' => $this->input->post('cab_type-status'),
+					'cab_make-index' => $this->input->post('cab_make-index'),
+					'cab_make-add' => $this->input->post('cab_make-add'),
+					'cab_make-edit' => $this->input->post('cab_make-edit'),
+					'cab_make-delete' => $this->input->post('cab_make-delete'),
+					'cab_make-status' => $this->input->post('cab_make-status'),
+					'cab_model-index' => $this->input->post('cab_model-index'),
+					'cab_model-add' => $this->input->post('cab_model-add'),
+					'cab_model-edit' => $this->input->post('cab_model-edit'),
+					'cab_model-delete' => $this->input->post('cab_model-delete'),
+					'cab_model-status' => $this->input->post('cab_model-status'),
+					'cab_fuel-index' => $this->input->post('cab_fuel-index'),
+					'cab_fuel-add' => $this->input->post('cab_fuel-add'),
+					'cab_fuel-edit' => $this->input->post('cab_fuel-edit'),
+					'cab_fuel-delete' => $this->input->post('cab_fuel-delete'),
+					'cab_fuel-status' => $this->input->post('cab_fuel-status'),
+					'continents-index' => $this->input->post('continents-index'),
+					'continents-add' => $this->input->post('continents-add'),
+					'continents-edit' => $this->input->post('continents-edit'),
+					'continents-delete' => $this->input->post('continents-delete'),
+					'countries-index' => $this->input->post('countries-index'),
+					'countries-add' => $this->input->post('countries-add'),
+					'countries-edit' => $this->input->post('countries-edit'),
+					'countries-delete' => $this->input->post('countries-delete'),
+					'zone-index' => $this->input->post('zone-index'),
+					'zone-add' => $this->input->post('zone-add'),
+					'zone-edit' => $this->input->post('zone-edit'),
+					'zone-delete' => $this->input->post('zone-delete'),
+					'state-index' => $this->input->post('state-index'),
+					'state-add' => $this->input->post('state-add'),
+					'state-edit' => $this->input->post('state-edit'),
+					'state-delete' => $this->input->post('state-delete'),
+					'city-index' => $this->input->post('city-index'),
+					'city-add' => $this->input->post('city-add'),
+					'city-edit' => $this->input->post('city-edit'),
+					'city-delete' => $this->input->post('city-delete'),
+					'areas-index' => $this->input->post('areas-index'),
+					'areas-add' => $this->input->post('areas-add'),
+					'areas-edit' => $this->input->post('areas-edit'),
+					'areas-delete' => $this->input->post('areas-delete'),
+					'pincode-index' => $this->input->post('pincode-index'),
+					'pincode-add' => $this->input->post('pincode-add'),
+					'pincode-edit' => $this->input->post('pincode-edit'),
+					'pincode-delete' => $this->input->post('pincode-delete'),
+					'help-index' => $this->input->post('help-index'),
+					'help-add' => $this->input->post('help-add'),
+					'help-edit' => $this->input->post('help-edit'),
+					'help-status' => $this->input->post('help-status'),
+					'import_csv_common_cab-index' => $this->input->post('import_csv_common_cab-index'),
+					'import_csv_common_location-index' => $this->input->post('import_csv_common_location-index'),
+					'wallets_dashboard-index' => $this->input->post('wallets_dashboard-index'),
+					'wallets_customer-index' => $this->input->post('wallets_customer-index'),
+					'wallets_driver-index' => $this->input->post('wallets_driver-index'),
+					'wallets_owner-index' => $this->input->post('wallets_owner-index'),
+					'incentive_list-index' => $this->input->post('incentive_list-index'),
+					'incentive_list-add' => $this->input->post('incentive_list-add'),
+					'incentive_list-edit' => $this->input->post('incentive_list-edit'),
+					'incentive_list-view' => $this->input->post('incentive_list-view'),
+					'incentive_group-index' => $this->input->post('incentive_group-index'),
+					'incentive_group-add' => $this->input->post('incentive_group-add'),
+					'incentive_group-edit' => $this->input->post('incentive_group-edit'),
+					'incentive_group-delete' => $this->input->post('incentive_group-delete'),
+					'offers_list-index' => $this->input->post('offers_list-index'),
+					'crm_dashboard-index' => $this->input->post('crm_dashboard-index'),
+					'crm_dashboard-add' => $this->input->post('crm_dashboard-add'),
+					'crm_dashboard-edit' => $this->input->post('crm_dashboard-edit'),
+					'crm_enquiry-index' => $this->input->post('crm_enquiry-index'),
+					'crm_enquiry-status' => $this->input->post('crm_enquiry-status'),
+					'crm_enquiry-view' => $this->input->post('crm_enquiry-view'),
+					'booking_rides_dashboard-index' => $this->input->post('booking_rides_dashboard-index'),
+					'booking_rides_dashboard-add' => $this->input->post('booking_rides_dashboard-add'),
+					'accounts_dashboard-index' => $this->input->post('accounts_dashboard-index'),
+					'settlement_branch-index' => $this->input->post('settlement_branch-index'),
+					'account_settlementlist-index' => $this->input->post('account_settlementlist-index'),
+					'account_settlementlist-approved' => $this->input->post('account_settlementlist-approved'),
+					'account_owner-index' => $this->input->post('account_owner-index'),
+					'bank_excel-index' => $this->input->post('bank_excel-index'),
+					'reconcilation-index' => $this->input->post('reconcilation-index'),
+					'trip-index' => $this->input->post('trip-index'),
+					'driver_payment-index' => $this->input->post('driver_payment-index'),
+					'reports_dashboard-index' => $this->input->post('reports_dashboard-index'),
+					'is_country' => $countryCode
+					
+
+				);
+				$q = $this->users_model->insertPermission($insert, $id, $countryCode);
+				if($q == TRUE){
+					admin_redirect('users/permissionlist');
+				}
+				//$this->data['error'] = (validation_errors() ? validation_errors() : $this->session->flashdata('error'));
+				
+				
+			
+		}
+		
+		$this->site->users_logs($countryCode,$this->session->userdata('user_id'), $this->getUserIpAddr, json_encode($_POST), $_SERVER['REQUEST_URI']);
+        $this->data['error'] = (validation_errors()) ? validation_errors() : $this->session->flashdata('error');
+		$this->data['p'] = $result;
+		
+		$this->data['department_id'] = $department_id;
+		$this->data['id'] = $id;
+		$this->data['group_id'] = $this->Employee;
+		$this->data['country'] = $countryCode;
+		$this->data['designation_id'] = $designation_id;
+		$this->data['user_department'] = $this->users_model->getALLUser_department();
+		$this->data['user_designation'] = $this->users_model->getALLUser_designation();
+		$this->data['department_name'] = $this->users_model->getname_department($department_id);
+		$this->data['designation_name'] = $this->users_model->getname_designation($designation_id);
+
+        $bc = array(array('link' => base_url(), 'page' => lang('home')), array('link' => '#', 'page' => lang('permission')));
+        $meta = array('page_title' => lang('permission'), 'bc' => $bc);
+		
+        $this->page_construct('users/permission', $meta, $this->data);
+    }
 	
+	function edit_admin($user_id){
+		$image_path = base_url('assets/uploads/');
+		
+		if($this->session->userdata('group_id') == 1){
+			if($this->input->get('is_country') != ''){
+				$countryCode = $this->input->get('is_country');	
+			}else{
+				$countryCode = $this->input->post('is_country');	
+			}	
+		}else{
+			$countryCode = $this->countryCode;	
+		}
+
+		
+		$this->data['commoncountry'] = $this->site->getcountryCodeID($countryCode);
+		$this->site->users_logs($countryCode,$this->session->userdata('user_id'), $this->getUserIpAddr, json_encode($_POST), $_SERVER['REQUEST_URI']);
+		$group_id = $this->Admin;
+		
+		 $this->db->select("u.id as id, u.first_name, u.last_name, u.email, u.gender, u.dob, u.photo")
+            ->from("users u")
+			->where("u.id", $user_id);		
+			$q = $this->db->get();
+			if ($q->num_rows() > 0) {
+				$row = $q->row();
+				
+				if($row->photo !=''){
+					$row->photo_img = $image_path.$row->photo;
+				}else{
+					$row->photo_img = $image_path.'no_image.png';
+				}
+				
+				
+			}
+				
+			
+		
+		
+		$result = $row;
+		
+		
+		$this->form_validation->set_rules('email', lang("email_address"), 'required');		
+		$this->form_validation->set_rules('first_name', lang("first_name"), 'required');
+		$this->form_validation->set_rules('gender', lang("gender"), 'required');
+		
+		
+		
+        if ($this->form_validation->run() == true) {
+		   
+		   $user = array(
+				'email' => $this->input->post('email'),
+				'first_name' => $this->input->post('first_name'),
+				'last_name' => $this->input->post('last_name'),
+				'gender' => $this->input->post('gender'),
+				'dob' => $this->input->post('dob'),
+		   );
+		   
+		   		   
+		   if ($_FILES['photo']['size'] > 0) {
+				$config['upload_path'] = $this->upload_path.'user/admin/';
+				$config['allowed_types'] = $this->photo_types;
+				$config['overwrite'] = FALSE;
+				$config['max_filename'] = 25;
+				$config['encrypt_name'] = TRUE;
+				$this->upload->initialize($config);
+				if (!$this->upload->do_upload('photo')) {
+					$result = array( 'status'=> false , 'message'=> lang('image_not_uploaded'));
+				}
+				$photo = $this->upload->file_name;
+				
+				$user['photo'] = 'user/admin/'.$photo;
+				$config = NULL;
+			}else{
+				
+				$user['photo'] = $result->photo;		
+			}
+			
+			
+			
+			
+			//$this->sma->print_arrays($user);
+			//die;
+        }
+		
+        if ($this->form_validation->run() == true && $this->users_model->edit_admin($this->session->userdata('user_id'), $user)){
+			
+            $this->session->set_flashdata('message', lang("admin_updated"));
+            admin_redirect('users/profile');
+        } else {
+            $this->data['error'] = (validation_errors() ? validation_errors() : $this->session->flashdata('error'));
+            $bc = array(array('link' => base_url(), 'page' => lang('home')), array('link' => admin_url('users/profile'), 'page' => lang('profile')), array('link' => '#', 'page' => lang('edit_admin')));
+            $meta = array('page_title' => lang('edit_admin'), 'bc' => $bc);
+			
+			
+			$this->data['result'] = $result;
+			
+			$this->data['country_code'] = $this->masters_model->getALLCountry();
+			
+			$this->data['user_id'] = $user_id;
+			
+		
+            $this->page_construct('users/edit_admin', $meta, $this->data);
+        }        
+    
+	}
 	
 	function edit_employee($user_id){
 		if($this->session->userdata('group_id') == 1){

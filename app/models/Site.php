@@ -3141,5 +3141,28 @@ function GetDrivingDistanceNew1($point1_lat, $point1_long, $point2_lat, $point2_
 		}
 		return 0;
 	}
+
+	function getDepartmentRole($user_id, $group_id){
+		$this->db->select('department_id, designation_id');
+		$this->db->from('user_permission');
+		$this->db->where('user_id', $user_id);
+		$this->db->where('group_id', $group_id);
+		$q = $this->db->get();
+		if($q->num_rows()>0){
+			return $q->row();
+		}
+		return false;
+	}
+
+	public function getUserPic($user_id){
+		$this->db->select('photo');
+		$this->db->where('id', $user_id);
+		$this->db->limit(1);
+		$q = $this->db->get('users');
+		if ($q->num_rows() == 1) {
+			return $q->row('photo');
+    	}
+		return false;
+   }
     
 }

@@ -8339,6 +8339,567 @@ $this->data['commoncountry'] = $this->site->getcountryCodeID($countryCode);
         
     }
 	
+
+	/*###### Cancel Master*/
+    function cancelmaster($action = NULL)
+    {
+		$this->sma->checkPermissions('cancel_master-index');
+		if($this->session->userdata('group_id') == 1){
+			if($this->input->get('is_country') != ''){
+				$countryCode = $this->input->get('is_country');	
+			}else{
+				$countryCode = $this->input->post('is_country');	
+			}	
+		}else{
+			$countryCode = $this->countryCode;	
+		}
+		$this->data['commoncountry'] = $this->site->getcountryCodeID($countryCode);
+		$this->site->users_logs($countryCode,$this->session->userdata('user_id'), $this->getUserIpAddr, json_encode($_POST), $_SERVER['REQUEST_URI']);
+        $this->data['error'] = (validation_errors()) ? validation_errors() : $this->session->flashdata('error');
+        $this->data['action'] = $action;
+		
+        $bc = array(array('link' => base_url(), 'page' => lang('home')), array('link' => '#', 'page' => lang('cancelmaster')));
+        $meta = array('page_title' => lang('cancelmaster'), 'bc' => $bc);
+        $this->page_construct('masters/cancelmaster', $meta, $this->data);
+    }
+    function getCancelmaster(){
+		if($this->session->userdata('group_id') == 1){
+			$countryCode = $this->input->get('is_country');	
+		}else{
+			$countryCode = $this->countryCode;	
+		}
+        $this->load->library('datatables');
+        $this->datatables
+            ->select("{$this->db->dbprefix('cancelmaster')}.id as id, {$this->db->dbprefix('cancelmaster')}.title,{$this->db->dbprefix('cancelmaster')}.message, group.name as group_name, {$this->db->dbprefix('cancelmaster')}.status as status, country.name as instance_country")
+            ->from("cancelmaster")
+			->join("groups group", " group.id = cancelmaster.group_id", "left")
+			->join("countries country", " country.iso = cancelmaster.is_country", "left")
+			->where('cancelmaster.is_delete', 0);
+			
+			if($this->session->userdata('group_id') == 1 && $countryCode != ''){
+				$this->datatables->where("cancelmaster.is_country", $countryCode);
+			}elseif($this->session->userdata('group_id') != 1){
+				$this->datatables->where("cancelmaster.is_country", $countryCode);
+			}
+			
+            			
+			
+              $this->datatables->edit_column('status', '$1__$2', 'status, id');
+			
+           // ->add_column("Actions", "<div class=\"text-center\"><a href='" . admin_url('masters/edit_currency/$1') . "' class='tip' title='" . lang("edit_currency") . "'><i class=\"fa fa-edit\"></i></a></div>", "id");
+		$edit = "<a href='" . admin_url('masters/edit_cancelmaster/$1') . "' data-toggle='tooltip'  data-original-title='' aria-describedby='tooltip' title='".lang('click_here_to_full_details')."'  ><i class='fa fa-pencil-square-o' aria-hidden='true'  style='color:#656464; font-size:18px'></i></a>";
+		
+		$delete = "<a href='" . admin_url('welcome/delete/cancelmaster/$1') . "' data-toggle='tooltip'  data-original-title='' aria-describedby='tooltip' title='".lang('click_here_to_delete')."'  ><i class='fa fa-trash' style='color:#656464; font-size:18px'></i></a>";
+		
+			$this->datatables->add_column("Actions", "<div><div>".$edit."</div><div>".$delete."</div></div>", "id");
+			
+        $this->datatables->unset_column('id');
+        echo $this->datatables->generate();
+    }
+    function add_cancelmaster(){
+		$this->sma->checkPermissions('cancel_master-add');
+		if($this->session->userdata('group_id') == 1){
+			if($this->input->get('is_country') != ''){
+				$countryCode = $this->input->get('is_country');	
+			}else{
+				$countryCode = $this->input->post('is_country');	
+			}	
+		}else{
+			$countryCode = $this->countryCode;	
+		}
+		$this->data['commoncountry'] = $this->site->getcountryCodeID($countryCode);
+		$this->site->users_logs($countryCode,$this->session->userdata('user_id'), $this->getUserIpAddr, json_encode($_POST), $_SERVER['REQUEST_URI']);
+        $this->form_validation->set_rules('title', lang("title"), 'required');
+		
+        if ($this->form_validation->run() == true) {
+			$check = $this->site->masterCheck('cancelmaster', array('title' => $this->input->post('title'), 'is_country' => $countryCode));
+			if($check == TRUE){
+				$this->session->set_flashdata('error', lang('title_has_been_already_exits'));
+            	admin_redirect("masters/cancelmaster");
+				exit;	
+			}
+            $data = array(
+                 'title' => $this->input->post('title'),
+                'message' =>$this->input->post('message'),
+				'group_id' => $this->input->post('group_id'),
+				
+                'created_on' => date('Y-m-d H:i:s'),
+                'status' => 1,
+				'is_country' => $countryCode
+            );
+			
+           
+        }elseif ($this->input->post('add_cancelmaster')) {
+            $this->session->set_flashdata('error', validation_errors());
+            admin_redirect("masters/cancelmaster");
+        }
+		
+        if ($this->form_validation->run() == true && $this->masters_model->add_cancelmaster($data, $countryCode)){
+			
+            $this->session->set_flashdata('message', lang("cancelmaster_added"));
+            admin_redirect('masters/cancelmaster');
+        } else {
+            $this->data['error'] = (validation_errors() ? validation_errors() : $this->session->flashdata('error'));
+            $bc = array(array('link' => base_url(), 'page' => lang('home')), array('link' => admin_url('masters/cancelmaster'), 'page' => lang('cancelmaster')), array('link' => '#', 'page' => lang('add_cancelmaster')));
+			
+            $meta = array('page_title' => lang('add_cancelmaster'), 'bc' => $bc);
+            $this->page_construct('masters/add_cancelmaster', $meta, $this->data);
+        }
+    }
+    function edit_cancelmaster($id){
+		$this->sma->checkPermissions('cancel_master-edit');
+		$result = $this->masters_model->getCancelmasterby_ID($id);
+		if($this->session->userdata('group_id') == 1){
+			if($result->is_country != ''){
+				$countryCode = $result->is_country;	
+			}else{
+				$countryCode = $this->input->post('is_country');	
+			}	
+		}else{
+			$countryCode = $this->countryCode;	
+		}
+		$this->data['commoncountry'] = $this->site->getcountryCodeID($countryCode);
+		$this->site->users_logs($countryCode,$this->session->userdata('user_id'), $this->getUserIpAddr, json_encode($_POST), $_SERVER['REQUEST_URI']);
+		
+        $this->form_validation->set_rules('title', lang("title"), 'required');
+        
+		
+        if ($this->form_validation->run() == true) {
+			
+			if ($this->input->post('title') != $result->title && $countryCode != $result->is_country) {
+				$check = $this->site->masterCheck('cancelmaster', array('title' => $this->input->post('title'), 'is_country' => $countryCode));
+				if($check == TRUE){
+					$this->session->set_flashdata('error', lang('title_has_been_already_exits'));
+					admin_redirect("masters/cancelmaster");
+					exit;	
+				}
+			}
+            $data = array(
+                 'title' => $this->input->post('title'),
+				 
+                'message' =>$this->input->post('message'),
+				'group_id' => $this->input->post('group_id'),
+				'is_country' => $countryCode
+				
+				
+            );
+			
+        }
+		
+		
+        if ($this->form_validation->run() == true && $this->masters_model->update_cancelmaster($id,$data, $countryCode)){
+			
+            $this->session->set_flashdata('message', lang("cancelmaster_updated"));
+            admin_redirect('masters/cancelmaster');
+        } else {
+            $this->data['error'] = (validation_errors() ? validation_errors() : $this->session->flashdata('error'));
+            $bc = array(array('link' => base_url(), 'page' => lang('home')), array('link' => admin_url('masters/cancelmaster'), 'page' => lang('cancelmaster')), array('link' => '#', 'page' => lang('profile')));
+            $meta = array('page_title' => lang('edit_cancelmaster'), 'bc' => $bc);
+            $this->data['cancelmaster'] = $result;
+			
+            $this->page_construct('masters/edit_cancelmaster', $meta, $this->data);
+        }
+    }
+    function cancelmaster_status($status,$id){
+		$this->sma->checkPermissions('cancel_master-status');
+		if($this->session->userdata('group_id') == 1){
+			if($this->input->get('is_country') != ''){
+				$countryCode = $this->input->get('is_country');	
+			}else{
+				$countryCode = $this->input->post('is_country');	
+			}	
+		}else{
+			$countryCode = $this->countryCode;	
+		}
+		$this->data['commoncountry'] = $this->site->getcountryCodeID($countryCode);
+		$this->site->users_logs($countryCode,$this->session->userdata('user_id'), $this->getUserIpAddr, json_encode($_POST), $_SERVER['REQUEST_URI']);
+		$data['status'] = 0;
+		if($status=='activate'){
+			$data['status'] = 1;
+		}
+		$this->masters_model->update_cancelmaster_status($data,$id, $countryCode);
+		redirect($_SERVER["HTTP_REFERER"]);
+    }
+	
+	
+	/*###### Discount Master*/
+    function discount($action = NULL)
+    {
+		$this->sma->checkPermissions('discount-index');
+		if($this->session->userdata('group_id') == 1){
+			if($this->input->get('is_country') != ''){
+				$countryCode = $this->input->get('is_country');	
+			}else{
+				$countryCode = $this->input->post('is_country');	
+			}	
+		}else{
+			$countryCode = $this->countryCode;	
+		}
+		$this->data['commoncountry'] = $this->site->getcountryCodeID($countryCode);
+		$this->site->users_logs($countryCode,$this->session->userdata('user_id'), $this->getUserIpAddr, json_encode($_POST), $_SERVER['REQUEST_URI']);
+        $this->data['error'] = (validation_errors()) ? validation_errors() : $this->session->flashdata('error');
+        $this->data['action'] = $action;
+		
+        $bc = array(array('link' => base_url(), 'page' => lang('home')), array('link' => '#', 'page' => lang('discount')));
+        $meta = array('page_title' => lang('discount'), 'bc' => $bc);
+        $this->page_construct('masters/discount', $meta, $this->data);
+    }
+    function getDiscount(){
+		if($this->session->userdata('group_id') == 1){
+			$countryCode = $this->input->get('is_country');	
+		}else{
+			$countryCode = $this->countryCode;	
+		}
+        $this->load->library('datatables');
+        $this->datatables
+            ->select("{$this->db->dbprefix('discount')}.id as id, {$this->db->dbprefix('discount')}.discount_name, {$this->db->dbprefix('discount')}.discount_percentage,{$this->db->dbprefix('discount')}.discount_type, {$this->db->dbprefix('discount')}.days, CONCAT({$this->db->dbprefix('discount')}.start_date,' ',{$this->db->dbprefix('discount')}.end_date) as dates,  {$this->db->dbprefix('discount')}.status as status, country.name as instance_country")
+            ->from("discount")
+			
+			->join("countries country", " country.iso = discount.is_country", "left")
+			->where('discount.is_delete', 0);
+			
+			if($this->session->userdata('group_id') == 1 && $countryCode != ''){
+				$this->datatables->where("discount.is_country", $countryCode);
+			}elseif($this->session->userdata('group_id') != 1){
+				$this->datatables->where("discount.is_country", $countryCode);
+			}
+			
+            			
+			
+              $this->datatables->edit_column('status', '$1__$2', 'status, id');
+			
+           // ->add_column("Actions", "<div class=\"text-center\"><a href='" . admin_url('masters/edit_currency/$1') . "' class='tip' title='" . lang("edit_currency") . "'><i class=\"fa fa-edit\"></i></a></div>", "id");
+		$edit = "<a href='" . admin_url('masters/edit_discount/$1') . "' data-toggle='tooltip'  data-original-title='' aria-describedby='tooltip' title='".lang('click_here_to_full_details')."'  ><i class='fa fa-pencil-square-o' aria-hidden='true'  style='color:#656464; font-size:18px'></i></a>";
+		
+		$delete = "<a href='" . admin_url('welcome/delete/discount/$1') . "' data-toggle='tooltip'  data-original-title='' aria-describedby='tooltip' title='".lang('click_here_to_delete')."'  ><i class='fa fa-trash' style='color:#656464; font-size:18px'></i></a>";
+		
+			$this->datatables->add_column("Actions", "<div><div>".$edit."</div><div>".$delete."</div></div>", "id");
+			
+        $this->datatables->unset_column('id');
+        echo $this->datatables->generate();
+    }
+    function add_discount(){
+		$this->sma->checkPermissions('discount-add');
+		if($this->session->userdata('group_id') == 1){
+			if($this->input->get('is_country') != ''){
+				$countryCode = $this->input->get('is_country');	
+			}else{
+				$countryCode = $this->input->post('is_country');	
+			}	
+		}else{
+			$countryCode = $this->countryCode;	
+		}
+		$this->data['commoncountry'] = $this->site->getcountryCodeID($countryCode);
+		$this->site->users_logs($countryCode,$this->session->userdata('user_id'), $this->getUserIpAddr, json_encode($_POST), $_SERVER['REQUEST_URI']);
+        $this->form_validation->set_rules('discount_name', lang("discount_name"), 'required');
+		
+        if ($this->form_validation->run() == true) {
+			$check = $this->site->masterCheck('discount', array('discount_name' => $this->input->post('discount_name'), 'is_country' => $countryCode));
+			if($check == TRUE){
+				$this->session->set_flashdata('error', lang('title_has_been_already_exits'));
+            	admin_redirect("masters/discount");
+				exit;	
+			}
+			
+            $data = array(
+                'discount_apply_type' => $this->input->post('discount_apply_type'),
+                'user_ids' => $this->input->post('discount_apply_type') == 0 ? '' : $this->input->post('user_ids'),
+				'discount_type' => $this->input->post('discount_type'),
+				'discount_name' => $this->input->post('discount_name'),
+				'days' => $this->input->post('discount_type') != 1 ? '' : $this->input->post('days'),
+				'start_date' => $this->input->post('discount_type') != 2 ? '' : $this->input->post('start_date'),
+				'end_date' => $this->input->post('discount_type') != 2 ? '' : $this->input->post('end_date'),
+				'discount_percentage' => $this->input->post('discount_percentage'),
+				'created_by' => $this->session->userdata('user_id'),
+                'created_on' => date('Y-m-d H:i:s'),
+                'status' => 1,
+				'is_country' => $countryCode
+            );
+			
+           
+        }elseif ($this->input->post('add_discount')) {
+            $this->session->set_flashdata('error', validation_errors());
+            admin_redirect("masters/discount");
+        }
+		
+        if ($this->form_validation->run() == true && $this->masters_model->add_discount($data, $countryCode)){
+			
+            $this->session->set_flashdata('message', lang("discount_added"));
+            admin_redirect('masters/discount');
+        } else {
+            $this->data['error'] = (validation_errors() ? validation_errors() : $this->session->flashdata('error'));
+            $bc = array(array('link' => base_url(), 'page' => lang('home')), array('link' => admin_url('masters/discount'), 'page' => lang('discount')), array('link' => '#', 'page' => lang('add_discount')));
+			$this->data['AllUsers'] = $this->masters_model->customerUsers($countryCode);
+            $meta = array('page_title' => lang('add_discount'), 'bc' => $bc);
+            $this->page_construct('masters/add_discount', $meta, $this->data);
+        }
+    }
+    function edit_discount($id){
+		$this->sma->checkPermissions('discount-edit');
+		$result = $this->masters_model->getDiscountby_ID($id);
+		if($this->session->userdata('group_id') == 1){
+			if($result->is_country != ''){
+				$countryCode = $result->is_country;	
+			}else{
+				$countryCode = $this->input->post('is_country');	
+			}	
+		}else{
+			$countryCode = $this->countryCode;	
+		}
+		$this->data['commoncountry'] = $this->site->getcountryCodeID($countryCode);
+		$this->site->users_logs($countryCode,$this->session->userdata('user_id'), $this->getUserIpAddr, json_encode($_POST), $_SERVER['REQUEST_URI']);
+		
+        $this->form_validation->set_rules('discount_name', lang("discount_name"), 'required');
+        
+		
+        if ($this->form_validation->run() == true) {
+			
+			if ($this->input->post('discount_name') != $result->discount_name && $countryCode != $result->is_country) {
+				$check = $this->site->masterCheck('discount', array('discount_name' => $this->input->post('discount_name'), 'is_country' => $countryCode));
+				if($check == TRUE){
+					$this->session->set_flashdata('error', lang('title_has_been_already_exits'));
+					admin_redirect("masters/discount");
+					exit;	
+				}
+			}
+            $data = array(
+                'discount_apply_type' => $this->input->post('discount_apply_type'),
+                'user_ids' => $this->input->post('discount_apply_type') == 0 ? '' : $this->input->post('user_ids'),
+				'discount_type' => $this->input->post('discount_type'),
+				'discount_name' => $this->input->post('discount_name'),
+				'days' => $this->input->post('discount_type') != 1 ? '' : $this->input->post('days'),
+				'start_date' => $this->input->post('discount_type') != 2 ? '' : $this->input->post('start_date'),
+				'end_date' => $this->input->post('discount_type') != 2 ? '' : $this->input->post('end_date'),
+				'discount_percentage' => $this->input->post('discount_percentage'),
+				'created_by' => $this->session->userdata('user_id'),
+                'created_on' => date('Y-m-d H:i:s'),
+                'status' => 1,
+				'is_country' => $countryCode
+				
+				
+            );
+			
+        }
+		
+		
+        if ($this->form_validation->run() == true && $this->masters_model->update_discount($id,$data, $countryCode)){
+			
+            $this->session->set_flashdata('message', lang("discount_updated"));
+            admin_redirect('masters/discount');
+        } else {
+            $this->data['error'] = (validation_errors() ? validation_errors() : $this->session->flashdata('error'));
+            $bc = array(array('link' => base_url(), 'page' => lang('home')), array('link' => admin_url('masters/discount'), 'page' => lang('discount')), array('link' => '#', 'page' => lang('discount')));
+            $meta = array('page_title' => lang('edit_discount'), 'bc' => $bc);
+            $this->data['discount'] = $result;
+			$this->data['AllUsers'] = $this->masters_model->customerUsers($countryCode);
+            $this->page_construct('masters/edit_discount', $meta, $this->data);
+        }
+    }
+    function discount_status($status,$id){
+		$this->sma->checkPermissions('discount-status');
+		if($this->session->userdata('group_id') == 1){
+			if($this->input->get('is_country') != ''){
+				$countryCode = $this->input->get('is_country');	
+			}else{
+				$countryCode = $this->input->post('is_country');	
+			}	
+		}else{
+			$countryCode = $this->countryCode;	
+		}
+		$this->data['commoncountry'] = $this->site->getcountryCodeID($countryCode);
+		$this->site->users_logs($countryCode,$this->session->userdata('user_id'), $this->getUserIpAddr, json_encode($_POST), $_SERVER['REQUEST_URI']);
+		$data['status'] = 0;
+		if($status=='activate'){
+			$data['status'] = 1;
+		}
+		$this->masters_model->update_discount_status($data,$id, $countryCode);
+		redirect($_SERVER["HTTP_REFERER"]);
+    }
+	
+	
+	/*###### Health Master*/
+    function health($action = NULL)
+    {
+		//$this->sma->checkPermissions('health-index');
+		if($this->session->userdata('group_id') == 1){
+			if($this->input->get('is_country') != ''){
+				$countryCode = $this->input->get('is_country');	
+			}else{
+				$countryCode = $this->input->post('is_country');	
+			}	
+		}else{
+			$countryCode = $this->countryCode;	
+		}
+		$this->data['commoncountry'] = $this->site->getcountryCodeID($countryCode);
+		$this->site->users_logs($countryCode,$this->session->userdata('user_id'), $this->getUserIpAddr, json_encode($_POST), $_SERVER['REQUEST_URI']);
+        $this->data['error'] = (validation_errors()) ? validation_errors() : $this->session->flashdata('error');
+        $this->data['action'] = $action;
+		
+        $bc = array(array('link' => base_url(), 'page' => lang('home')), array('link' => '#', 'page' => lang('health')));
+        $meta = array('page_title' => lang('health'), 'bc' => $bc);
+        $this->page_construct('masters/health', $meta, $this->data);
+    }
+    function getHealth(){
+		if($this->session->userdata('group_id') == 1){
+			$countryCode = $this->input->get('is_country');	
+		}else{
+			$countryCode = $this->countryCode;	
+		}
+        $this->load->library('datatables');
+        $this->datatables
+            ->select("{$this->db->dbprefix('health')}.id as id, {$this->db->dbprefix('health')}.health_name,  {$this->db->dbprefix('health')}.status as status, country.name as instance_country")
+            ->from("health")
+			
+			->join("countries country", " country.iso = health.is_country", "left")
+			->where('health.is_delete', 0);
+			
+			if($this->session->userdata('group_id') == 1 && $countryCode != ''){
+				$this->datatables->where("health.is_country", $countryCode);
+			}elseif($this->session->userdata('group_id') != 1){
+				$this->datatables->where("health.is_country", $countryCode);
+			}
+			
+            			
+			
+              $this->datatables->edit_column('status', '$1__$2', 'status, id');
+			
+           // ->add_column("Actions", "<div class=\"text-center\"><a href='" . admin_url('masters/edit_currency/$1') . "' class='tip' title='" . lang("edit_currency") . "'><i class=\"fa fa-edit\"></i></a></div>", "id");
+		$edit = "<a href='" . admin_url('masters/edit_health/$1') . "' data-toggle='tooltip'  data-original-title='' aria-describedby='tooltip' title='".lang('click_here_to_full_details')."'  ><i class='fa fa-pencil-square-o' aria-hidden='true'  style='color:#656464; font-size:18px'></i></a>";
+		
+		$delete = "<a href='" . admin_url('welcome/delete/health/$1') . "' data-toggle='tooltip'  data-original-title='' aria-describedby='tooltip' title='".lang('click_here_to_delete')."'  ><i class='fa fa-trash' style='color:#656464; font-size:18px'></i></a>";
+		
+			$this->datatables->add_column("Actions", "<div><div>".$edit."</div><div>".$delete."</div></div>", "id");
+			
+        $this->datatables->unset_column('id');
+        echo $this->datatables->generate();
+    }
+    function add_health(){
+		//$this->sma->checkPermissions('health-add');
+		if($this->session->userdata('group_id') == 1){
+			if($this->input->get('is_country') != ''){
+				$countryCode = $this->input->get('is_country');	
+			}else{
+				$countryCode = $this->input->post('is_country');	
+			}	
+		}else{
+			$countryCode = $this->countryCode;	
+		}
+		$this->data['commoncountry'] = $this->site->getcountryCodeID($countryCode);
+		$this->site->users_logs($countryCode,$this->session->userdata('user_id'), $this->getUserIpAddr, json_encode($_POST), $_SERVER['REQUEST_URI']);
+        $this->form_validation->set_rules('health_name', lang("health_name"), 'required');
+		
+        if ($this->form_validation->run() == true) {
+			$check = $this->site->masterCheck('health', array('health_name' => $this->input->post('health_name'), 'is_country' => $countryCode));
+			if($check == TRUE){
+				$this->session->set_flashdata('error', lang('title_has_been_already_exits'));
+            	admin_redirect("masters/health");
+				exit;	
+			}
+			
+            $data = array(
+               
+				'health_name' => $this->input->post('health_name'),				
+				'created_by' => $this->session->userdata('user_id'),
+                'created_on' => date('Y-m-d H:i:s'),
+                'status' => 1,
+				'is_country' => $countryCode
+            );
+			
+           
+        }elseif ($this->input->post('add_health')) {
+            $this->session->set_flashdata('error', validation_errors());
+            admin_redirect("masters/health");
+        }
+		
+        if ($this->form_validation->run() == true && $this->masters_model->add_health($data, $countryCode)){
+			
+            $this->session->set_flashdata('message', lang("health_added"));
+            admin_redirect('masters/health');
+        } else {
+            $this->data['error'] = (validation_errors() ? validation_errors() : $this->session->flashdata('error'));
+            $bc = array(array('link' => base_url(), 'page' => lang('home')), array('link' => admin_url('masters/health'), 'page' => lang('health')), array('link' => '#', 'page' => lang('add_health')));
+			
+            $meta = array('page_title' => lang('add_health'), 'bc' => $bc);
+            $this->page_construct('masters/add_health', $meta, $this->data);
+        }
+    }
+    function edit_health($id){
+		//$this->sma->checkPermissions('health-edit');
+		$result = $this->masters_model->getHealthby_ID($id);
+		if($this->session->userdata('group_id') == 1){
+			if($result->is_country != ''){
+				$countryCode = $result->is_country;	
+			}else{
+				$countryCode = $this->input->post('is_country');	
+			}	
+		}else{
+			$countryCode = $this->countryCode;	
+		}
+		$this->data['commoncountry'] = $this->site->getcountryCodeID($countryCode);
+		$this->site->users_logs($countryCode,$this->session->userdata('user_id'), $this->getUserIpAddr, json_encode($_POST), $_SERVER['REQUEST_URI']);
+		
+        $this->form_validation->set_rules('health_name', lang("health_name"), 'required');
+        
+		
+        if ($this->form_validation->run() == true) {
+			
+			if ($this->input->post('health_name') != $result->health_name && $countryCode != $result->is_country) {
+				$check = $this->site->masterCheck('health', array('health_name' => $this->input->post('health_name'), 'is_country' => $countryCode));
+				if($check == TRUE){
+					$this->session->set_flashdata('error', lang('title_has_been_already_exits'));
+					admin_redirect("masters/health");
+					exit;	
+				}
+			}
+            $data = array(
+                
+				'health_name' => $this->input->post('health_name'),
+				
+				'created_by' => $this->session->userdata('user_id'),
+                'created_on' => date('Y-m-d H:i:s'),
+                'status' => 1,
+				'is_country' => $countryCode
+				
+				
+            );
+			
+        }
+		
+		
+        if ($this->form_validation->run() == true && $this->masters_model->update_health($id,$data, $countryCode)){
+			
+            $this->session->set_flashdata('message', lang("health_updated"));
+            admin_redirect('masters/health');
+        } else {
+            $this->data['error'] = (validation_errors() ? validation_errors() : $this->session->flashdata('error'));
+            $bc = array(array('link' => base_url(), 'page' => lang('home')), array('link' => admin_url('masters/health'), 'page' => lang('health')), array('link' => '#', 'page' => lang('health')));
+            $meta = array('page_title' => lang('edit_health'), 'bc' => $bc);
+            $this->data['health'] = $result;
+			
+            $this->page_construct('masters/edit_health', $meta, $this->data);
+        }
+    }
+    function health_status($status,$id){
+		//$this->sma->checkPermissions('health-status');
+		if($this->session->userdata('group_id') == 1){
+			if($this->input->get('is_country') != ''){
+				$countryCode = $this->input->get('is_country');	
+			}else{
+				$countryCode = $this->input->post('is_country');	
+			}	
+		}else{
+			$countryCode = $this->countryCode;	
+		}
+		$this->data['commoncountry'] = $this->site->getcountryCodeID($countryCode);
+		$this->site->users_logs($countryCode,$this->session->userdata('user_id'), $this->getUserIpAddr, json_encode($_POST), $_SERVER['REQUEST_URI']);
+		$data['status'] = 0;
+		if($status=='activate'){
+			$data['status'] = 1;
+		}
+		$this->masters_model->update_health_status($data,$id, $countryCode);
+		redirect($_SERVER["HTTP_REFERER"]);
+    }
+	
 	
 	
 }

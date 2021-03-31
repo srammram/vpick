@@ -27,14 +27,18 @@
     
    
     <noscript>
-	<style type="text/css">#loading { display: none; }</style></noscript>
+	<style type="text/css">#loading { display: none; } 
+    </style></noscript>
     <style type="text/css">.sub_li{margin: 0px;
     line-height: 20px;
     padding: 0px 15px 0px 30px;
     font-size: 12px;
 	color:#E0DEDE;
     position: initial;
-    float: left;}</style>
+    float: left;}
+    #sidebar-left .mini_avatar {
+    max-height: 75px !important;
+}</style>
         <script type="text/javascript">
         $(window).load(function () {
             $("#loading").fadeOut("slow");
@@ -49,7 +53,9 @@
 </head>
 
 <body>
-
+<?php
+$pic_small = $this->site->getUserPic($this->session->userdata('user_id'));	
+?>
 <div id="loading"></div>
 <div id="app_wrapper">
     <header id="header" class="navbar">
@@ -74,9 +80,18 @@
                 <ul class="nav navbar-nav pull-right">
                 	
                     <li class="dropdown">
-                        <a class="btn account dropdown-toggle" data-toggle="dropdown" href="#">
-                            <img alt="" src="<?=$assets?>images/male.png" class="mini_avatar img-circle">
-
+                    <a class="btn account dropdown-toggle" data-toggle="dropdown" href="#">
+                           <?php
+							
+							if($pic_small != FALSE){
+								$pic = base_url().'assets/uploads/'.$pic_small;
+							}else{
+								$pic = $assets.'images/male.png';
+							}
+							?>
+                           
+                            <img alt="" src="<?=$pic?>" class="mini_avatar img-circle">
+							
 
                         </a>
                         <ul class="dropdown-menu pull-right">
@@ -86,6 +101,18 @@
                                     <?= lang('account') ?>   
                                 </a>
                             </li>
+                            <?php
+                            if($this->session->userdata('group_id') == 1 || $this->session->userdata('group_id') == 2){
+                            ?>
+                            <li>
+                                <a href="<?=admin_url('users/permissionlist')?>">
+                                    <?= lang('permission') ?>  
+                                     
+                                </a>
+                            </li>
+                            <?php
+                            }
+                            ?>
                             <li>
                                 <a href="<?=admin_url('verification/index')?>">
                                     <?= lang('verification') ?>   
@@ -212,7 +239,17 @@
                 <div class="sidebar-nav nav-collapse collapse navbar-collapse" id="sidebar_menu">
                 	<div class="col-lg-12 text-center">
                     	<h3 class="yellow"><?= lang('admin_panel') ?></h3>
-                         <img alt="" src="<?=$assets?>icons/male-lg.png" class="mini_avatar img-rounded">
+                        <?php							
+								if($pic_small != FALSE){
+									$pic_lg = base_url().'assets/uploads/'.$pic_small;
+								}else{
+									$pic_lg = $assets.'icons/male-lg.png';
+								}
+								?>
+							
+							 <img alt="" src="<?=$pic_lg?>" class="mini_avatar img-rounded">
+                             
+                        
                          <h3 class="yellow"><?= $this->session->userdata('username') ?></h3> 
                     </div>
                     

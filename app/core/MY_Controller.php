@@ -11,7 +11,18 @@ class MY_Controller extends CI_Controller {
 		$Setting_Country = json_decode(file_get_contents("http://www.geoplugin.net/json.gp?ip={$ip}"));
 		$this->countryCode = $Setting_Country->geoplugin_countryCode;
 		//$this->countryCode = 'IN';
+        if($this->session->userdata('group_id') == 6){
+            $deprole = $this->site->getDepartmentRole($this->session->userdata('user_id'), $this->session->userdata('group_id'));
+            $this->Department = $deprole->department_id;
+            $this->Designation = $deprole->designation_id;
+        }else{
+            $this->Department = 0;
+            $this->Designation = 0;
+        }
+
+
 		$this->Settings = $this->site->get_setting($this->countryCode);
+        $this->Bnotify = $this->site->get_booking_cancel_notification($this->countryCode);
 		$this->getUserIpAddr = $this->site->getUserIpAddr();
 		
 		if($this->session->userdata('value', TRUE)) {
@@ -131,6 +142,7 @@ class MY_Controller extends CI_Controller {
             }
             $this->dateFormats = $dateFormats;
             $this->data['dateFormats'] = $dateFormats;
+            $this->data['Bnotify'] = $this->Bnotify;
             $this->load->language('calendar');
             //$this->default_currency = $this->Settings->currency_code;
             //$this->data['default_currency'] = $this->default_currency;
@@ -160,6 +172,8 @@ class MY_Controller extends CI_Controller {
                 /**** check current user activity ***/
                 //$this->site->isActiveUser();
             }
+        }else{
+            $this->data['AllCountrys'] = $this->AllCountrys;
         }
     }
 

@@ -370,5 +370,86 @@ class Users_model extends CI_Model
 			
 		return false;
     }
+
+	function edit_admin($user_id, $user){
+		$user = array_map(function($v){return (is_null($v)) ? "" : $v;},$user);
+		if($user_id){
+			$this->db->update('users', $user, array('id' => $user_id));
+			return true;
+		}
+		return false;
+	}
+
+	function getexitPermission($department_id, $designation_id, $group_id, $countryCode, $id){
+		
+		if($id !=''){
+			$this->db->where('id', $id);
+		}else{
+			$this->db->where('department_id', $department_id);
+			$this->db->where('designation_id', $designation_id);
+			$this->db->where('group_id', $group_id);
+			$this->db->where('is_country', $countryCode);
+		}
+		$q = $this->db->get('all_permission');
+		if ($q->num_rows() > 0) {
+			return $q->row();
+			
+		}
+
+		return false;
+	}
 	
+	function insertPermission($data, $id, $is_country){
+		$data = array_map(function($v){return $v ?: '';},$data);
+
+		if($id != ''){
+			$this->db->where('id', $id);
+			$q = $this->db->update('all_permission', $data);
+			return true;
+		}else{			
+			
+			$q = $this->db->insert('all_permission', $data);
+			return true;
+		}
+
+	}
+	function getALLUser_department(){
+		$q = $this->db->get('user_department');
+		if($q->num_rows()>0){
+			foreach (($q->result()) as $row) {
+                $data[] = $row;
+            }
+			return $data;
+		}
+		return false;
+	}
+	function getALLUser_designation(){
+		$q = $this->db->get('user_roles');
+		if($q->num_rows()>0){
+			foreach (($q->result()) as $row) {
+                $data[] = $row;
+            }
+			return $data;
+		}
+		return false;
+	}
+	function getname_department($id){
+		
+		$q =$this->db->select('name')->where('id', $id)->get('user_department');
+		if($q->num_rows()>0){
+			
+			return $q->row('name');
+		}
+		return false;
+	}
+
+	function getname_designation($id){
+		
+		$q = $this->db->select('position')->where('id', $id)->get('user_roles');
+		if($q->num_rows()>0){
+			
+			return $q->row('position');
+		}
+		return false;
+	}
 }

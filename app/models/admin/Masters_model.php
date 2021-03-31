@@ -2273,6 +2273,170 @@ class Masters_model extends CI_Model
 		return false;
 	}
 	
+		
+	/*### Cancel Master*/
+    function add_cancelmaster($data, $countryCode){
+		
+		
+		$this->db->insert('cancelmaster', $data);
+        return $this->db->insert_id();	
+    }
+    function update_cancelmaster($id,$data, $countryCode){
+		
+		
+		
+		$this->db->where('id',$id);
+		$this->db->where('is_country', $countryCode);
+		if($this->db->update('cancelmaster',$data)){
+	    	return true;
+		}
+		return false;
+    }
+    function getCancelmasterby_ID($id){
+		$this->db->select('*');
+		$this->db->from('cancelmaster');
+		$this->db->where('id',$id);
+		$q = $this->db->get();
+		if($q->num_rows()>0){
+			return $q->row();
+		}
+		return false;
+    }
+	function getALLCancelmaster($countryCode){
+		//if($countryCode != ''){
+		$this->db->where('is_country', $countryCode);
+		//}
+		$q = $this->db->get('cancelmaster');
+		if($q->num_rows()>0){
+			foreach (($q->result()) as $row) {
+                $data[] = $row;
+            }
+			return $data;
+		}
+		return false;
+	}
+    function update_cancelmaster_status($data,$id, $countryCode){
+		$this->db->where('id',$id);
+		$this->db->where('is_country', $countryCode);
+		if($this->db->update('cancelmaster',$data)){
+			return true;
+		}
+		return false;
+    }
 	
+	
+	/*### Discount Master*/
+    function add_discount($data, $countryCode){
+		
+		
+		$this->db->insert('discount', $data);
+        return $this->db->insert_id();	
+    }
+    function update_discount($id,$data, $countryCode){
+		
+		
+		
+		$this->db->where('id',$id);
+		$this->db->where('is_country', $countryCode);
+		if($this->db->update('discount',$data)){
+	    	return true;
+		}
+		return false;
+    }
+    function getDiscountby_ID($id){
+		$this->db->select('*');
+		$this->db->from('discount');
+		$this->db->where('id',$id);
+		$q = $this->db->get();
+		if($q->num_rows()>0){
+			return $q->row();
+		}
+		return false;
+    }
+	function getALLDiscount($countryCode){
+		//if($countryCode != ''){
+		$this->db->where('is_country', $countryCode);
+		//}
+		$q = $this->db->get('discount');
+		if($q->num_rows()>0){
+			foreach (($q->result()) as $row) {
+                $data[] = $row;
+            }
+			return $data;
+		}
+		return false;
+	}
+    function update_discount_status($data,$id, $countryCode){
+		$this->db->where('id',$id);
+		$this->db->where('is_country', $countryCode);
+		if($this->db->update('discount',$data)){
+			return true;
+		}
+		return false;
+    }
+	
+	public function customerUsers($countryCode){
+		$this->db->select('id, first_name');
+		$this->db->where('is_country', $countryCode);
+		$this->db->where('group_id', 5);
+		$q = $this->db->get('users');
+		if($q->num_rows()>0){
+			foreach (($q->result()) as $row) {
+                $data[] = $row;
+            }
+			return $data;
+		}
+		return false;
+	}
+	
+	/*### Health Master*/
+    function add_health($data, $countryCode){
+		
+		
+		$this->db->insert('health', $data);
+        return $this->db->insert_id();	
+    }
+    function update_health($id,$data, $countryCode){
+		
+		
+		
+		$this->db->where('id',$id);
+		$this->db->where('is_country', $countryCode);
+		if($this->db->update('health',$data)){
+	    	return true;
+		}
+		return false;
+    }
+    function getHealthby_ID($id){
+		$this->db->select('*');
+		$this->db->from('health');
+		$this->db->where('id',$id);
+		$q = $this->db->get();
+		if($q->num_rows()>0){
+			return $q->row();
+		}
+		return false;
+    }
+	function getALLHealth($countryCode){
+		//if($countryCode != ''){
+		$this->db->where('is_country', $countryCode);
+		//}
+		$q = $this->db->get('health');
+		if($q->num_rows()>0){
+			foreach (($q->result()) as $row) {
+                $data[] = $row;
+            }
+			return $data;
+		}
+		return false;
+	}
+    function update_health_status($data,$id, $countryCode){
+		$this->db->where('id',$id);
+		$this->db->where('is_country', $countryCode);
+		if($this->db->update('health',$data)){
+			return true;
+		}
+		return false;
+    }
 	
 }

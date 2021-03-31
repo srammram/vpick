@@ -50,19 +50,19 @@
     <li><span><div class="kappoverview"></div> </span><strong><?= lang('overview') ?></strong>
     	<ul>
     		<li><a class="<?= $this->uri->segment(2) == 'welcome' ? 'active' : '' ?>" href="<?=admin_url('welcome')?>"><?= lang('statistics') ?></a></li>
-           
+            <?php if($this->session->userdata('group_id') != 4 && $this->session->userdata('group_id') !=5 && $this->session->userdata('group_id') !=3 && $this->session->userdata('group_id') !=6 ){  ?>
     		<li><a class="<?= $this->uri->segment(2) == 'heatmap' && $this->uri->segment(3) == 'available_cityride' ? 'active' : '' ?>" href="<?=admin_url('heatmap/available_cityride')?>"><?= lang('tracking') ?></a></li>
             <li><a class="<?= $this->uri->segment(2) == 'heatmap' && $this->uri->segment(3) == 'search_heatmap' ? 'active' : '' ?>" href="<?=admin_url('heatmap/search_heatmap')?>"><?= lang('search_heatmap') ?></a></li>
-           
+            <?php } ?>
             <li><a class="<?= $this->uri->segment(2) == 'notification' ? 'active' : '' ?>" href="<?=admin_url('notification/index')?>"><?= lang('notification') ?></a></li>
     	</ul>
     </li>
     <li><span><div class="kappmaster"></div></span><strong><?= lang('masters') ?></strong>
     	<ul>
-        
-           
+        	<?php if($this->session->userdata('group_id') != 4 && $this->session->userdata('group_id') !=5 && $this->session->userdata('group_id') !=3 ){  ?>
+            <?php if($this->session->userdata('group_id') != 6){ ?>
         	<li><a class="<?= $this->uri->segment(2) == 'people' && ($this->uri->segment(3) == 'employee' || $this->uri->segment(3) == 'employee_edit' || $this->uri->segment(3) == 'employee_role_setting' || $this->uri->segment(3) == 'add_employee') ? 'active' : '' ?>" href="<?=admin_url('people/employee')?>"><?= lang('staff') ?></a></li>
-          
+            <?php } ?>
             
     		<!--<li><a class="<?= $this->uri->segment(2) == 'people' && $this->uri->segment(3) == 'vendor' ? 'active' : '' ?>" href="<?=admin_url('people/vendor')?>">Vendor</a></li>-->
             
@@ -73,28 +73,26 @@
     		<li><a class="<?= $this->uri->segment(2) == 'people' && ($this->uri->segment(3) == 'customer' || $this->uri->segment(3) == 'customer_view' || $this->uri->segment(3) == 'add_customer') ? 'active' : '' ?>" href="<?=admin_url('people/customer')?>"><?= lang('customer') ?></a></li>
             
             <li><a class="<?= $this->uri->segment(2) == 'rides'  ? 'active' : '' ?>" href="<?=admin_url('rides')?>"><?= lang('rides') ?></a></li>
-           
-            
-           
-            
+            <?php } ?>
+            <?php if($this->session->userdata('group_id') != 1 && $this->session->userdata('group_id') !=2 && $this->session->userdata('group_id') !=6 ){  ?>
+            <li><a class="<?= $this->uri->segment(2) == 'usersrides'  ? 'active' : '' ?>" href="<?=admin_url('usersrides')?>"><?= lang('rides') ?></a></li>
+            <?php } ?>
     	</ul>
     </li>
-    
-    
+    <?php if($this->session->userdata('group_id') != 3 && $this->session->userdata('group_id') !=4 && $this->session->userdata('group_id') !=5  && $this->session->userdata('group_id') !=6 ){  ?>
     <li><span><div class="kappfare"></div></span><strong><?= lang('fare'); ?></strong>
     	<ul>
     		<li><a class="<?= $this->uri->segment(2) == 'locations' && ($this->uri->segment(3) == 'daily' || $this->uri->segment(3) == 'edit_daily' || $this->uri->segment(3) == 'add_daily') ? 'active' : '' ?>" href="<?=admin_url('locations/daily')?>"><?= lang('city_ride') ?></a></li>
     		<li><a class="<?= $this->uri->segment(2) == 'locations' && ($this->uri->segment(3) == 'outstation' || $this->uri->segment(3) == 'add_outstation' || $this->uri->segment(3) == 'edit_outstation') ? 'active' : '' ?>" href="<?=admin_url('locations/outstation')?>"><?= lang('outstation') ?></a></li>
-    		
+    		<li class="hidden"><a class="<?= $this->uri->segment(2) == 'locations' && ($this->uri->segment(3) == 'rental' || $this->uri->segment(3) == 'add_rental' || $this->uri->segment(3) == 'edit_rental') ? 'active' : '' ?>" href="<?=admin_url('locations/rental')?>"><?= lang('rentals') ?></a></li>
     	</ul>
     </li>
-   
-    
-    
+    <?php } ?>
+    <?php if($this->session->userdata('group_id') != 3 && $this->session->userdata('group_id') !=4 && $this->session->userdata('group_id') !=5  && $this->session->userdata('group_id') !=6 ){  ?>
     <li><span><div class="kappoption"></div></span><strong><?= lang('options') ?></strong>
     	<ul>
-        	  <?php if($this->session->userdata('group_id') != 1){ ?>
-          	<li><a class="<?= $this->uri->segment(2) == 'masters' && $this->uri->segment(3) == 'index' ? 'active' : '' ?>" href="<?=admin_url('masters/index/'.$countryCode)?>"><?= lang('settings') ?></a></li>
+        	<?php if($this->session->userdata('group_id') != 1){ ?>
+        	<li><a class="<?= $this->uri->segment(2) == 'masters' && $this->uri->segment(3) == 'index' ? 'active' : '' ?>" href="<?=admin_url('masters/index/'.$countryCode)?>"><?= lang('settings') ?></a></li>
             <?php }else{ ?>
             <li><a class="<?= $this->uri->segment(2) == 'masters' && $this->uri->segment(3) == 'index' ? 'active' : '' ?>" href="<?=admin_url('masters/index')?>"><?= lang('settings') ?></a></li>
             <?php } ?>
@@ -103,19 +101,13 @@
     		<!--<li><a class="<?= $this->uri->segment(2) == 'masters' && $this->uri->segment(3) == 'user_department' ? 'active' : '' ?>"  href="<?=admin_url('masters/user_department')?>">User Department</a></li>-->
             <li><a class="<?= $this->uri->segment(2) == 'masters' && ($this->uri->segment(3) == 'currencies'  || $this->uri->segment(3) == 'add_currency' || $this->uri->segment(3) == 'edit_currency') ? 'active' : '' ?>"  href="<?=admin_url('masters/currencies')?>"><?= lang('currency') ?></a></li>
             
-			<li><a class="<?= $this->uri->segment(2) == 'masters' && ($this->uri->segment(3) == 'cancelmaster'  || $this->uri->segment(3) == 'add_cancelmaster' || $this->uri->segment(3) == 'edit_cancelmaster') ? 'active' : '' ?>"  href="<?=admin_url('masters/cancelmaster')?>"><?= lang('cancelmaster') ?></a></li>
-           
-           <li><a class="<?= $this->uri->segment(2) == 'masters' && ($this->uri->segment(3) == 'health'  || $this->uri->segment(3) == 'add_health' || $this->uri->segment(3) == 'edit_health') ? 'active' : '' ?>"  href="<?=admin_url('masters/health')?>"><?= lang('healthmaster') ?></a></li>
-            
-            <li><a class="<?= $this->uri->segment(2) == 'masters' && ($this->uri->segment(3) == 'discount'  || $this->uri->segment(3) == 'add_discount' || $this->uri->segment(3) == 'edit_discount') ? 'active' : '' ?>"  href="<?=admin_url('masters/discount')?>"><?= lang('discount') ?></a></li>
-            
-			
-            <li><a class="<?= $this->uri->segment(2) == 'masters' && ($this->uri->segment(3) == 'company'  || $this->uri->segment(3) == 'add_company' || $this->uri->segment(3) == 'edit_company') ? 'active' : '' ?>"  href="<?=admin_url('masters/company')?>"><?= lang('company') ?></a></li>
+             <li><a class="<?= $this->uri->segment(2) == 'masters' && ($this->uri->segment(3) == 'company'  || $this->uri->segment(3) == 'add_company' || $this->uri->segment(3) == 'edit_company') ? 'active' : '' ?>"  href="<?=admin_url('masters/company')?>"><?= lang('company') ?></a></li>
             
             <li><a class="<?= $this->uri->segment(2) == 'masters' && ($this->uri->segment(3) == 'walletoffer'  || $this->uri->segment(3) == 'add_walletoffer' || $this->uri->segment(3) == 'edit_walletoffer') ? 'active' : '' ?>"  href="<?=admin_url('masters/walletoffer')?>"><?= lang('wallet_offer') ?></a></li>
             
             <li><a class="<?= $this->uri->segment(2) == 'masters' && ($this->uri->segment(3) == 'bank' || $this->uri->segment(3) == 'add_bank' || $this->uri->segment(3) == 'edit_bank') ? 'active' : '' ?>"  href="<?=admin_url('masters/bank')?>"><?= lang('bank') ?></a></li>
             <li><a class="<?= $this->uri->segment(2) == 'masters' && $this->uri->segment(3) == 'payment_gateway' ? 'active' : '' ?>"  href="<?=admin_url('masters/payment_gateway')?>"><?= lang('payment_gateway') ?></a></li>
+            
     		<li><a class="<?= $this->uri->segment(2) == 'masters' && ($this->uri->segment(3) == 'tax' || $this->uri->segment(3) == 'add_tax' || $this->uri->segment(3) == 'edit_tax') ? 'active' : '' ?>"  href="<?=admin_url('masters/tax')?>"><?= lang('tax') ?></a></li>
             <!--<li><a href="<?=admin_url('masters/taxi_category')?>">Taxi Category</a></li>-->
             <li><a class="<?= $this->uri->segment(2) == 'masters' && $this->uri->segment(3) == 'taxi_category' ? 'active' : '' ?>"  href="<?=admin_url('masters/taxi_category')?>"><?= lang('truck_category') ?></a></li>
@@ -124,7 +116,6 @@
             <li><a class="<?= $this->uri->segment(2) == 'masters' && $this->uri->segment(3) == 'taxi_model' ? 'active' : '' ?>"  href="<?=admin_url('masters/taxi_model')?>"><?= lang('truck_model') ?></a></li>
             <li><a class="<?= $this->uri->segment(2) == 'masters' && $this->uri->segment(3) == 'taxi_fuel' ? 'active' : '' ?>"  href="<?=admin_url('masters/taxi_fuel')?>"><?= lang('truck_fuel') ?></a></li>
             <li><a class="<?= $this->uri->segment(2) == 'masters' && $this->uri->segment(3) == 'shifting' ? 'active' : '' ?>"  href="<?=admin_url('masters/shifting')?>"><?= lang('shifting') ?></a></li>
-            
             
             <?php if($this->session->userdata('group_id') == 1){ ?>
             <li><a class="<?= $this->uri->segment(2) == 'masters' && $this->uri->segment(3) == 'continents' ? 'active' : '' ?>"  href="<?=admin_url('masters/continents')?>"><?= lang('continents') ?></a></li>
@@ -143,72 +134,11 @@
             
     	</ul>
     </li>
-   
+    <?php } ?>
     
      
     
-    
-    
-    
-    
-   
-    <li><span><div class="kappaccount"></div></span><strong><?= lang('wallet') ?></strong>
-    	<ul>
-    		<li><a class="<?= $this->uri->segment(2) == 'wallet' && $this->uri->segment(3) == 'index' ? 'active' : '' ?>" href="<?=admin_url('wallet/index')?>"><?= lang('dashboard') ?></a></li>
-    		<li><a class="<?= $this->uri->segment(2) == 'wallet' && $this->uri->segment(3) == 'customer' ? 'active' : '' ?>" href="<?=admin_url('wallet/customer')?>"><?= lang('customer') ?></a></li>
-            <li><a class="<?= $this->uri->segment(2) == 'wallet' && $this->uri->segment(3) == 'driver' ? 'active' : '' ?>" href="<?=admin_url('wallet/driver')?>"><?= lang('driver') ?></a></li>
-            <!--<li><a class="<?= $this->uri->segment(2) == 'wallet' && $this->uri->segment(3) == 'vendor' ? 'active' : '' ?>" href="<?=admin_url('wallet/vendor')?>"><?= lang('vendor') ?></a></li>-->
-            <li><a class="<?= $this->uri->segment(2) == 'wallet' && $this->uri->segment(3) == 'owner' ? 'active' : '' ?>" href="<?=admin_url('wallet/owner')?>"><?= lang('owner') ?></a></li>
-    	</ul>
-    </li>
-   
-    
-   
-    
-    
-    <li><span><div class="kappaccount"></div></span><strong><?= lang('incentives') ?></strong>
-    	<ul>
-    		
-    		<li><a class="<?= $this->uri->segment(2) == 'incentive' && ($this->uri->segment(3) == 'index' || $this->uri->segment(3) == 'add_incentive' || $this->uri->segment(3) == 'edit_incentive' || $this->uri->segment(3) == 'view_incentive') ? 'active' : '' ?>" href="<?=admin_url('incentive/index')?>"><?= lang('list') ?></a></li>
-            <li><a class="<?= $this->uri->segment(2) == 'incentive' && ($this->uri->segment(3) == 'group' || $this->uri->segment(3) == 'edit_group' || $this->uri->segment(3) == 'add_group') ? 'active' : '' ?>" href="<?=admin_url('incentive/group')?>"><?= lang('group') ?></a></li>
-            
-    	</ul>
-    </li>
-    
-    
-    
-    <li><span><div class="kappaccount"></div></span><strong><?= lang('offers') ?></strong>
-    	<ul>
-    		
-    		<li><a class="<?= $this->uri->segment(2) == 'offers' && ($this->uri->segment(3) == 'index' || $this->uri->segment(3) == 'add_offers' || $this->uri->segment(3) == 'edit_offers' || $this->uri->segment(3) == 'view_offers') ? 'active' : '' ?>" href="<?=admin_url('offers/index')?>"><?= lang('list') ?></a></li>
-            
-    	</ul>
-    </li>
-   
-    
-    
-    
-   
-    <li><span><div class="kappaccount"></div></span><strong><?= lang('crm') ?></strong>
-    	<ul>
-    		<li><a class="<?= $this->uri->segment(2) == 'enquiry' && $this->uri->segment(3) == 'index' ? 'active' : '' ?>" href="<?=admin_url('enquiry/index')?>"><?= lang('dashboard') ?></a></li>
-    		<li><a class="<?= $this->uri->segment(2) == 'enquiry' && ($this->uri->segment(3) == 'listview' || $this->uri->segment(3) == 'close_transfer' || $this->uri->segment(3) == 'open') ? 'active' : '' ?>" href="<?=admin_url('enquiry/listview')?>"><?= lang('enquiry') ?></a></li>
-            
-    	</ul>
-    </li>
-    
-    
-    
-    <li><span><div class="kappaccount"></div></span><strong><?= lang('booking_ride') ?></strong>
-    	<ul>
-    		<li><a class="<?= $this->uri->segment(2) == 'booking_crm' && $this->uri->segment(3) == 'index' ? 'active' : '' ?>" href="<?=admin_url('booking_crm/index')?>"><?= lang('dashboard') ?></a></li>
-    		<li><a class="<?= $this->uri->segment(2) == 'booking_crm' && ($this->uri->segment(3) == 'listview' ) ? 'active' : '' ?>" href="<?=admin_url('booking_crm/listview')?>"><?= lang('booking_ride') ?></a></li>
-            
-    	</ul>
-    </li>
-    
-  
-    
+    <?php if($this->session->userdata('group_id') != 3 && $this->session->userdata('group_id') !=4 && $this->session->userdata('group_id') !=5  && $this->session->userdata('group_id') !=6 ){  ?>
     <li><span><div class="kappaccount"></div></span><strong>ACCOUNTS</strong>
     	<ul>
         	<li><a class="<?= $this->uri->segment(2) == 'account' && $this->uri->segment(3) == 'dashboard' ? 'active' : '' ?>" href="<?=admin_url('account/dashboard')?>"><?= lang('dashboard') ?></a></li>
@@ -226,23 +156,89 @@
     		 <li><a class="<?= $this->uri->segment(2) == 'account' && $this->uri->segment(3) == 'trip' ? 'active' : '' ?>" href="<?=admin_url('account/trip')?>"><?= lang('per_trip_accounting') ?></a></li>
              
     		<li><a class="<?= $this->uri->segment(2) == 'account' && ($this->uri->segment(3) == 'driver' || $this->uri->segment(3) == 'driver_view') ? 'active' : '' ?>" href="<?=admin_url('account/driver')?>"><?= lang('driver_payment') ?></a></li>
-           <!-- <li><a class="<?= $this->uri->segment(2) == 'account' && $this->uri->segment(3) == 'complete_payment' ? 'active' : '' ?>" href="<?=admin_url('account/complete_payment')?>"><?= lang('payment_history') ?></a></li>-->
+            <li><a class="<?= $this->uri->segment(2) == 'account' && $this->uri->segment(3) == 'complete_payment' ? 'active' : '' ?>" href="<?=admin_url('account/complete_payment')?>"><?= lang('payment_history') ?></a></li>
             <!--<li><a class="<?= $this->uri->segment(2) == 'account' && $this->uri->segment(3) == 'withdraw' ? 'active' : '' ?>" href="<?=admin_url('account/withdraw')?>"><?= lang('customer_settlement') ?></a></li>-->
     	</ul>
     </li>
+    <?php } ?>
     
     
     
-    <li><span><div class="kappaccount"></div></span><strong>REPORTS</strong>
+    <?php if($this->session->userdata('group_id') != 3 && $this->session->userdata('group_id') !=4 && $this->session->userdata('group_id') !=5  && $this->session->userdata('group_id') !=6 ){  ?>
+    <li><span><div class="kappaccount"></div></span><strong><?= lang('wallet') ?></strong>
     	<ul>
-        	<li><a class="<?= $this->uri->segment(2) == 'report' && $this->uri->segment(3) == 'dashboard' ? 'active' : '' ?>" href="<?=admin_url('report/dashboard')?>"><?= lang('dashboard') ?></a></li>
-          <li><a class="<?= $this->uri->segment(2) == 'report' && $this->uri->segment(3) == 'activity_report' ? 'active' : '' ?>" href="<?=admin_url('report/activity_report')?>"><?= lang('activity_report') ?></a></li>
-          <li><a class="<?= $this->uri->segment(2) == 'report' && $this->uri->segment(3) == 'health_report' ? 'active' : '' ?>" href="<?=admin_url('report/health_report')?>"><?= lang('health_report') ?></a></li>
-            
+    		<li><a class="<?= $this->uri->segment(2) == 'wallet' && $this->uri->segment(3) == 'index' ? 'active' : '' ?>" href="<?=admin_url('wallet/index')?>"><?= lang('dashboard') ?></a></li>
+    		<li><a class="<?= $this->uri->segment(2) == 'wallet' && $this->uri->segment(3) == 'customer' ? 'active' : '' ?>" href="<?=admin_url('wallet/customer')?>"><?= lang('customer') ?></a></li>
+            <li><a class="<?= $this->uri->segment(2) == 'wallet' && $this->uri->segment(3) == 'driver' ? 'active' : '' ?>" href="<?=admin_url('wallet/driver')?>"><?= lang('driver') ?></a></li>
+           <!-- <li><a class="<?= $this->uri->segment(2) == 'wallet' && $this->uri->segment(3) == 'vendor' ? 'active' : '' ?>" href="<?=admin_url('wallet/vendor')?>"><?= lang('vendor') ?></a></li>-->
+            <li><a class="<?= $this->uri->segment(2) == 'wallet' && $this->uri->segment(3) == 'owner' ? 'active' : '' ?>" href="<?=admin_url('wallet/owner')?>"><?= lang('owner') ?></a></li>
+    	</ul>
+    </li>
+    <?php } ?>
+    
+    <?php if($this->session->userdata('group_id') != 3 && $this->session->userdata('group_id') !=4 && $this->session->userdata('group_id') !=5  && $this->session->userdata('group_id') !=6 ){  ?>
+    <li><span><div class="kappaccount"></div></span><strong><?= lang('incentives') ?></strong>
+    	<ul>
+    		
+    		<li><a class="<?= $this->uri->segment(2) == 'incentive' && ($this->uri->segment(3) == 'index' || $this->uri->segment(3) == 'add_incentive' || $this->uri->segment(3) == 'edit_incentive' || $this->uri->segment(3) == 'view_incentive') ? 'active' : '' ?>" href="<?=admin_url('incentive/index')?>"><?= lang('list') ?></a></li>
+            <li><a class="<?= $this->uri->segment(2) == 'incentive' && ($this->uri->segment(3) == 'group' || $this->uri->segment(3) == 'edit_group' || $this->uri->segment(3) == 'add_group') ? 'active' : '' ?>" href="<?=admin_url('incentive/group')?>"><?= lang('group') ?></a></li>
             
     	</ul>
     </li>
-   
+    <?php } ?>
+    
+    <?php if($this->session->userdata('group_id') != 3 && $this->session->userdata('group_id') !=4 && $this->session->userdata('group_id') !=5  && $this->session->userdata('group_id') !=6 ){  ?>
+    <li><span><div class="kappaccount"></div></span><strong><?= lang('offers') ?></strong>
+    	<ul>
+    		
+    		<li><a class="<?= $this->uri->segment(2) == 'incentive' && ($this->uri->segment(3) == 'index' || $this->uri->segment(3) == 'add_offers' || $this->uri->segment(3) == 'edit_offers' || $this->uri->segment(3) == 'view_offers') ? 'active' : '' ?>" href="<?=admin_url('offers/index')?>"><?= lang('list') ?></a></li>
+            
+    	</ul>
+    </li>
+    <?php } ?>
+    
+    <?php if($this->session->userdata('group_id') != 1 && $this->session->userdata('group_id') !=2 && $this->session->userdata('group_id') !=6 ){  ?>
+    <!--<li><span><div class="kappaccount"></div></span><strong>PAYMENTS</strong>
+    	<ul>
+    		<li><a class="<?= $this->uri->segment(2) == 'userspayments' && $this->uri->segment(3) == 'index' ? 'active' : '' ?>" href="<?=admin_url('userspayments/index')?>">Dashboard</a></li>
+    		<li><a class="<?= $this->uri->segment(2) == 'userspayments' && $this->uri->segment(3) == 'listview' ? 'active' : '' ?>" href="<?=admin_url('userspayments/listview')?>">Payments</a></li>
+            
+    	</ul>
+    </li>-->
+    <?php } ?>
+    
+    <?php if($this->session->userdata('group_id') != 1 && $this->session->userdata('group_id') !=2 && $this->session->userdata('group_id') !=6 ){  ?>
+    <li><span><div class="kappaccount"></div></span><strong><?= lang('crm') ?></strong>
+    	<ul>
+    		<li><a class="<?= $this->uri->segment(2) == 'usersenquiry' && $this->uri->segment(3) == 'index' ? 'active' : '' ?>" href="<?=admin_url('usersenquiry/index')?>"><?= lang('dashboard') ?></a></li>
+    		<li><a class="<?= $this->uri->segment(2) == 'usersenquiry' && ($this->uri->segment(3) == 'listview' || $this->uri->segment(3) == 'close_transfer' || $this->uri->segment(3) == 'open') ? 'active' : '' ?>" href="<?=admin_url('usersenquiry/listview')?>"><?= lang('enquiry') ?></a></li>
+            
+    	</ul>
+    </li>
+    <?php } ?>
+    <?php if($this->session->userdata('group_id') != 3 && $this->session->userdata('group_id') !=4 && $this->session->userdata('group_id') !=5){  ?>
+    <li><span><div class="kappaccount"></div></span><strong><?= lang('crm') ?></strong>
+    	<ul>
+    		<li><a class="<?= $this->uri->segment(2) == 'enquiry' && $this->uri->segment(3) == 'index' ? 'active' : '' ?>" href="<?=admin_url('enquiry/index')?>"><?= lang('dashboard') ?></a></li>
+    		<li><a class="<?= $this->uri->segment(2) == 'enquiry' && ($this->uri->segment(3) == 'listview' || $this->uri->segment(3) == 'close_transfer' || $this->uri->segment(3) == 'open') ? 'active' : '' ?>" href="<?=admin_url('enquiry/listview')?>"><?= lang('enquiry') ?></a></li>
+            
+    	</ul>
+    </li>
+    <?php
+	}
+	?>
+    
+    <?php if($this->session->userdata('group_id') != 3 && $this->session->userdata('group_id') !=4 && $this->session->userdata('group_id') !=5){  ?>
+    <li class="hidden"><span><div class="kappaccount"></div></span><strong><?= lang('booking_ride') ?></strong>
+    	<ul>
+    		<li><a class="<?= $this->uri->segment(2) == 'booking_crm' && $this->uri->segment(3) == 'index' ? 'active' : '' ?>" href="<?=admin_url('booking_crm/index')?>"><?= lang('dashboard') ?></a></li>
+    		<li><a class="<?= $this->uri->segment(2) == 'booking_crm' && ($this->uri->segment(3) == 'listview' ) ? 'active' : '' ?>" href="<?=admin_url('booking_crm/listview')?>"><?= lang('booking_ride') ?></a></li>
+            
+    	</ul>
+    </li>
+    <?php
+	}
+	?>
    
   </ul>
 </nav>

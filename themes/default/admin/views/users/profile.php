@@ -6,7 +6,7 @@
     <div class="box-content">
         <div class="row">
             <div class="col-md-2 col-md-offset-10">
-            	<?php
+			<?php
 				if($this->session->userdata('group_id') == 3){
 				?>
                 <a href="<?= admin_url('users/edit_vendor/'.$this->session->userdata('user_id')); ?>" class="profile-edit-btn">Edit Profile</a>
@@ -19,8 +19,13 @@
 				?>
                 <a href="<?= admin_url('users/edit_employee/'.$this->session->userdata('user_id')); ?>" class="profile-edit-btn">Edit Profile</a>
                 <?php
-				}
+				}else{
 				?>
+				<a href="<?= admin_url('users/edit_admin/'.$this->session->userdata('user_id')); ?>" class="profile-edit-btn">Edit Profile</a>
+				<?php
+				}				
+				?>
+            	
             	
 			</div>
             <div class="col-md-3" style="margin-top: 30px;">
