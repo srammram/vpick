@@ -434,7 +434,7 @@ class Datatables
             $this->ci->db->distinct($this->distinct);
             $this->ci->db->select($this->columns);
         }
-
+        //print_r($this->ci->db->last_query());die;
         $query = $this->ci->db->get($this->table, NULL, NULL, FALSE);
         return $query->num_rows();
     }

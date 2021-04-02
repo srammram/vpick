@@ -165,6 +165,14 @@ class Locations extends MY_Controller
 						'base_waiting_minute' => '00:'.$this->input->post('base_waiting_minute').':00',
 						'base_waiting_price' => $this->input->post('base_waiting_price'),
 						
+						'no_of_driver_cancel' => $this->input->post('no_of_driver_cancel'),
+						'driver_cancel_type' => $this->input->post('driver_cancel_type'),
+						'driver_cancel_charge' => $this->input->post('driver_cancel_charge'),
+						'no_of_customer_cancel' => $this->input->post('no_of_customer_cancel'),
+						'customer_cancel_type' => $this->input->post('customer_cancel_type'),
+						'customer_cancel_charge' => $this->input->post('customer_cancel_charge'),
+						'cancel_free_second' => $this->input->post('cancel_free_second'),
+						
 						'is_base' => $this->input->post('is_base'),
 						'is_peak' => $this->input->post('is_peak'),
 						'is_night' => $this->input->post('is_night'),
@@ -195,6 +203,14 @@ class Locations extends MY_Controller
 						//'base_end_time' => $this->input->post('base_end_time'),
 						'base_waiting_minute' => '00:'.$this->input->post('base_waiting_minute').':00',
 						'base_waiting_price' => $this->input->post('base_waiting_price'),
+						
+						'no_of_driver_cancel' => $this->input->post('no_of_driver_cancel'),
+						'driver_cancel_type' => $this->input->post('driver_cancel_type'),
+						'driver_cancel_charge' => $this->input->post('driver_cancel_charge'),
+						'no_of_customer_cancel' => $this->input->post('no_of_customer_cancel'),
+						'customer_cancel_type' => $this->input->post('customer_cancel_type'),
+						'customer_cancel_charge' => $this->input->post('customer_cancel_charge'),
+						'cancel_free_second' => $this->input->post('cancel_free_second'),
 						
 						'is_base' => $this->input->post('is_base'),
 						'is_peak' => $this->input->post('is_peak'),
@@ -342,6 +358,14 @@ class Locations extends MY_Controller
 						'base_waiting_minute' => '00:'.$this->input->post('base_waiting_minute').':00',
 						'base_waiting_price' => $this->input->post('base_waiting_price'),
 						
+						'no_of_driver_cancel' => $this->input->post('no_of_driver_cancel'),
+						'driver_cancel_type' => $this->input->post('driver_cancel_type'),
+						'driver_cancel_charge' => $this->input->post('driver_cancel_charge'),
+						'no_of_customer_cancel' => $this->input->post('no_of_customer_cancel'),
+						'customer_cancel_type' => $this->input->post('customer_cancel_type'),
+						'customer_cancel_charge' => $this->input->post('customer_cancel_charge'),
+						'cancel_free_second' => $this->input->post('cancel_free_second'),
+						
 						'is_base' => $this->input->post('is_base'),
 						'is_peak' => $this->input->post('is_peak'),
 						'is_night' => $this->input->post('is_night'),
@@ -372,6 +396,14 @@ class Locations extends MY_Controller
 						//'base_end_time' => $this->input->post('base_end_time'),
 						'base_waiting_minute' => '00:'.$this->input->post('base_waiting_minute').':00',
 						'base_waiting_price' => $this->input->post('base_waiting_price'),
+						
+						'no_of_driver_cancel' => $this->input->post('no_of_driver_cancel'),
+						'driver_cancel_type' => $this->input->post('driver_cancel_type'),
+						'driver_cancel_charge' => $this->input->post('driver_cancel_charge'),
+						'no_of_customer_cancel' => $this->input->post('no_of_customer_cancel'),
+						'customer_cancel_type' => $this->input->post('customer_cancel_type'),
+						'customer_cancel_charge' => $this->input->post('customer_cancel_charge'),
+						'cancel_free_second' => $this->input->post('cancel_free_second'),
 						
 						'is_base' => $this->input->post('is_base'),
 						'is_peak' => $this->input->post('is_peak'),

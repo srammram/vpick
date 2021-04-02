@@ -379,8 +379,34 @@ class Masters extends MY_Controller
 				'day_shift_to_time' => $this->input->post('day_shift_to_time'),
 				'night_shift_from_time' => $this->input->post('night_shift_from_time'),
 				'night_shift_to_time' => $this->input->post('night_shift_to_time'),
-				'driver_default_set_payment' => $this->input->post('driver_default_set_payment')
+				'driver_default_set_payment' => $this->input->post('driver_default_set_payment'),
 				
+				'badge_enable' => $this->input->post('badge_enable'),
+				'training_certificate_enable' => $this->input->post('training_certificate_enable'),
+				'experience_certificate_enable' => $this->input->post('experience_certificate_enable'),
+				'medical_certificate_enable' => $this->input->post('medical_certificate_enable'),
+				'police_verification_enable' => $this->input->post('police_verification_enable'),
+				'health_insurance_enable' => $this->input->post('health_insurance_enable'),
+				'term_insurance_enable' => $this->input->post('term_insurance_enable'),
+				'additional_contact_enable' => $this->input->post('additional_contact_enable'),
+				'emission_norms_enable' => $this->input->post('emission_norms_enable'),
+				'vehicle_tracking_enable' => $this->input->post('vehicle_tracking_enable'),
+				'fire_extinguisher_enable' => $this->input->post('fire_extinguisher_enable'),
+				'child_lock_mechanism_enable' => $this->input->post('child_lock_mechanism_enable'),
+				'interior_vehicle_enable' => $this->input->post('interior_vehicle_enable'),
+				'taxi_roof_sign_enable' => $this->input->post('taxi_roof_sign_enable'),
+				'e_challans_clearance_enable' => $this->input->post('e_challans_clearance_enable'),
+				
+				'ride_cancel_driver_on_the_way_km_fare_enable' => $this->input->post('ride_cancel_driver_on_the_way_km_fare_enable'),
+				'ride_cancel_driver_on_the_way_percentage_enable' => $this->input->post('ride_cancel_driver_on_the_way_percentage_enable'),
+				'ride_cancel_driver_on_the_way_percentage_value' => $this->input->post('ride_cancel_driver_on_the_way_percentage_value'),
+				
+				'driver_working_hours_limit' => $this->input->post('driver_working_hours_limit') != 0 ?  $this->input->post('driver_working_hours_limit') : 4,
+				'trafic_distance' => $this->input->post('trafic_distance'),
+				'estimate_fare_enable' => $this->input->post('estimate_fare_enable'),
+				
+				'cancel_maximum_fare' => $this->input->post('cancel_maximum_fare'),
+				'ride_cancel_allocated_another_driver' => $this->input->post('ride_cancel_allocated_another_driver'),
 				
 
 			);

@@ -479,6 +479,10 @@
             </div>
           </div>
         </div>
+        
+          
+		  
+        </div>
         <div class="col-sm-12 last_sa_se"><?php echo form_submit('add_daily', lang('submit'), 'class="btn btn-primary change_btn_save center-block"'); ?></div>
         <?php echo form_close(); ?> </div>
     </div>

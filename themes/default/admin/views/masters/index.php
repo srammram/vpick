@@ -32,6 +32,83 @@
                             </div>
                         </div>
                     </div>-->
+
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="control-label" for="overselling"><?= lang("ride_cancel_allocated_another_driver"); ?></label>
+                
+                            <div class="controls">
+                                <?php
+                                $opt = array(0 => lang('no'), 1 => lang('yes'));
+                                echo form_dropdown('ride_cancel_allocated_another_driver', $opt, $dataSettings->ride_cancel_allocated_another_driver, 'class="form-control tip" id="ride_cancel_allocated_another_driver" required="required" style="width:100%;"');
+                                ?>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="control-label" for="overselling"><?= lang("cancel_maximum_fare"); ?></label>
+                
+                            <div class="controls">
+                                <?= form_input('cancel_maximum_fare', $dataSettings->cancel_maximum_fare, 'class="form-control tip" id="cancel_maximum_fare"'); ?>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="control-label" for="ride_cancel_driver_on_the_way_km_fare_enable"><?= lang("ride_cancel_driver_on_the_way_km_fare_enable"); ?></label>
+							<div class="controls">
+                                <?php
+                                $opt = array(0 => lang('no'), 1 => lang('yes'));
+                                echo form_dropdown('ride_cancel_driver_on_the_way_km_fare_enable', $opt, $dataSettings->ride_cancel_driver_on_the_way_km_fare_enable, 'class="form-control tip" id="ride_cancel_driver_on_the_way_km_fare_enable" required="required" style="width:100%;"');
+                                ?>
+                            </div>
+                           
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="control-label" for="ride_cancel_driver_on_the_way_km_fare_enable"><?= lang("ride_cancel_driver_on_the_way_percentage_enable"); ?></label>
+							<div class="controls">
+                                <?php
+                                $opt = array(0 => lang('no'), 1 => lang('yes'));
+                                echo form_dropdown('ride_cancel_driver_on_the_way_percentage_enable', $opt, $dataSettings->ride_cancel_driver_on_the_way_percentage_enable, 'class="form-control tip" id="ride_cancel_driver_on_the_way_percentage_enable" required="required" style="width:100%;"');
+                                ?>
+                            </div>
+                           
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="control-label" for="overselling"><?= lang("ride_cancel_driver_on_the_way_percentage_value"); ?></label>
+                
+                            <div class="controls">
+                                <?= form_input('ride_cancel_driver_on_the_way_percentage_value', $dataSettings->ride_cancel_driver_on_the_way_percentage_value, 'class="form-control tip" id="ride_cancel_driver_on_the_way_percentage_value"'); ?>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="control-label" for="driver_working_hours_limit"><?= lang("driver_working_hours_limit"); ?></label>
+                
+                            <div class="controls">
+                                <?= form_input('driver_working_hours_limit', $dataSettings->driver_working_hours_limit, 'class="form-control tip" id="driver_working_hours_limit"'); ?>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="control-label" for="overselling"><?= lang("estimate_fare_enable"); ?></label>
+                
+                            <div class="controls">
+                                <?php
+                                $opt = array(0 => lang('no'), 1 => lang('yes'));
+                                echo form_dropdown('estimate_fare_enable', $opt, $dataSettings->estimate_fare_enable, 'class="form-control tip" id="estimate_fare_enable" required="required" style="width:100%;"');
+                                ?>
+                            </div>
+                        </div>
+                    </div>
                     
                     <div class="col-md-4">
                         <div class="form-group">
@@ -51,7 +128,7 @@
                                 ?>
                             </div>
                     </div>
-                    <div class="col-md-4">
+                    <!--<div class="col-md-4">
                         <div class="form-group">
                             <label class="control-label" for="overselling"><?= lang("outstation_min_kilometer"); ?></label>
                 
@@ -77,7 +154,18 @@
                                 <?= form_input('cityride_max_kilometer', $dataSettings->cityride_max_kilometer, 'class="form-control tip" id="cityride_max_kilometer"'); ?>
                             </div>
                         </div>
+                    </div> -->
+
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="control-label" for="overselling"><?= lang("riding_kilometer"); ?></label>
+                
+                            <div class="controls">
+                                <?= form_input('cityride_max_kilometer', $dataSettings->cityride_max_kilometer, 'class="form-control tip" id="cityride_max_kilometer"'); ?>
+                            </div>
+                        </div>
                     </div>
+                    
                     
                     <!--<div class="col-md-4">
                         <div class="form-group">
@@ -136,6 +224,29 @@
                             </div>
                         </div>
                     </div>
+
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="control-label" for="trafic_distance"><?= lang("trafic_distance"); ?></label>
+                
+                            <div class="controls">
+                                <?= form_input('trafic_distance', $dataSettings->trafic_distance, 'class="form-control tip" id="trafic_distance"'); ?>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="control-label" for="overselling"><?= lang("drop_points_limit"); ?></label>
+                
+                            <div class="controls">
+                            	<?php
+                                $dp = array(1 => lang('1'), 2 => lang('2'), 3 => lang('3'));
+                                echo form_dropdown('drop_points', $dp, $dataSettings->drop_points, 'class="form-control tip" id="drop_points" required="required" style="width:100%;"');
+                                ?>
+                            </div>
+                        </div>
+                    </div>
+
                 </fieldset>
                 
                 <fieldset class="scheduler-border">
@@ -397,7 +508,7 @@
                 
                 <fieldset class="scheduler-border">
                     <legend class="scheduler-border"><?= lang('account_module') ?></legend>
-                    <div class="col-md-3">
+                    <!--<div class="col-md-3">
                         <div class="form-group">
                             <label class="control-label" for="overselling"><?= lang("driver_default_set_payment"); ?></label>
                 
@@ -408,8 +519,8 @@
                                 ?>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-md-3">
+                    </div>-->
+                    <!--<div class="col-md-3">
                         <div class="form-group">
                             <label class="control-label" for="overselling"><?= lang("driver_admin_payment_option"); ?></label>
                 
@@ -420,11 +531,11 @@
                                 ?>
                             </div>
                         </div>
-                    </div>
+                    </div>-->
                     
                     <div class="col-md-3">
                         <div class="form-group">
-                            <label class="control-label" for="overselling"><?= lang("driver_admin_payment_percentage"); ?></label>
+                            <label class="control-label" for="overselling"><?= lang("heyycab_commision_fee_percentage"); ?></label>
                 
                             <div class="controls">
                                 <?php 
@@ -438,7 +549,7 @@
                         </div>
                     </div>
                     
-                    <div class="col-md-3">
+                    <!--<div class="col-md-3">
                         <div class="form-group">
                             <label class="control-label" for="overselling"><?= lang("driver_admin_payment_duration"); ?></label>
                 
@@ -452,7 +563,7 @@
 								?>
                             </div>
                         </div>
-                    </div>
+                    </div>-->
                     
                     <!--<div class="col-md-4">
                         <div class="form-group">
@@ -824,12 +935,86 @@
                                 ?>
                             </div>
                     </div>
+
+                    <div class="col-md-2">
+                    	<div class="form-group">
+                                <?php echo lang('badge', 'badge_enable'); ?>
+                                <?php
+                                $ge[''] = array('0' => lang('No'), '1' => lang('Yes'));
+                                echo form_dropdown('badge_enable', $ge, $dataSettings->badge_enable, 'class="tip form-control" id="badge_enable" ');
+                                ?>
+                            </div>
+                    </div>
+                    <div class="col-md-2">
+                    	<div class="form-group">
+                                <?php echo lang('training_certificate', 'training_certificate_enable'); ?>
+                                <?php
+                                $ge[''] = array('0' => lang('No'), '1' => lang('Yes'));
+                                echo form_dropdown('training_certificate_enable', $ge, $dataSettings->training_certificate_enable, 'class="tip form-control" id="training_certificate_enable" ');
+                                ?>
+                            </div>
+                    </div>
+                    <div class="col-md-2">
+                    	<div class="form-group">
+                                <?php echo lang('experience_certificate', 'experience_certificate_enable'); ?>
+                                <?php
+                                $ge[''] = array('0' => lang('No'), '1' => lang('Yes'));
+                                echo form_dropdown('experience_certificate_enable', $ge, $dataSettings->experience_certificate_enable, 'class="tip form-control" id="experience_certificate_enable" ');
+                                ?>
+                            </div>
+                    </div>
+                    <div class="col-md-2">
+                    	<div class="form-group">
+                                <?php echo lang('medical_certificate', 'medical_certificate_enable'); ?>
+                                <?php
+                                $ge[''] = array('0' => lang('No'), '1' => lang('Yes'));
+                                echo form_dropdown('medical_certificate_enable', $ge, $dataSettings->medical_certificate_enable, 'class="tip form-control" id="medical_certificate_enable" ');
+                                ?>
+                            </div>
+                    </div>
+                    <input type="hidden" name="police_verification_enable" value="1">
+                    <!--<div class="col-md-2">
+                    	<div class="form-group">
+                                <?php echo lang('police_verification', 'police_verification_enable'); ?>
+                                <?php
+                                $ge[''] = array('0' => lang('No'), '1' => lang('Yes'));
+                                echo form_dropdown('police_verification_enable', $ge, $dataSettings->police_verification_enable, 'class="tip form-control" id="police_verification_enable" ');
+                                ?>
+                            </div>
+                    </div>-->
+                    <div class="col-md-2">
+                    	<div class="form-group">
+                                <?php echo lang('health_insurance', 'health_insurance_enable'); ?>
+                                <?php
+                                $ge[''] = array('0' => lang('No'), '1' => lang('Yes'));
+                                echo form_dropdown('health_insurance_enable', $ge, $dataSettings->health_insurance_enable, 'class="tip form-control" id="health_insurance_enable" ');
+                                ?>
+                            </div>
+                    </div>
+                    <div class="col-md-2">
+                    	<div class="form-group">
+                                <?php echo lang('term_insurance', 'term_insurance_enable'); ?>
+                                <?php
+                                $ge[''] = array('0' => lang('No'), '1' => lang('Yes'));
+                                echo form_dropdown('term_insurance_enable', $ge, $dataSettings->term_insurance_enable, 'class="tip form-control" id="term_insurance_enable" ');
+                                ?>
+                            </div>
+                    </div>
+                    <div class="col-md-2">
+                    	<div class="form-group">
+                                <?php echo lang('additional_contact', 'additional_contact_enable'); ?>
+                                <?php
+                                $ge[''] = array('0' => lang('No'), '1' => lang('Yes'));
+                                echo form_dropdown('additional_contact_enable', $ge, $dataSettings->additional_contact_enable, 'class="tip form-control" id="additional_contact_enable" ');
+                                ?>
+                            </div>
+                    </div>
                     
                     
                 </fieldset>
                 
                 <fieldset class="scheduler-border">
-                    <legend class="scheduler-border"><?= lang('cab') ?></legend>
+                    <legend class="scheduler-border"><?= lang('truck') ?></legend>
                     
                     
                     <div class="col-md-2">
@@ -924,6 +1109,70 @@
                                 <?php
                                 $ge[''] = array('0' => lang('Foot'), '1' => lang('Inch'), '2' => lang('Centimetre'), '3' => lang('Metre'), '4' => lang('Kilometre'));
                                 echo form_dropdown('taxi_bodysize_formate', $ge, $dataSettings->taxi_bodysize_formate, 'class="tip form-control" id="taxi_bodysize_formate" ');
+                                ?>
+                            </div>
+                    </div>
+
+                    <div class="col-md-2">
+                    	<div class="form-group">
+                                <?php echo lang('emission_norms', 'emission_norms_enable'); ?>
+                                <?php
+                                $ge[''] = array('0' => lang('No'), '1' => lang('Yes'));
+                                echo form_dropdown('emission_norms_enable', $ge, $dataSettings->emission_norms_enable, 'class="tip form-control" id="emission_norms_enable" ');
+                                ?>
+                            </div>
+                    </div>
+                    <div class="col-md-2">
+                    	<div class="form-group">
+                                <?php echo lang('vehicle_tracking', 'vehicle_tracking_enable'); ?>
+                                <?php
+                                $ge[''] = array('0' => lang('No'), '1' => lang('Yes'));
+                                echo form_dropdown('vehicle_tracking_enable', $ge, $dataSettings->vehicle_tracking_enable, 'class="tip form-control" id="vehicle_tracking_enable" ');
+                                ?>
+                            </div>
+                    </div>
+                    <div class="col-md-2">
+                    	<div class="form-group">
+                                <?php echo lang('fire_extinguisher', 'fire_extinguisher_enable'); ?>
+                                <?php
+                                $ge[''] = array('0' => lang('No'), '1' => lang('Yes'));
+                                echo form_dropdown('fire_extinguisher_enable', $ge, $dataSettings->fire_extinguisher_enable, 'class="tip form-control" id="fire_extinguisher_enable" ');
+                                ?>
+                            </div>
+                    </div>
+                    <div class="col-md-2">
+                    	<div class="form-group">
+                                <?php echo lang('child_lock_mechanism', 'child_lock_mechanism_enable'); ?>
+                                <?php
+                                $ge[''] = array('0' => lang('No'), '1' => lang('Yes'));
+                                echo form_dropdown('child_lock_mechanism_enable', $ge, $dataSettings->child_lock_mechanism_enable, 'class="tip form-control" id="child_lock_mechanism_enable" ');
+                                ?>
+                            </div>
+                    </div>
+                    <div class="col-md-2">
+                    	<div class="form-group">
+                                <?php echo lang('interior_vehicle', 'interior_vehicle_enable'); ?>
+                                <?php
+                                $ge[''] = array('0' => lang('No'), '1' => lang('Yes'));
+                                echo form_dropdown('interior_vehicle_enable', $ge, $dataSettings->interior_vehicle_enable, 'class="tip form-control" id="interior_vehicle_enable" ');
+                                ?>
+                            </div>
+                    </div>
+                    <div class="col-md-2">
+                    	<div class="form-group">
+                                <?php echo lang('taxi_roof_sign', 'taxi_roof_sign_enable'); ?>
+                                <?php
+                                $ge[''] = array('0' => lang('No'), '1' => lang('Yes'));
+                                echo form_dropdown('taxi_roof_sign_enable', $ge, $dataSettings->taxi_roof_sign_enable, 'class="tip form-control" id="taxi_roof_sign_enable" ');
+                                ?>
+                            </div>
+                    </div>
+                    <div class="col-md-2">
+                    	<div class="form-group">
+                                <?php echo lang('e_challans_clearance', 'e_challans_clearance_enable'); ?>
+                                <?php
+                                $ge[''] = array('0' => lang('No'), '1' => lang('Yes'));
+                                echo form_dropdown('e_challans_clearance_enable', $ge, $dataSettings->e_challans_clearance_enable, 'class="tip form-control" id="e_challans_clearance_enable" ');
                                 ?>
                             </div>
                     </div>
